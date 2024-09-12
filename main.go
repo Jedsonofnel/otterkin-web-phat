@@ -1,84 +1,47 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
+	"log"
 	"os"
-	"text/template"
+
+	"github.com/Jedsonofnel/otterkin-web/routing"
+	"github.com/pocketbase/pocketbase"
+	"github.com/pocketbase/pocketbase/apis"
+	"github.com/pocketbase/pocketbase/core"
+	"github.com/pocketbase/pocketbase/tools/template"
 )
 
-type Welcome struct {
-	Message string
+type LoginInfo struct {
+	email    string
+	password string
 }
 
 func main() {
-	welcomeMessage := Welcome{Message: "Welcome to Otterkin"}
+	app := pocketbase.New()
 
-	// define a router
-	router := http.NewServeMux()
+	// Routing
+	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
+		// way of caching templates that is safe to use
+		// in multiple goroutines
+		p := routing.PageRenderer{Registry: template.NewRegistry(), Event: e}
 
-	// handle func for the home page
-	homeHandler := func(w http.ResponseWriter, r *http.Request) {
-		// Parse the HTML template
-		tmpl, err := template.ParseFiles("templates/index.html", "templates/layout.html")
-		if err != nil {
-			http.Error(w, "Internal server error!", http.StatusInternalServerError)
-			return
-		}
+		// static files
+		e.Router.GET("/static/*", apis.StaticDirectoryHandler(os.DirFS("./static"), false))
 
-		// Execute the template
-		err = tmpl.ExecuteTemplate(w, "layout", welcomeMessage)
-		if err != nil {
-			http.Error(w, "Internal server error!", http.StatusInternalServerError)
-			return
-		}
+		// favicon
+		e.Router.File("/favicon.ico", "./static/favicon.ico")
+
+		// other pages
+		e.Router.GET("/", routing.HomeHandlerGen(p.Registry))
+		e.Router.GET("/login", p.LoginHandler)
+		e.Router.GET("/sign-up", p.SignupHandler)
+		e.Router.POST("/sign-up", p.SignupPostHandler)
+
+		return nil
+	})
+
+	if err := app.Start(); err != nil {
+		log.Fatal(err)
 	}
 
-	// handle func for the resources pages
-	loginHandler := func(w http.ResponseWriter, r *http.Request) {
-		// Parse the HTML template
-		tmpl, err := template.ParseFiles("templates/login.html", "templates/layout.html")
-		if err != nil {
-			http.Error(w, "Internal server error!", http.StatusInternalServerError)
-			return
-		}
-
-		err = tmpl.ExecuteTemplate(w, "layout", nil)
-		if err != nil {
-			http.Error(w, "Internal server error!", http.StatusInternalServerError)
-			return
-		}
-	}
-
-	// handle func for the resources pages
-	signUpHandler := func(w http.ResponseWriter, r *http.Request) {
-		// Parse the HTML template
-		tmpl, err := template.ParseFiles("templates/sign-up.html", "templates/layout.html")
-		if err != nil {
-			http.Error(w, "Internal server error!", http.StatusInternalServerError)
-			return
-		}
-
-		err = tmpl.ExecuteTemplate(w, "layout", nil)
-		if err != nil {
-			http.Error(w, "Internal server error!", http.StatusInternalServerError)
-			return
-		}
-	}
-
-	router.HandleFunc("GET /", homeHandler)
-	router.HandleFunc("GET /login", loginHandler)
-	router.HandleFunc("GET /sign-up", signUpHandler)
-
-	// serve static files like css
-	fs := http.FileServer(http.Dir("static"))
-	router.Handle("GET /static/", http.StripPrefix("/static/", fs))
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-
-	fmt.Printf("Starting the http server on %s\n", port)
-	http.ListenAndServe(":"+port, router)
 }

@@ -1,16 +1,3 @@
-{{define "title"}}Otterkin{{end}} {{define "body" }}
-<nav>
-  <div class="home-link">
-    <a href="/">home</a>
-  </div>
-  <div>
-    <a href="/sign-up">signup</a>
-    <a href="/login">login</a>
-  </div>
-</nav>
-
-<h1>Sign up</h1>
-
 <form
   hx-post="/sign-up"
   hx-swap="outerHTML"
@@ -22,5 +9,6 @@
   <input type="password" name="password" />
   <input type="password" name="passwordConfirm" />
   <input type="submit" value="Sign Up" />
+
+  <div style="padding: 10px; background-color: red">{{ .Error }}</div>
 </form>
-{{ end }}
