@@ -1,0 +1,23 @@
+{{define "title"}}Otterkin{{end}} {{define "body"}}
+
+<nav>
+  <div class="home-link">
+    <a href="/">home</a>
+  </div>
+  <div>
+    <a href="/auth/register">signup</a>
+    <a href="/auth/login">login</a>
+  </div>
+</nav>
+
+<h1>Login</h1>
+
+<form hx-post="/login" hx-swap="outerHTML" hx-target="this">
+  <label>Email</label>
+  <input type="email" name="email" />
+
+  <label>Password</label>
+  <input type="password" name="password" />
+  <input type="submit" value="Login" />
+</form>
+{{end}}

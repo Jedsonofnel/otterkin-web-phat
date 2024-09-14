@@ -11,22 +11,26 @@ import (
 	"github.com/pocketbase/pocketbase/tokens"
 )
 
-func Signup(e *core.ServeEvent, c echo.Context) error {
-	collection, err := e.App.Dao().FindCollectionByNameOrId("users")
+func Register(app core.App, c echo.Context) error {
+	collection, err := app.Dao().FindCollectionByNameOrId("users")
 	if err != nil {
 		return err
 	}
 
 	newUser := models.NewRecord(collection)
-	form := forms.NewRecordUpsert(e.App, newUser)
-	form.LoadRequest(c.Request(), "")
+	form := forms.NewRecordUpsert(app, newUser)
+	form.LoadData(map[string]any{
+		"email":           c.FormValue("email"),
+		"password":        c.FormValue("password"),
+		"passwordConfirm": c.FormValue("passwordConfirm"),
+	})
 
 	// validation happens here:
 	if err := form.Submit(); err != nil {
 		return err
 	}
 
-	return setAuthToken(e.App, c, newUser)
+	return setAuthToken(app, c, newUser)
 }
 
 func setAuthToken(app core.App, c echo.Context, user *models.Record) error {
@@ -36,7 +40,7 @@ func setAuthToken(app core.App, c echo.Context, user *models.Record) error {
 	}
 
 	c.SetCookie(&http.Cookie{
-		Name:     "Auth",
+		Name:     authCookieName,
 		Value:    s,
 		Path:     "/",
 		Secure:   true,

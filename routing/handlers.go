@@ -6,61 +6,67 @@ import (
 	"github.com/Jedsonofnel/otterkin-web/auth"
 	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/pocketbase/apis"
-	"github.com/pocketbase/pocketbase/tools/template"
+	"github.com/pocketbase/pocketbase/core"
 )
 
+type HandlerContext struct {
+	e *core.ServeEvent
+}
+
+func NewHandlerContext(e *core.ServeEvent) HandlerContext {
+	return HandlerContext{e: e}
+}
+
 // needs the external registry dependency as it caches
-func HomeHandlerGen(registry *template.Registry) func(c echo.Context) error {
-	homeHandler := func(c echo.Context) error {
-		html, err := registry.LoadFiles(
-			"templates/layout.html", "templates/index.html",
-		).Render(nil)
-		if err != nil {
-			return apis.NewNotFoundError("", err)
-		}
-
-		return c.HTML(http.StatusOK, html)
-	}
-
-	return homeHandler
+func (h HandlerContext) HomeHandler(c echo.Context) error {
+	authRecord := c.Get(apis.ContextAuthRecordKey)
+	return c.Render(http.StatusOK, "index", authRecord)
 }
 
-func (p PageRenderer) LoginHandler(c echo.Context) error {
-	html, err := p.Registry.LoadFiles(
-		"templates/layout.html", "templates/login.html",
-	).Render(nil)
+func (hc HandlerContext) AuthHandler(g *echo.Group) {
+	//TODO block user from logging in/registering if
+	// they are already logged in or registered
+	// login
+	g.GET("/login", hc.LoginHandler)
+	g.POST("/login", hc.LoginPostHandler)
 
-	if err != nil {
-		return apis.NewNotFoundError("", err)
-	}
+	// register
+	g.GET("/register", hc.RegisterHandler)
+	g.POST("/register", hc.RegisterPostHandler)
 
-	return c.HTML(http.StatusOK, html)
+	// logout
+	g.POST("/logout", hc.LogoutHandler)
 }
 
-func (p PageRenderer) SignupHandler(c echo.Context) error {
-	html, err := p.Registry.LoadFiles(
-		"templates/layout.html", "templates/sign-up.html",
-	).Render(nil)
-
-	if err != nil {
-		return apis.NewNotFoundError("", err)
-	}
-
-	return c.HTML(http.StatusOK, html)
+func (h HandlerContext) LoginHandler(c echo.Context) error {
+	return c.Render(http.StatusOK, "login", nil)
 }
 
-func (p PageRenderer) SignupPostHandler(c echo.Context) error {
-	if err := auth.Signup(p.Event, c); err != nil {
-		html, rendererErr := p.Registry.LoadFiles("templates/sign-up-error.html").Render(struct{ Error string }{Error: err.Error()})
+func (h HandlerContext) RegisterHandler(c echo.Context) error {
+	return c.Render(http.StatusOK, "register", nil)
+}
 
-		if rendererErr != nil {
-			return apis.NewNotFoundError("", rendererErr)
-		}
-
-		return c.HTML(http.StatusOK, html)
-
+func (h HandlerContext) RegisterPostHandler(c echo.Context) error {
+	if err := auth.Register(h.e.App, c); err != nil {
+		return c.Render(http.StatusOK, "register-error", err)
 	}
 
 	c.Redirect(http.StatusSeeOther, "/")
+	return nil
+}
+
+func (h HandlerContext) LoginPostHandler(c echo.Context) error {
+	if err := auth.Login(h.e.App, c); err != nil {
+		return c.Render(http.StatusOK, "login-error", nil)
+	}
+
+	c.Redirect(http.StatusSeeOther, "/")
+	return nil
+}
+
+func (hc HandlerContext) LogoutHandler(c echo.Context) error {
+	auth.Logout(c)
+
+	//TODO figure out a way to display a "logged out!" message
 	return nil
 }

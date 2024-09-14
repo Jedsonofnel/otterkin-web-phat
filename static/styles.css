@@ -1,1 +1,9 @@
-/* main app stylesheet */
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+main {
+  width: min(800px, 90%);
+}
