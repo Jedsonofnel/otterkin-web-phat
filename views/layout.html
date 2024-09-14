@@ -3,15 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="static/htmx.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="static/styles.css" />
+    <script src="/static/htmx.min.js"></script>
+    <script src="/static/js/hide-flash.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css" />
     <title>{{template "title" .}}</title>
   </head>
   <body>
     <main>
-      {{ if .Email }}
-      <h2>Logged in!</h2>
-      {{end}} {{template "body" .}}
+      {{template "body" .}}
     </main>
+    {{template "flash-messages" .}}
   </body>
 </html>
+
+{{define "flash-messages"}}
+  {{range $key, $value := .Flash}}
+    {{if ne $value ""}}
+    <div class="{{$key}} flash">
+      {{$value}}
+      <button class="flash-close" onclick="hideFlash('{{$key}}')"></button>
+    </div>
+    {{end}}
+  {{end}}
+{{end}}

@@ -3,13 +3,13 @@
 
 <nav>
   <div class="home-link">
-    <a href="/">home</a>
+    <a href="/">home </a>
   </div>
   <div>
     <a href="/auth/register">register</a>
     <a href="/auth/login">login</a>
-    {{if .Email}}
-    <button hx-post="/logout" hx-swap="outerHTML">logout</button>
+    {{if .AuthRecord}}
+    <button hx-post="/auth/logout" hx-swap="outerHTML">logout</button>
     {{end}}
   </div>
 </nav>

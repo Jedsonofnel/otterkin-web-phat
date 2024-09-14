@@ -19,7 +19,9 @@ func main() {
 		hc := routing.NewHandlerContext(e)
 
 		// pages
-		e.Router.GET("/", hc.HomeHandler, auth.LoadAuthContextFromCookie(e.App))
+		e.Router.GET("/", hc.HomeHandler,
+			auth.LoadAuthContextFromCookie(e.App),
+			routing.LoadFlash)
 
 		// auth routes
 		authGroup := e.Router.Group("/auth")

@@ -1,5 +1,5 @@
 {{define "login-error"}}
-<form hx-post="/login" hx-swap="outerHTML" hx-target="this">
+<form hx-post="/auth/login" hx-swap="outerHTML" hx-target="this">
   <label>Email</label>
   <input type="email" name="email" />
 
@@ -10,23 +10,15 @@
   <div style="padding: 10px; background-color: red">Invalid credentials!</div>
 </form>
 {{end}} {{define "register-error"}}
-<form
-  hx-post="/register"
-  hx-swap="outerHTML"
-  hx-target="this"
-  enctype="multipart/form-data"
->
-  <label>Email</label>
-  <input type="email" name="email" />
+<label>Email</label>
+<input type="email" name="email" />
 
-  <label>Password</label>
-  <input type="password" name="password" />
+<label>Password</label>
+<input type="password" name="password" />
 
-  <label>Confirm Password</label>
-  <input type="password" name="passwordConfirm" />
-  <input type="submit" value="Sign Up" />
+<label>Confirm Password</label>
+<input type="password" name="passwordConfirm" />
+<input type="submit" value="Sign Up" />
 
-  <div style="padding: 10px; background-color: red">{{ .Error }}</div>
-</form>
-
+<div style="padding: 10px; background-color: red">{{ .Error }}</div>
 {{end}}
