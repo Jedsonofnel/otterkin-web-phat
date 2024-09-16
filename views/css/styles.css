@@ -4,10 +4,6 @@ body {
   align-items: center;
 }
 
-main {
-  width: min(800px, 90%);
-}
-
 .form-register,
 .form-login {
   display: flex;

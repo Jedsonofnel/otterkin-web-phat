@@ -1,6 +1,7 @@
 package routing
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/Jedsonofnel/otterkin-web/auth"
@@ -82,12 +83,12 @@ func (h HandlerContext) RegisterPatronPostHandler(c echo.Context) error {
 }
 
 func (h HandlerContext) RegisterArtistPostHandler(c echo.Context) error {
-	if err := auth.Register(h.e.App, c); err != nil {
+	log.Println("Hello!")
+	if err := auth.RegisterArtist(h.e.App, c); err != nil {
 		return views.Render(c, http.StatusUnprocessableEntity, views.RegisterFormError(err.Error()))
 	}
 
-	SetFlash(c, "info", "Registered - welcome!")
-	c.Response().Header().Set("Hx-Redirect", "/")
+	c.Response().Header().Set("Hx-Redirect", "/auth/register")
 	c.Response().WriteHeader(http.StatusOK)
 	return nil
 }

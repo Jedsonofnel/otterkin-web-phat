@@ -11,6 +11,35 @@ import (
 	"github.com/pocketbase/pocketbase/tokens"
 )
 
+func RegisterArtist(app core.App, c echo.Context) error {
+	_, err := app.Dao().FindCollectionByNameOrId("users")
+	if err != nil {
+		return err
+	}
+
+	_, err = app.Dao().FindCollectionByNameOrId("artists")
+	if err != nil {
+		return err
+	}
+
+	// fields have to be exported for this to work
+	formData := struct {
+		FirstName       string `form:"first_name"`
+		LastName        string `form:"last_name"`
+		InstagramHandle string `form:"instagram_handle"`
+		Email           string `form:"email"`
+		biography       string `form:"biography"`
+		password        string `form:"password"`
+		passwordConfirm string `form:"password"`
+	}{}
+
+	if err = c.Bind(&formData); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func Register(app core.App, c echo.Context) error {
 	collection, err := app.Dao().FindCollectionByNameOrId("users")
 	if err != nil {

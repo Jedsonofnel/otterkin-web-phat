@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/Jedsonofnel/otterkin-web/auth"
+	_ "github.com/Jedsonofnel/otterkin-web/migrations"
 	"github.com/Jedsonofnel/otterkin-web/routing"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"

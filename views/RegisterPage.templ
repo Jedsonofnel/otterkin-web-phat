@@ -1,46 +1,50 @@
 package views
 
 templ RegisterPage(title string, pd PageData) {
-	@layout(title, pd) {
-		<h1>Sign up</h1>
-		<button hx-get="/auth/register/patron" hx-target=".form-register" hx-swap="outerHTML">Patron</button>
-		<button hx-get="/auth/register/artist" hx-target=".form-register" hx-swap="outerHTML">Artist</button>
-		@PatronForm()
-	}
+@layout(title, pd) {
+<h1>Sign up</h1>
+<button hx-get="/auth/register/artist" hx-target=".form-register" hx-swap="outerHTML">Artist</button>
+<button hx-get="/auth/register/patron" hx-target=".form-register" hx-swap="outerHTML">Patron</button>
+@ArtistForm()
+}
 }
 
 templ PatronForm() {
-	<form hx-post="/auth/register/patron" class="form-register" hx-target="#register-form-error" hx-swap="outerHTML">
-		<h2>Patron registration</h2>
-		<label>Email</label>
-		<input type="email" name="email"/>
-		<label>Password</label>
-		<input type="password" name="password"/>
-		<label>Confirm Password</label>
-		<input type="password" name="passwordConfirm"/>
-		<input type="submit" value="Sign Up"/>
-		<div id="register-form-error"></div>
-	</form>
+<form hx-post="/auth/register/patron" class="form-register" hx-target="#register-form-error" hx-swap="outerHTML">
+  <h2>Patron registration</h2>
+  <label>Email</label>
+  <input type="email" name="email" />
+  <label>Password</label>
+  <input type="password" name="password" />
+  <label>Confirm Password</label>
+  <input type="password" name="passwordConfirm" />
+  <input type="submit" value="Sign Up" />
+  <div id="register-form-error"></div>
+</form>
 }
 
 templ ArtistForm() {
-	<form hx-post="/auth/register/artist" hx-target="#register-form-error" class="form-register" hx-swap="outerHTML">
-		<h2>Artist registration</h2>
-		<label>First Name</label>
-		<input type="text" name="email"/>
-		<label>Last Name</label>
-		<input type="text" name="email"/>
-		<label>Email</label>
-		<input type="email" name="email"/>
-		<label>Password</label>
-		<input type="password" name="password"/>
-		<label>Confirm Password</label>
-		<input type="password" name="passwordConfirm"/>
-		<input type="submit" value="Sign Up"/>
-		<div id="register-form-error"></div>
-	</form>
+<form hx-post="/auth/register/artist" hx-target="#register-form-error" class="form-register" hx-swap="outerHTML">
+  <h2>Artist registration</h2>
+  <label for="first_name">First Name</label>
+  <input id="first_name" type="text" name="first_name" />
+  <label for="last_name">Last Name</label>
+  <input id="last_name" type="text" name="last_name" />
+  <label for="email">Email</label>
+  <input id="email" type="email" name="email" />
+  <label for="biography">Biography</label>
+  <textarea id="biography" name="biography" rows="3"></textarea>
+  <label for="instagram">Instagram Handle</label>
+  <input id="instagram" type="text" name="instagram_handle" />
+  <label for="password">Password</label>
+  <input id="password" type="password" name="password" />
+  <label for="passwordConfirm">Confirm Password</label>
+  <input id="passwordCOnfirm" type="password" name="passwordConfirm" />
+  <input type="submit" value="Sign Up" />
+  <div id="register-form-error"></div>
+</form>
 }
 
 templ RegisterFormError(message string) {
-	<div id="register-form-error" class="register-form-error">{ message }</div>
+<div id="register-form-error" class="register-form-error">{ message }</div>
 }
