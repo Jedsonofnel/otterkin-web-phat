@@ -1,3 +1,5 @@
 tmp/
 otterkin-web
 pb_data/
+static/build/
+node_modules/
