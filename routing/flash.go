@@ -57,20 +57,17 @@ func decode(src string) ([]byte, error) {
 
 func LoadFlash(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		// this Gets flash
-		flashData := map[string]string{
-			"error": "",
-			"info":  "",
+		if flashError, err := GetFlash(c, "error"); err != nil {
+			return err
+		} else {
+			c.Set("ferror", string(flashError))
 		}
 
-		for key := range flashData {
-			value, err := GetFlash(c, key)
-			if err != nil {
-				return echo.NewHTTPError(http.StatusInternalServerError, err.Error)
-			}
-			flashData[key] = string(value)
+		if flashInfo, err := GetFlash(c, "info"); err != nil {
+			return err
+		} else {
+			c.Set("finfo", string(flashInfo))
 		}
-		c.Set(flashContextKey, flashData)
 
 		return next(c)
 	}

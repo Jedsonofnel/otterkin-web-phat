@@ -5,7 +5,6 @@ import (
 
 	"github.com/Jedsonofnel/otterkin-web/auth"
 	"github.com/Jedsonofnel/otterkin-web/routing"
-	"github.com/Jedsonofnel/otterkin-web/views"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 )
@@ -15,7 +14,6 @@ func main() {
 
 	// Routing
 	pb.OnBeforeServe().Add(func(e *core.ServeEvent) error {
-		e.Router.Renderer = views.NewRegistry()
 		hc := routing.NewHandlerContext(e)
 
 		// pages
@@ -39,5 +37,4 @@ func main() {
 	if err := pb.Start(); err != nil {
 		log.Fatal(err)
 	}
-
 }

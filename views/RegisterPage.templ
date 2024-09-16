@@ -1,0 +1,46 @@
+package views
+
+templ RegisterPage(title string, pd PageData) {
+	@layout(title, pd) {
+		<h1>Sign up</h1>
+		<button hx-get="/auth/register/patron" hx-target=".form-register" hx-swap="outerHTML">Patron</button>
+		<button hx-get="/auth/register/artist" hx-target=".form-register" hx-swap="outerHTML">Artist</button>
+		@PatronForm()
+	}
+}
+
+templ PatronForm() {
+	<form hx-post="/auth/register/patron" class="form-register" hx-target="#register-form-error" hx-swap="outerHTML">
+		<h2>Patron registration</h2>
+		<label>Email</label>
+		<input type="email" name="email"/>
+		<label>Password</label>
+		<input type="password" name="password"/>
+		<label>Confirm Password</label>
+		<input type="password" name="passwordConfirm"/>
+		<input type="submit" value="Sign Up"/>
+		<div id="register-form-error"></div>
+	</form>
+}
+
+templ ArtistForm() {
+	<form hx-post="/auth/register/artist" hx-target="#register-form-error" class="form-register" hx-swap="outerHTML">
+		<h2>Artist registration</h2>
+		<label>First Name</label>
+		<input type="text" name="email"/>
+		<label>Last Name</label>
+		<input type="text" name="email"/>
+		<label>Email</label>
+		<input type="email" name="email"/>
+		<label>Password</label>
+		<input type="password" name="password"/>
+		<label>Confirm Password</label>
+		<input type="password" name="passwordConfirm"/>
+		<input type="submit" value="Sign Up"/>
+		<div id="register-form-error"></div>
+	</form>
+}
+
+templ RegisterFormError(message string) {
+	<div id="register-form-error" class="register-form-error">{ message }</div>
+}

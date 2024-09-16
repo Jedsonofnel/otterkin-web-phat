@@ -1,0 +1,19 @@
+package views
+
+templ LoginPage(title string, pd PageData) {
+@layout(title, pd) {
+<h1>Login</h1>
+<form hx-post="/auth/login" hx-swap="outerHTML" hx-target="#login-form-error" class="form-login">
+  <label>Email</label>
+  <input type="email" name="email" />
+  <label>Password</label>
+  <input type="password" name="password" />
+  <input type="submit" value="Login" />
+  <div id="login-form-error"></div>
+</form>
+}
+}
+
+templ LoginFormError(message string) {
+<div id="login-form-error" class="login-form-error">{ message }</div>
+}
