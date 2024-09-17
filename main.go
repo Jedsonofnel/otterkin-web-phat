@@ -34,8 +34,13 @@ func main() {
 			routing.LoadFlash)
 
 		// auth routes
-		authGroup := e.Router.Group("/auth")
+		authGroup := e.Router.Group(
+			"/auth",
+			auth.LoadAuthContextFromCookie(e.App),
+			routing.OnlyUnauthorisedUsers,
+		)
 		hc.AuthHandler(authGroup)
+		e.Router.POST("/logout", hc.LogoutHandler)
 
 		// static files
 		e.Router.Static("/static", "static")

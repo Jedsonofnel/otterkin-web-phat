@@ -2,8 +2,8 @@ package views
 
 import "fmt"
 
-templ RegisterPage(title string, pd PageData) {
-@layout(title, pd) {
+templ RegisterPage(title string, ld LayoutData) {
+@layout(title, ld) {
 <div class="registration-wrapper">
   <h3 class="registration-header">I AM A...</h3>
   @ArtistForm()

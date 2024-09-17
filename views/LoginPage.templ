@@ -1,7 +1,7 @@
 package views
 
-templ LoginPage(title string, pd PageData) {
-@layout(title, pd) {
+templ LoginPage(title string, ld LayoutData) {
+@layout(title, ld) {
 <h1>Login</h1>
 <form hx-post="/auth/login" hx-swap="outerHTML" hx-target="#login-form-error" class="form-login">
   <label>Email</label>

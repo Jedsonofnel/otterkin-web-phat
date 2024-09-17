@@ -19,7 +19,7 @@ func NewHandlerContext(e *core.ServeEvent) HandlerContext {
 
 // needs the external registry dependency as it caches
 func (h HandlerContext) HomeHandler(c echo.Context) error {
-	pd := views.NewPageData(c)
+	pd := views.NewLayoutData(c)
 	return views.Render(c, http.StatusOK, views.HomePage("Otterkin", pd))
 }
 
@@ -36,13 +36,10 @@ func (hc HandlerContext) AuthHandler(g *echo.Group) {
 	g.GET("/register/artist", hc.RegisterArtistHandler)
 	g.POST("/register/patron", hc.RegisterPatronPostHandler)
 	g.POST("/register/artist", hc.RegisterArtistPostHandler)
-
-	// logout
-	g.POST("/logout", hc.LogoutHandler)
 }
 
 func (h HandlerContext) LoginPageHandler(c echo.Context) error {
-	pd := views.NewPageData(c)
+	pd := views.NewLayoutData(c)
 	return views.Render(c, http.StatusOK, views.LoginPage("Login - Otterkin", pd))
 }
 
@@ -58,7 +55,7 @@ func (h HandlerContext) LoginPostHandler(c echo.Context) error {
 }
 
 func (h HandlerContext) RegisterPageHandler(c echo.Context) error {
-	pd := views.NewPageData(c)
+	pd := views.NewLayoutData(c)
 	return views.Render(c, http.StatusOK, views.RegisterPage("Register - Otterkin", pd))
 }
 

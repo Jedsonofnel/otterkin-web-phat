@@ -7,30 +7,30 @@ import (
 	"github.com/pocketbase/pocketbase/models"
 )
 
-type PageData struct {
+type LayoutData struct {
 	authRecord *models.Record
 	flashInfo  string
 	flashError string
 }
 
-func NewPageData(c echo.Context) PageData {
-	pd := PageData{}
+func NewLayoutData(c echo.Context) LayoutData {
+	ld := LayoutData{}
 
 	if authRecord, ok := c.Get(apis.ContextAuthRecordKey).(*models.Record); ok {
-		pd.authRecord = authRecord
+		ld.authRecord = authRecord
 	} else {
-		pd.authRecord = nil
+		ld.authRecord = nil
 	}
 
 	if flashError, ok := c.Get("ferror").(string); ok {
-		pd.flashError = flashError
+		ld.flashError = flashError
 	}
 
 	if flashInfo, ok := c.Get("finfo").(string); ok {
-		pd.flashInfo = flashInfo
+		ld.flashInfo = flashInfo
 	}
 
-	return pd
+	return ld
 }
 
 func Render(c echo.Context, status int, cmp templ.Component) error {
