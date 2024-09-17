@@ -25,6 +25,12 @@ type ArtistFormFields struct {
 	PasswordConfirm string `form:"passwordConfirm" json:"passwordConfirm"`
 }
 
+type PatronFormFields struct {
+	Email           string `form:"email" json:"email"`
+	Password        string `form:"password" json:"password"`
+	PasswordConfirm string `form:"passwordConfirm" json:"passwordConfirm"`
+}
+
 func checkConfirmPassword(password string) validation.RuleFunc {
 	return func(value interface{}) error {
 		confirmPassword, _ := value.(string)
@@ -44,6 +50,14 @@ func (a ArtistFormFields) Validate() error {
 		validation.Field(&a.Email, validation.Required, is.Email),
 		validation.Field(&a.Password, validation.Required),
 		validation.Field(&a.PasswordConfirm, validation.Required, validation.By(checkConfirmPassword(a.Password))),
+	)
+}
+
+func (p PatronFormFields) Validate() error {
+	return validation.ValidateStruct(&p,
+		validation.Field(&p.Email, validation.Required, is.Email),
+		validation.Field(&p.Password, validation.Required),
+		validation.Field(&p.PasswordConfirm, validation.Required, validation.By(checkConfirmPassword(p.Password))),
 	)
 }
 
@@ -108,7 +122,8 @@ func RegisterArtist(app core.App, c echo.Context) error {
 		"approved":         false,
 	})
 
-	// extra validation happens here
+	// validation happens here - returns same type of error
+	// as ozzo-validation so can also be marshalled into a map
 	if err = artistForm.Submit(); err != nil {
 		return err
 	}
@@ -122,12 +137,23 @@ func Register(app core.App, c echo.Context) error {
 		return err
 	}
 
+	// fields have to be exported for this to work
+	pd := PatronFormFields{}
+	if err = c.Bind(&pd); err != nil {
+		return err
+	}
+
+	err = pd.Validate()
+	if err != nil {
+		return err
+	}
+
 	newUser := models.NewRecord(collection)
 	form := forms.NewRecordUpsert(app, newUser)
 	form.LoadData(map[string]any{
-		"email":           c.FormValue("email"),
-		"password":        c.FormValue("password"),
-		"passwordConfirm": c.FormValue("passwordConfirm"),
+		"email":           pd.Email,
+		"password":        pd.Password,
+		"passwordConfirm": pd.PasswordConfirm,
 	})
 
 	// validation happens here - returns same type of error

@@ -6,7 +6,7 @@ templ RegisterPage(title string, pd PageData) {
 @layout(title, pd) {
 <div class="registration-wrapper">
   <h3 class="registration-header">I AM A...</h3>
-  @ArtistFormFirst()
+  @ArtistForm()
 </div>
 }
 }
@@ -18,18 +18,33 @@ templ PatronForm() {
     disabled>Patron</button>
 </div>
 <form hx-post="/auth/register/patron" class="form-register" hx-target="#register-form-error" hx-swap="outerHTML">
-  <label>Email</label>
-  <input type="email" name="email" />
-  <label>Password</label>
-  <input type="password" name="password" />
-  <label>Confirm Password</label>
-  <input type="password" name="passwordConfirm" />
-  <input type="submit" value="Sign Up" />
+  <div class="form-error-wrapper">
+    <div class="text-field">
+      <i class="at-envelope-lines-thin"></i>
+      <input id="email" type="email" name="email" placeholder="Email" />
+    </div>
+    <span id="email-error"></span>
+  </div>
+  <div class="form-error-wrapper">
+    <div class="text-field">
+      <i class="at-lock-keyhole-thin"></i>
+      <input id="password" type="password" name="password" placeholder="Password" />
+    </div>
+    <span id="password-error"></span>
+  </div>
+  <div class="form-error-wrapper">
+    <div class="text-field">
+      <i class="at-lock-keyhole-thin"></i>
+      <input id="passwordConfirm" type="password" name="passwordConfirm" placeholder="Confirm Password" />
+    </div>
+    <span id="passwordConfirm-error"></span>
+  </div>
+  <input type="submit" value="Sign me up" />
   <div id="register-form-error"></div>
 </form>
 }
 
-templ ArtistFormFirst() {
+templ ArtistForm() {
 <div class="registration-selection" hx-swap-oob="true:.registration-selection">
   <button hx-get="/auth/register/artist" hx-target=".form-register" hx-swap="outerHTML" class="selected"
     disabled>Artist</button>
@@ -86,22 +101,6 @@ templ ArtistFormFirst() {
     <span id="passwordConfirm-error"></span>
   </div>
   <input type="submit" value="Sign me up" />
-  <div id="register-form-error"></div>
-</form>
-}
-
-templ ArtistFormSecond() {
-<form hx-post="/auth/register/artist" hx-target="#register-form-error" class="form-register" hx-swap="outerHTML">
-  <h2>We'd love to know a little more about you...</h2>
-  <label for="first_name">First Name</label>
-  <input id="first_name" type="text" name="first_name" />
-  <label for="last_name">Last Name</label>
-  <input id="last_name" type="text" name="last_name" />
-  <label for="biography">Biography</label>
-  <textarea id="biography" name="biography" rows="3"></textarea>
-  <label for="instagram">Instagram Handle</label>
-  <input id="instagram" type="text" name="instagram_handle" />
-  <input type="submit" value="Sign Up" />
   <div id="register-form-error"></div>
 </form>
 }
