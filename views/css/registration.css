@@ -53,11 +53,13 @@
     align-items: center;
     gap: var(--crotchet);
     width: min(280px, 100%);
+    padding-bottom: var(--semibreve);
 
     .text-field {
-        width: 100%;
+        max-width: 100%;
         border: 1px solid var(--grey-300);
         border-radius: var(--crotchet);
+        background-color: var(--bg);
         padding: var(--crotchet);
         display: flex;
         align-items: center;
@@ -110,5 +112,19 @@
             color: var(--bg);
             cursor: pointer;
         }
+    }
+
+    .form-error-wrapper {
+        background-color: var(--pink);
+        border-radius: var(--crotchet);
+        width: 100%;
+    }
+
+    .error-message {
+        padding: var(--crotchet);
+        margin: 0;
+        color: var(--grey-800);
+        font-family: var(--font-sans);
+        font-size: 0.8rem;
     }
 }

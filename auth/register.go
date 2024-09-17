@@ -1,9 +1,14 @@
 package auth
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
+	"log"
 	"net/http"
 
+	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"github.com/go-ozzo/ozzo-validation/v4/is"
 	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/forms"
@@ -11,62 +16,107 @@ import (
 	"github.com/pocketbase/pocketbase/tokens"
 )
 
+type ArtistFormFields struct {
+	FirstName       string `form:"first_name" json:"first_name"`
+	LastName        string `form:"last_name" json:"last_name"`
+	InstagramHandle string `form:"instagram_handle" json:"instagram_handle"`
+	Biography       string `form:"biography" json:"biography"`
+	Email           string `form:"email" json:"email"`
+	Password        string `form:"password" json:"password"`
+	PasswordConfirm string `form:"passwordConfirm" json:"passwordConfirm"`
+}
+
+func checkConfirmPassword(password string) validation.RuleFunc {
+	return func(value interface{}) error {
+		confirmPassword, _ := value.(string)
+		if confirmPassword != password {
+			return errors.New("must match password")
+		}
+		return nil
+	}
+}
+
+func (a ArtistFormFields) Validate() error {
+	return validation.ValidateStruct(&a,
+		validation.Field(&a.FirstName, validation.Required),
+		validation.Field(&a.LastName, validation.Required),
+		validation.Field(&a.InstagramHandle, validation.Required),
+		validation.Field(&a.Biography, validation.Required),
+		validation.Field(&a.Email, validation.Required, is.Email),
+		validation.Field(&a.Password, validation.Required),
+		validation.Field(&a.PasswordConfirm, validation.Required, validation.By(checkConfirmPassword(a.Password))),
+	)
+}
+
+func GetMapOfErrs(validationError error) map[string]string {
+	// if there are any errors in the marshalling
+	// just return empty map
+	errJson, err := json.Marshal(validationError)
+	if err != nil {
+		return make(map[string]string)
+	}
+	errMap := make(map[string]string)
+	if err := json.Unmarshal(errJson, &errMap); err != nil {
+		return make(map[string]string)
+	}
+
+	return errMap
+}
+
 func RegisterArtist(app core.App, c echo.Context) error {
-	users, err := app.Dao().FindCollectionByNameOrId("users")
+	_, err := app.Dao().FindCollectionByNameOrId("users")
 	if err != nil {
 		return err
 	}
 
-	artists, err := app.Dao().FindCollectionByNameOrId("artists")
+	_, err = app.Dao().FindCollectionByNameOrId("artists")
 	if err != nil {
 		return err
 	}
 
 	// fields have to be exported for this to work
-	fd := struct {
-		FirstName       string `form:"first_name"`
-		LastName        string `form:"last_name"`
-		InstagramHandle string `form:"instagram_handle"`
-		Biography       string `form:"biography"`
-		Email           string `form:"email"`
-		Password        string `form:"password"`
-		PasswordConfirm string `form:"password"`
-	}{}
-
+	fd := ArtistFormFields{}
 	if err = c.Bind(&fd); err != nil {
 		return err
 	}
 
-	newUser := models.NewRecord(users)
-	userForm := forms.NewRecordUpsert(app, newUser)
-	userForm.LoadData(map[string]any{
-		"first_name":      fd.FirstName,
-		"last_name":       fd.LastName,
-		"email":           fd.Email,
-		"password":        fd.Password,
-		"passwordConfirm": fd.PasswordConfirm,
-	})
-
-	// user validation happens here:
-	if err := userForm.Submit(); err != nil {
+	err = fd.Validate()
+	if err != nil {
 		return err
 	}
 
-	newArtist := models.NewRecord(artists)
-	artistForm := forms.NewRecordUpsert(app, newArtist)
-	artistForm.LoadData(map[string]any{
-		"instagram_handle": fd.InstagramHandle,
-		"biography":        fd.Biography,
-		"user":             newUser.Id,
-		"approved":         false,
-	})
+	return nil
 
-	// artist validation happens here
-	if err = artistForm.Submit(); err != nil {
-		return err
-	}
+	// newUser := models.NewRecord(users)
+	// userForm := forms.NewRecordUpsert(app, newUser)
+	// userForm.LoadData(map[string]any{
+	// 	"first_name":      fd.FirstName,
+	// 	"last_name":       fd.LastName,
+	// 	"email":           fd.Email,
+	// 	"password":        fd.Password,
+	// 	"passwordConfirm": fd.PasswordConfirm,
+	// })
 
-	return setAuthToken(app, c, newUser)
+	// // user validation happens here:
+	// if err := userForm.Submit(); err != nil {
+	// 	return err
+	// }
+
+	// newArtist := models.NewRecord(artists)
+	// artistForm := forms.NewRecordUpsert(app, newArtist)
+	// artistForm.LoadData(map[string]any{
+	// 	"instagram_handle": fd.InstagramHandle,
+	// 	"biography":        fd.Biography,
+	// 	"user":             newUser.Id,
+	// 	"approved":         false,
+	// })
+
+	// // artist validation happens here
+	// if err = artistForm.Submit(); err != nil {
+	// 	return err
+	// }
+
+	// return setAuthToken(app, c, newUser)
 }
 
 func Register(app core.App, c echo.Context) error {

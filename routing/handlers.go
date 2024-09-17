@@ -73,7 +73,7 @@ func (h HandlerContext) RegisterArtistHandler(c echo.Context) error {
 
 func (h HandlerContext) RegisterPatronPostHandler(c echo.Context) error {
 	if err := auth.Register(h.e.App, c); err != nil {
-		return views.Render(c, http.StatusUnprocessableEntity, views.RegisterFormError(err.Error()))
+		return views.Render(c, http.StatusUnprocessableEntity, views.RegisterFormError(make(map[string]string)))
 	}
 
 	SetFlash(c, "info", "Registered - welcome!")
@@ -83,9 +83,9 @@ func (h HandlerContext) RegisterPatronPostHandler(c echo.Context) error {
 }
 
 func (h HandlerContext) RegisterArtistPostHandler(c echo.Context) error {
-	log.Println("Hello!")
 	if err := auth.RegisterArtist(h.e.App, c); err != nil {
-		return views.Render(c, http.StatusUnprocessableEntity, views.RegisterFormError(err.Error()))
+		errMap := auth.GetMapOfErrs(err)
+		return views.Render(c, http.StatusUnprocessableEntity, views.RegisterFormError(errMap))
 	}
 
 	c.Response().Header().Set("Hx-Redirect", "/auth/register")

@@ -34,33 +34,51 @@ templ ArtistFormFirst() {
   <button hx-get="/auth/register/patron" hx-target=".form-register" hx-swap="outerHTML">Patron</button>
 </div>
 <form hx-post="/auth/register/artist" hx-target="#register-form-error" class="form-register" hx-swap="outerHTML">
-  <div class="text-field">
-    <i class="at-account-thin"></i>
-    <input id="first_name" type="text" name="first_name" placeholder="First Name" />
+  <div class="form-error-wrapper">
+    <div class="text-field">
+      <i class="at-account-thin"></i>
+      <input id="first_name" type="text" name="first_name" placeholder="First Name" />
+    </div>
+    <span id="first-name-error"></span>
   </div>
-  <div class="text-field">
-    <i class="at-account-thin"></i>
-    <input id="first_name" type="text" name="last_name" placeholder="Last Name" />
+  <div class="form-error-wrapper">
+    <div class="text-field">
+      <i class="at-account-thin"></i>
+      <input id="last_name" type="text" name="last_name" placeholder="Last Name" />
+    </div>
+    <span id="last-name-error"></span>
   </div>
-  <div class="text-field">
-    <i class="at-instagram-thin"></i>
-    <input id="instagram_handle" type="text" name="instagram_handle" placeholder="Instagram Handle" />
+  <div class="form-error-wrapper">
+    <div class="text-field">
+      <i class="at-instagram-thin"></i>
+      <input id="instagram_handle" type="text" name="instagram_handle" placeholder="Instagram Handle" />
+    </div>
+    <span id="instagram-handle-error"></span>
   </div>
-  <div class="text-field">
-    <i class="at-write-paper-thin"></i>
-    <textarea id="biography" name="biography" rows="3" placeholder="A tiny biography" maxlength="128"></textarea>
+  <div class="form-error-wrapper">
+    <div class="text-field">
+      <i class="at-write-paper-thin"></i>
+      <textarea id="biography" name="biography" rows="3" placeholder="A tiny biography" maxlength="128"></textarea>
+    </div>
+    <span id="biography-error"></span>
   </div>
-  <div class="text-field">
-    <i class="at-envelope-lines-thin"></i>
-    <input id="email" type="email" name="email" placeholder="Email" />
+  <div class="form-error-wrapper">
+    <div class="text-field">
+      <i class="at-envelope-lines-thin"></i>
+      <input id="email" type="email" name="email" placeholder="Email" />
+    </div>
   </div>
-  <div class="text-field">
-    <i class="at-lock-keyhole-thin"></i>
-    <input id="password" type="password" name="password" placeholder="Password" />
+  <div class="form-error-wrapper">
+    <div class="text-field">
+      <i class="at-lock-keyhole-thin"></i>
+      <input id="password" type="password" name="password" placeholder="Password" />
+    </div>
   </div>
-  <div class="text-field">
-    <i class="at-lock-keyhole-thin"></i>
-    <input id="passwordCOnfirm" type="password" name="passwordConfirm" placeholder="Confirm Password" />
+  <div class="form-error-wrapper">
+    <div class="text-field">
+      <i class="at-lock-keyhole-thin"></i>
+      <input id="passwordCOnfirm" type="password" name="passwordConfirm" placeholder="Confirm Password" />
+    </div>
   </div>
   <input type="submit" value="Sign me up" />
   <div id="register-form-error"></div>
@@ -83,6 +101,25 @@ templ ArtistFormSecond() {
 </form>
 }
 
-templ RegisterFormError(message string) {
-<div id="register-form-error" class="register-form-error">{ message }</div>
+templ RegisterFormError(errMap map[string]string) {
+if errMap["first_name"] != "" {
+<p id="first-name-error" hx-swap-oob="outerHTML" class="error-message">
+  { errMap["first_name"] }
+</p>
+}
+if errMap["last_name"] != "" {
+<p id="last-name-error" hx-swap-oob="outerHTML" class="error-message">
+  { errMap["last_name"] }
+</p>
+}
+if errMap["instagram_handle"] != "" {
+<p id="instagram-handle-error" hx-swap-oob="outerHTML" class="error-message">
+  { errMap["instagram_handle"] }
+</p>
+}
+if errMap["biography"] != "" {
+<p id="biography-error" hx-swap-oob="outerHTML" class="error-message">
+  { errMap["biography"] }
+</p>
+}
 }
