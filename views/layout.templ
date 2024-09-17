@@ -1,51 +1,54 @@
 package views
 
-
 templ layout(title string, pd PageData) {
-	<!DOCTYPE html>
-	<html lang="en_gb">
-		<head>
-			<meta charset="UTF-8"/>
-			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<script src="/static/build/index.js"></script>
-			<link rel="stylesheet" type="text/css" href="/static/build/app.css"/>
-			<title>{ title }</title>
-		</head>
-		<body>
-			<header>
-				@navbar(pd)
-			</header>
-			<main>
-				{ children... }
-			</main>
-			@flashMessages(pd.flashError, pd.flashInfo)
-		</body>
-	</html>
+<!DOCTYPE html>
+<html lang="en_gb">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="/static/build/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="/static/build/app.css" />
+  <link rel="stylesheet" href="https://unpkg.com/@vectopus/atlas-icons/style.css" />
+  <title>{ title }</title>
+</head>
+
+<body>
+  <header>
+    @navbar(pd)
+  </header>
+  <main>
+    { children... }
+  </main>
+  @flashMessages(pd.flashError, pd.flashInfo)
+</body>
+
+</html>
 }
 
 templ navbar(pd PageData) {
-	<nav>
-		<ul>
-			<li><a href="/">Home</a></li>
-			<li><a href="/auth/register">Register</a></li>
-			<li><a href="/auth/login">Login</a></li>
-			if pd.authRecord != nil {
-				<li><button hx-post="/auth/logout" hx-swap="outerHTML">Logout</button></li>
-			}
-		</ul>
-	</nav>
+<nav>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/auth/register">Register</a></li>
+    <li><a href="/auth/login">Login</a></li>
+    if pd.authRecord != nil {
+    <li><button hx-post="/auth/logout" hx-swap="outerHTML">Logout</button></li>
+    }
+  </ul>
+</nav>
 }
 
 templ flashMessages(flashError string, flashInfo string) {
-	if flashError != "" {
-		<div class="error flash">
-			{ flashError }
-			<button class="flash-close" onclick="window.hideFlash('error')"></button>
-		</div>
-	} else if flashInfo != "" {
-		<div class="info flash">
-			{ flashInfo }
-			<button class="flash-close" onclick="window.hideFlash('info')"></button>
-		</div>
-	}
+if flashError != "" {
+<div class="error flash">
+  { flashError }
+  <button class="flash-close" onclick="window.hideFlash('error')"></button>
+</div>
+} else if flashInfo != "" {
+<div class="info flash">
+  { flashInfo }
+  <button class="flash-close" onclick="window.hideFlash('info')"></button>
+</div>
+}
 }

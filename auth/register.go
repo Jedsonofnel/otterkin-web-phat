@@ -12,32 +12,61 @@ import (
 )
 
 func RegisterArtist(app core.App, c echo.Context) error {
-	_, err := app.Dao().FindCollectionByNameOrId("users")
+	users, err := app.Dao().FindCollectionByNameOrId("users")
 	if err != nil {
 		return err
 	}
 
-	_, err = app.Dao().FindCollectionByNameOrId("artists")
+	artists, err := app.Dao().FindCollectionByNameOrId("artists")
 	if err != nil {
 		return err
 	}
 
 	// fields have to be exported for this to work
-	formData := struct {
+	fd := struct {
 		FirstName       string `form:"first_name"`
 		LastName        string `form:"last_name"`
 		InstagramHandle string `form:"instagram_handle"`
+		Biography       string `form:"biography"`
 		Email           string `form:"email"`
-		biography       string `form:"biography"`
-		password        string `form:"password"`
-		passwordConfirm string `form:"password"`
+		Password        string `form:"password"`
+		PasswordConfirm string `form:"password"`
 	}{}
 
-	if err = c.Bind(&formData); err != nil {
+	if err = c.Bind(&fd); err != nil {
 		return err
 	}
 
-	return nil
+	newUser := models.NewRecord(users)
+	userForm := forms.NewRecordUpsert(app, newUser)
+	userForm.LoadData(map[string]any{
+		"first_name":      fd.FirstName,
+		"last_name":       fd.LastName,
+		"email":           fd.Email,
+		"password":        fd.Password,
+		"passwordConfirm": fd.PasswordConfirm,
+	})
+
+	// user validation happens here:
+	if err := userForm.Submit(); err != nil {
+		return err
+	}
+
+	newArtist := models.NewRecord(artists)
+	artistForm := forms.NewRecordUpsert(app, newArtist)
+	artistForm.LoadData(map[string]any{
+		"instagram_handle": fd.InstagramHandle,
+		"biography":        fd.Biography,
+		"user":             newUser.Id,
+		"approved":         false,
+	})
+
+	// artist validation happens here
+	if err = artistForm.Submit(); err != nil {
+		return err
+	}
+
+	return setAuthToken(app, c, newUser)
 }
 
 func Register(app core.App, c echo.Context) error {

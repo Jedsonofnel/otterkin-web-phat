@@ -1,0 +1,114 @@
+.registration-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.registration-selection {
+    display: flex;
+    width: auto;
+    gap: var(--quaver);
+    flex-wrap: wrap;
+    justify-content: center;
+
+    button {
+        padding: var(--crotchet);
+        font-family: var(--font-sans);
+        font-size: 1rem;
+        width: 120px;
+        border: none;
+        border-radius: var(--crotchet);
+        background-color: var(--bg);
+        color: var(--grey-300);
+
+        &.selected {
+            background-color: var(--grey-200);
+            color: var(--grey-800);
+            &:hover {
+                background-color: var(--grey-200);
+                cursor: default;
+            }
+        }
+
+        &:hover {
+            background-color: var(--grey-300);
+            color: var(--grey-800);
+            cursor: pointer;
+        }
+    }
+}
+
+.registration-header {
+    color: var(--gold);
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+}
+
+.form-register,
+.form-login {
+    margin-top: var(--minim);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--crotchet);
+    width: min(280px, 100%);
+
+    .text-field {
+        width: 100%;
+        border: 1px solid var(--grey-300);
+        border-radius: var(--crotchet);
+        padding: var(--crotchet);
+        display: flex;
+        align-items: center;
+        gap: var(--crotchet);
+
+        &:focus-within {
+            border-color: var(--grey-800);
+        }
+
+        i {
+            color: var(--gold);
+            font-size: 24px;
+        }
+
+        textarea {
+            flex-grow: 1;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            color: var(--fg);
+            background-color: var(--bg);
+            border: none;
+            outline: none;
+        }
+
+        input {
+            flex-grow: 1;
+            font-size: 0.9rem;
+            color: var(--fg);
+            border: none;
+            outline: none;
+            background-color: var(--bg);
+            font-family: var(--font-sans);
+        }
+    }
+
+    input[type="submit"] {
+        margin-top: var(--minim);
+        padding: var(--crotchet);
+        font-family: var(--font-serif);
+        font-size: 1rem;
+        background-color: var(--bg);
+        box-shadow: none;
+        color: var(--gold);
+        border: 1px solid var(--gold);
+        border-radius: var(--quaver);
+
+        &:hover {
+            background-color: var(--pink);
+            border: 1px solid var(--pink);
+            color: var(--bg);
+            cursor: pointer;
+        }
+    }
+}

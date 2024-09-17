@@ -1,0 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display+SC:ital@0;1&display=swap');
+
+/* let's add some variables */
+html {
+  --font-serif: "Playfair Display SC", serif;
+  --font-sans: "Montserrat", sans-serif;
+}

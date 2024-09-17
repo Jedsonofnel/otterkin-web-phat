@@ -1,18 +1,3 @@
-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.form-register,
-.form-login {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  padding: 8px;
-  border: 1px solid black;
-}
-
 .flash {
   position: fixed;
   right: 16px;

@@ -68,7 +68,7 @@ func (h HandlerContext) RegisterPatronHandler(c echo.Context) error {
 }
 
 func (h HandlerContext) RegisterArtistHandler(c echo.Context) error {
-	return views.Render(c, http.StatusOK, views.ArtistForm())
+	return views.Render(c, http.StatusOK, views.ArtistFormFirst())
 }
 
 func (h HandlerContext) RegisterPatronPostHandler(c echo.Context) error {
