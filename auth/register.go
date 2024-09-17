@@ -63,12 +63,12 @@ func GetMapOfErrs(validationError error) map[string]string {
 }
 
 func RegisterArtist(app core.App, c echo.Context) error {
-	_, err := app.Dao().FindCollectionByNameOrId("users")
+	users, err := app.Dao().FindCollectionByNameOrId("users")
 	if err != nil {
 		return err
 	}
 
-	_, err = app.Dao().FindCollectionByNameOrId("artists")
+	artists, err := app.Dao().FindCollectionByNameOrId("artists")
 	if err != nil {
 		return err
 	}
@@ -84,38 +84,36 @@ func RegisterArtist(app core.App, c echo.Context) error {
 		return err
 	}
 
-	return nil
+	newUser := models.NewRecord(users)
+	userForm := forms.NewRecordUpsert(app, newUser)
+	userForm.LoadData(map[string]any{
+		"first_name":      fd.FirstName,
+		"last_name":       fd.LastName,
+		"email":           fd.Email,
+		"password":        fd.Password,
+		"passwordConfirm": fd.PasswordConfirm,
+	})
 
-	// newUser := models.NewRecord(users)
-	// userForm := forms.NewRecordUpsert(app, newUser)
-	// userForm.LoadData(map[string]any{
-	// 	"first_name":      fd.FirstName,
-	// 	"last_name":       fd.LastName,
-	// 	"email":           fd.Email,
-	// 	"password":        fd.Password,
-	// 	"passwordConfirm": fd.PasswordConfirm,
-	// })
+	// extra validation happens here:
+	if err := userForm.Submit(); err != nil {
+		return err
+	}
 
-	// // user validation happens here:
-	// if err := userForm.Submit(); err != nil {
-	// 	return err
-	// }
+	newArtist := models.NewRecord(artists)
+	artistForm := forms.NewRecordUpsert(app, newArtist)
+	artistForm.LoadData(map[string]any{
+		"instagram_handle": fd.InstagramHandle,
+		"biography":        fd.Biography,
+		"user":             newUser.Id,
+		"approved":         false,
+	})
 
-	// newArtist := models.NewRecord(artists)
-	// artistForm := forms.NewRecordUpsert(app, newArtist)
-	// artistForm.LoadData(map[string]any{
-	// 	"instagram_handle": fd.InstagramHandle,
-	// 	"biography":        fd.Biography,
-	// 	"user":             newUser.Id,
-	// 	"approved":         false,
-	// })
+	// extra validation happens here
+	if err = artistForm.Submit(); err != nil {
+		return err
+	}
 
-	// // artist validation happens here
-	// if err = artistForm.Submit(); err != nil {
-	// 	return err
-	// }
-
-	// return setAuthToken(app, c, newUser)
+	return setAuthToken(app, c, newUser)
 }
 
 func Register(app core.App, c echo.Context) error {
@@ -132,7 +130,8 @@ func Register(app core.App, c echo.Context) error {
 		"passwordConfirm": c.FormValue("passwordConfirm"),
 	})
 
-	// validation happens here:
+	// validation happens here - returns same type of error
+	// as ozzo-validation so can also be marshalled into a map
 	if err := form.Submit(); err != nil {
 		return err
 	}
