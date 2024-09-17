@@ -1,7 +1,6 @@
 package routing
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/Jedsonofnel/otterkin-web/auth"
