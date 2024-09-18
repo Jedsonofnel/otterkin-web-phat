@@ -8,13 +8,16 @@ import (
 )
 
 type LayoutData struct {
+	title      string
 	authRecord *models.Record
 	flashInfo  string
 	flashError string
 }
 
-func NewLayoutData(c echo.Context) LayoutData {
+func NewLayoutData(c echo.Context, title string) LayoutData {
 	ld := LayoutData{}
+
+	ld.title = title
 
 	if authRecord, ok := c.Get(apis.ContextAuthRecordKey).(*models.Record); ok {
 		ld.authRecord = authRecord

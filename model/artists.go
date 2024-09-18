@@ -7,7 +7,27 @@ import (
 )
 
 func FindActiveArtists(dao *daos.Dao) ([]*models.Record, error) {
-	query := dao.RecordQuery("artists")
+	query := dao.RecordQuery("artists").
+		AndWhere(dbx.HashExp{"approved": true}).
+		OrderBy("created DESC").
+		Limit(10)
 
-	return nil, nil
+	records := []*models.Record{}
+	if err := query.All(&records); err != nil {
+		return nil, err
+	}
+
+	return records, nil
+}
+
+func FindAllArtists(dao *daos.Dao) ([]*models.Record, error) {
+	query := dao.RecordQuery("artists").
+		OrderBy("created DESC")
+
+	records := []*models.Record{}
+	if err := query.All(&records); err != nil {
+		return nil, err
+	}
+
+	return records, nil
 }

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/Jedsonofnel/otterkin-web/auth"
+	"github.com/Jedsonofnel/otterkin-web/model"
 	"github.com/Jedsonofnel/otterkin-web/view"
 	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/pocketbase/core"
@@ -19,8 +20,13 @@ func NewHandlerContext(e *core.ServeEvent) HandlerContext {
 
 // needs the external registry dependency as it caches
 func (h HandlerContext) HomeHandler(c echo.Context) error {
-	pd := view.NewLayoutData(c)
-	return view.Render(c, http.StatusOK, view.HomePage("Otterkin", pd))
+	visibleArtists, err := model.FindActiveArtists(h.e.App.Dao())
+	if err != nil {
+		return err // this will be a 500 as it's a db error
+	}
+	hd := view.NewHomePageData(visibleArtists)
+	ld := view.NewLayoutData(c, "Otterkin")
+	return view.Render(c, http.StatusOK, view.HomePage(ld, hd))
 }
 
 func (hc HandlerContext) AuthHandler(g *echo.Group) {
@@ -39,8 +45,8 @@ func (hc HandlerContext) AuthHandler(g *echo.Group) {
 }
 
 func (h HandlerContext) LoginPageHandler(c echo.Context) error {
-	pd := view.NewLayoutData(c)
-	return view.Render(c, http.StatusOK, view.LoginPage("Login - Otterkin", pd))
+	ld := view.NewLayoutData(c, "Login - Otterkin")
+	return view.Render(c, http.StatusOK, view.LoginPage(ld))
 }
 
 func (h HandlerContext) LoginPostHandler(c echo.Context) error {
@@ -55,8 +61,8 @@ func (h HandlerContext) LoginPostHandler(c echo.Context) error {
 }
 
 func (h HandlerContext) RegisterPageHandler(c echo.Context) error {
-	pd := view.NewLayoutData(c)
-	return view.Render(c, http.StatusOK, view.RegisterPage("Register - Otterkin", pd))
+	ld := view.NewLayoutData(c, "Register - Otterking")
+	return view.Render(c, http.StatusOK, view.RegisterPage(ld))
 }
 
 func (h HandlerContext) RegisterPatronHandler(c echo.Context) error {

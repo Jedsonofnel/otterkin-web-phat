@@ -1,6 +1,6 @@
 package view
 
-templ layout(title string, ld LayoutData) {
+templ layout(ld LayoutData) {
 	<!DOCTYPE html>
 	<html lang="en_gb">
 		<head>
@@ -8,7 +8,7 @@ templ layout(title string, ld LayoutData) {
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<link rel="stylesheet" type="text/css" href="/static/build/app.css"/>
 			<link rel="stylesheet" href="https://unpkg.com/@vectopus/atlas-icons/style.css"/>
-			<title>{ title }</title>
+			<title>{ ld.title }</title>
 		</head>
 		<body>
 			@header(ld)

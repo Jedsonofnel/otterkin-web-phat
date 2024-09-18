@@ -1,32 +1,47 @@
 package view
 
-templ HomePage(title string, ld LayoutData) {
-	@layout(title, ld) {
+import "github.com/pocketbase/pocketbase/models"
+
+type HomePageData struct {
+  artists []*models.Record
+}
+
+func NewHomePageData(artists []*models.Record) HomePageData {
+  return HomePageData{artists: artists} 
+}
+
+templ HomePage(ld LayoutData, pd HomePageData) {
+	@layout(ld) {
 		<h1 class="home-heading">
 			A <span style="font-style:italic">very</span> warm welcome
 		</h1>
-		<p>
-			Pardon the dust, our digital decorators are at work. But let me introduce myself - I'm Mr. Otterkin, and welcome to
-			Otterkin, an online commissioning
-			platofrm created to help talented artists thrive. I'm passionate about bridging the gap between artists and art
-			lovers, providing
-			a space where beautiful, bespoke works of art come to life.
-		</p>
-		<p>
-			At Otterkin, we take pride in supporting artists by offering a platform that makes
-			the commissioning process straightforward, fair, and rewarding. We're not just
-			another platform; we're a community that values craftsmanship, talent and the stories
-			behind every brushstroke.
-		</p>
-		<p>
-			Now, dear artist, while we're still setting the stage and hanging the curtains, we'd be absolutely delighted if you'd
-			pop your name on the list below. You'll be the first to know when we open our digital doors
-			and start welcoming portfolios. With a simple click, you'll have your very own space to showcase
-			your masterpieces, connect with eager clients, and begin weaving new tales with your work.
-			So wy not? Sign up below and be ready to step into the spotlight as soon as we're live. We
-			can't wait to see what marvellous creations you'll bring to Otterkin!
-		</p>
-		<p>We look forward to hosting you soon!</p>
-		<p>Yours faithfullly,</p>
+
+    <h2>Our artists:</h2>
+    for _, artist := range pd.artists {
+      <div>{artist.GetString("instagram_handle")}</div>
+    }
+		// <p>
+		// 	Pardon the dust, our digital decorators are at work. But let me introduce myself - I'm Mr. Otterkin, and welcome to
+		// 	Otterkin, an online commissioning
+		// 	platofrm created to help talented artists thrive. I'm passionate about bridging the gap between artists and art
+		// 	lovers, providing
+		// 	a space where beautiful, bespoke works of art come to life.
+		// </p>
+		// <p>
+		// 	At Otterkin, we take pride in supporting artists by offering a platform that makes
+		// 	the commissioning process straightforward, fair, and rewarding. We're not just
+		// 	another platform; we're a community that values craftsmanship, talent and the stories
+		// 	behind every brushstroke.
+		// </p>
+		// <p>
+		// 	Now, dear artist, while we're still setting the stage and hanging the curtains, we'd be absolutely delighted if you'd
+		// 	pop your name on the list below. You'll be the first to know when we open our digital doors
+		// 	and start welcoming portfolios. With a simple click, you'll have your very own space to showcase
+		// 	your masterpieces, connect with eager clients, and begin weaving new tales with your work.
+		// 	So wy not? Sign up below and be ready to step into the spotlight as soon as we're live. We
+		// 	can't wait to see what marvellous creations you'll bring to Otterkin!
+		// </p>
+		// <p>We look forward to hosting you soon!</p>
+		// <p>Yours faithfullly,</p>
 	}
 }

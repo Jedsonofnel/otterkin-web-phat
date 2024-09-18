@@ -2,8 +2,8 @@ package view
 
 import "fmt"
 
-templ RegisterPage(title string, ld LayoutData) {
-	@layout(title, ld) {
+templ RegisterPage(ld LayoutData) {
+	@layout(ld) {
 		<div class="registration-wrapper">
 			@ArtistForm()
 		</div>
