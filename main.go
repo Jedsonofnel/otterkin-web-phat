@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"github.com/Jedsonofnel/otterkin-web/auth"
+	"github.com/Jedsonofnel/otterkin-web/controller"
 	_ "github.com/Jedsonofnel/otterkin-web/migrations"
-	"github.com/Jedsonofnel/otterkin-web/routing"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
@@ -26,18 +26,18 @@ func main() {
 
 	// Routing
 	pb.OnBeforeServe().Add(func(e *core.ServeEvent) error {
-		hc := routing.NewHandlerContext(e)
+		hc := controller.NewHandlerContext(e)
 
 		// pages
 		e.Router.GET("/", hc.HomeHandler,
 			auth.LoadAuthContextFromCookie(e.App),
-			routing.LoadFlash)
+			controller.LoadFlash)
 
 		// auth routes
 		authGroup := e.Router.Group(
 			"/auth",
 			auth.LoadAuthContextFromCookie(e.App),
-			routing.OnlyUnauthorisedUsers,
+			controller.OnlyUnauthorisedUsers,
 		)
 		hc.AuthHandler(authGroup)
 		e.Router.POST("/logout", hc.LogoutHandler)

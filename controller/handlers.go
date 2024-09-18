@@ -1,10 +1,10 @@
-package routing
+package controller
 
 import (
 	"net/http"
 
 	"github.com/Jedsonofnel/otterkin-web/auth"
-	"github.com/Jedsonofnel/otterkin-web/views"
+	"github.com/Jedsonofnel/otterkin-web/view"
 	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/pocketbase/core"
 )
@@ -19,8 +19,8 @@ func NewHandlerContext(e *core.ServeEvent) HandlerContext {
 
 // needs the external registry dependency as it caches
 func (h HandlerContext) HomeHandler(c echo.Context) error {
-	pd := views.NewLayoutData(c)
-	return views.Render(c, http.StatusOK, views.HomePage("Otterkin", pd))
+	pd := view.NewLayoutData(c)
+	return view.Render(c, http.StatusOK, view.HomePage("Otterkin", pd))
 }
 
 func (hc HandlerContext) AuthHandler(g *echo.Group) {
@@ -39,13 +39,13 @@ func (hc HandlerContext) AuthHandler(g *echo.Group) {
 }
 
 func (h HandlerContext) LoginPageHandler(c echo.Context) error {
-	pd := views.NewLayoutData(c)
-	return views.Render(c, http.StatusOK, views.LoginPage("Login - Otterkin", pd))
+	pd := view.NewLayoutData(c)
+	return view.Render(c, http.StatusOK, view.LoginPage("Login - Otterkin", pd))
 }
 
 func (h HandlerContext) LoginPostHandler(c echo.Context) error {
 	if err := auth.Login(h.e.App, c); err != nil {
-		return views.Render(c, http.StatusUnprocessableEntity, views.LoginFormError("Invalid credentials!"))
+		return view.Render(c, http.StatusUnprocessableEntity, view.LoginFormError("Invalid credentials!"))
 	}
 
 	SetFlash(c, "info", "Logged in, welcome!")
@@ -55,22 +55,22 @@ func (h HandlerContext) LoginPostHandler(c echo.Context) error {
 }
 
 func (h HandlerContext) RegisterPageHandler(c echo.Context) error {
-	pd := views.NewLayoutData(c)
-	return views.Render(c, http.StatusOK, views.RegisterPage("Register - Otterkin", pd))
+	pd := view.NewLayoutData(c)
+	return view.Render(c, http.StatusOK, view.RegisterPage("Register - Otterkin", pd))
 }
 
 func (h HandlerContext) RegisterPatronHandler(c echo.Context) error {
-	return views.Render(c, http.StatusOK, views.PatronForm())
+	return view.Render(c, http.StatusOK, view.PatronForm())
 }
 
 func (h HandlerContext) RegisterArtistHandler(c echo.Context) error {
-	return views.Render(c, http.StatusOK, views.ArtistForm())
+	return view.Render(c, http.StatusOK, view.ArtistForm())
 }
 
 func (h HandlerContext) RegisterPatronPostHandler(c echo.Context) error {
 	if err := auth.Register(h.e.App, c); err != nil {
 		errMap := auth.GetMapOfErrs(err)
-		return views.Render(c, http.StatusUnprocessableEntity, views.RegisterFormError(errMap))
+		return view.Render(c, http.StatusUnprocessableEntity, view.RegisterFormError(errMap))
 	}
 
 	SetFlash(c, "info", "Registered - welcome!")
@@ -82,7 +82,7 @@ func (h HandlerContext) RegisterPatronPostHandler(c echo.Context) error {
 func (h HandlerContext) RegisterArtistPostHandler(c echo.Context) error {
 	if err := auth.RegisterArtist(h.e.App, c); err != nil {
 		errMap := auth.GetMapOfErrs(err)
-		return views.Render(c, http.StatusUnprocessableEntity, views.RegisterFormError(errMap))
+		return view.Render(c, http.StatusUnprocessableEntity, view.RegisterFormError(errMap))
 	}
 
 	SetFlash(c, "info", "Registered - welcome!")
