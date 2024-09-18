@@ -1,19 +1,37 @@
 package views
 
 templ LoginPage(title string, ld LayoutData) {
-@layout(title, ld) {
-<h1>Login</h1>
-<form hx-post="/auth/login" hx-swap="outerHTML" hx-target="#login-form-error" class="form-login">
-  <label>Email</label>
-  <input type="email" name="email" />
-  <label>Password</label>
-  <input type="password" name="password" />
-  <input type="submit" value="Login" />
-  <div id="login-form-error"></div>
-</form>
-}
+	@layout(title, ld) {
+		<div class="registration-wrapper">
+			<h1 class="registration-header">Login</h1>
+			<form hx-post="/auth/login" hx-swap="outerHTML" hx-target="#login-form-error" class="form-login">
+				<h3 class="greeting">Welcome home!</h3>
+				<div class="form-error-wrapper">
+					<div class="text-field">
+						<i class="at-envelope-lines-thin"></i>
+						<input id="email" type="email" name="email" placeholder="Email"/>
+					</div>
+				</div>
+				<div class="form-error-wrapper">
+					<div class="text-field">
+						<i class="at-lock-keyhole-thin"></i>
+						<input id="password" type="password" name="password" placeholder="Password"/>
+					</div>
+					<span id="login-error"></span>
+				</div>
+				<input type="submit" value="Login"/>
+				<div id="login-form-error"></div>
+			</form>
+		</div>
+	}
 }
 
 templ LoginFormError(message string) {
-<div id="login-form-error" class="login-form-error">{ message }</div>
+	if message != "" {
+		<p id="login-error" class="error-message" hx-swap-oob="outerHTML">
+			{ message }
+		</p>
+	} else {
+		<span id="login-error"></span>
+	}
 }

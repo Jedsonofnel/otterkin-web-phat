@@ -1,55 +1,53 @@
 package views
 
 templ layout(title string, ld LayoutData) {
-<!DOCTYPE html>
-<html lang="en_gb">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="/static/build/index.js"></script>
-  <link rel="stylesheet" type="text/css" href="/static/build/app.css" />
-  <link rel="stylesheet" href="https://unpkg.com/@vectopus/atlas-icons/style.css" />
-  <title>{ title }</title>
-</head>
-
-<body>
-  <header>
-    @navbar(ld)
-  </header>
-  <main>
-    { children... }
-  </main>
-  @flashMessages(ld.flashError, ld.flashInfo)
-</body>
-
-</html>
+	<!DOCTYPE html>
+	<html lang="en_gb">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<link rel="stylesheet" type="text/css" href="/static/build/app.css"/>
+			<link rel="stylesheet" href="https://unpkg.com/@vectopus/atlas-icons/style.css"/>
+			<title>{ title }</title>
+		</head>
+		<body>
+			@header(ld)
+			<main>
+				{ children... }
+			</main>
+			@flashMessages(ld.flashError, ld.flashInfo)
+			<script src="/static/build/index.js"></script>
+		</body>
+	</html>
 }
 
-templ navbar(pd LayoutData) {
-<nav>
-  <ul>
-    <li><a href="/">Home</a></li>
-    if pd.authRecord == nil {
-    <li><a href="/auth/register">Register</a></li>
-    <li><a href="/auth/login">Login</a></li>
-    } else {
-    <li><button hx-post="/logout" hx-swap="outerHTML">Logout</button></li>
-    }
-  </ul>
-</nav>
+templ header(pd LayoutData) {
+	<header>
+    <img src="/static/images/logo.png" class="logo"/>
+		<nav>
+			<ul>
+				<li><a href="/">Home</a></li>
+				if pd.authRecord == nil {
+					<li><a href="/auth/register">Register</a></li>
+					<li><a href="/auth/login">Login</a></li>
+				} else {
+					<li><button hx-post="/logout" hx-swap="outerHTML">Logout</button></li>
+				}
+			</ul>
+		</nav>
+	</header>
 }
 
 templ flashMessages(flashError string, flashInfo string) {
-if flashError != "" {
-<div class="error flash">
-  { flashError }
-  <button class="flash-close" onclick="window.hideFlash('error')"></button>
-</div>
-} else if flashInfo != "" {
-<div class="info flash">
-  { flashInfo }
-  <button class="flash-close" onclick="window.hideFlash('info')"></button>
-</div>
-}
+	if flashError != "" {
+		<div class="error flash">
+			{ flashError }
+			<button class="flash-close" onclick="window.hideFlash('error')"></button>
+		</div>
+	} else if flashInfo != "" {
+		<div class="info flash">
+			{ flashInfo }
+			<button class="flash-close" onclick="window.hideFlash('info')"></button>
+		</div>
+	}
 }

@@ -1,0 +1,7 @@
+.home-heading {
+    color: var(--bg);
+
+    span {
+        color: var(--pink);
+    }
+}

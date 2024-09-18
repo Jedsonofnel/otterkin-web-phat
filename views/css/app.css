@@ -3,22 +3,30 @@
 @import "./layout.css";
 @import "./registration.css";
 @import "./typography.css";
+@import "./homepage.css";
+
+/* important for the box model */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
 /* variables */
 html {
-  /* colour palette */
-  --bg: #faf9f4;
-  --fg: #0e292f;
-  --gold: #cdb684;
-  --pink: #ffd6d0;
-  --grey-200: #e9e6dd;
-  --grey-300: #c5bdaa;
-  --grey-800: #43474a;
+    /* colour palette */
+    --bg: #faf9f4;
+    --fg: #0e292f;
+    --gold: #cdb684;
+    --pink: #ffd6d0;
+    --grey-200: #e9e6dd;
+    --grey-300: #c5bdaa;
+    --grey-800: #43474a;
 
-  /* spacing */
-  --semibreve: 32px;
-  --minim: 16px;
-  --crotchet: 8px;
-  --quaver: 4px;
-  --semiquaver: 2px;
+    /* spacing */
+    --semibreve: 32px;
+    --minim: 16px;
+    --crotchet: 8px;
+    --quaver: 4px;
+    --semiquaver: 2px;
 }

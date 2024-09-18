@@ -3,127 +3,139 @@ package views
 import "fmt"
 
 templ RegisterPage(title string, ld LayoutData) {
-@layout(title, ld) {
-<div class="registration-wrapper">
-  <h3 class="registration-header">I AM A...</h3>
-  @ArtistForm()
-</div>
-}
+	@layout(title, ld) {
+		<div class="registration-wrapper">
+			@ArtistForm()
+		</div>
+	}
 }
 
 templ PatronForm() {
-<div class="registration-selection" hx-swap-oob="true:.registration-selection">
-  <button hx-get="/auth/register/artist" hx-target=".form-register" hx-swap="outerHTML">Artist</button>
-  <button hx-get="/auth/register/patron" hx-target=".form-register" hx-swap="outerHTML" class="selected"
-    disabled>Patron</button>
-</div>
-<form hx-post="/auth/register/patron" class="form-register" hx-target="#register-form-error" hx-swap="outerHTML">
-  <div class="form-error-wrapper">
-    <div class="text-field">
-      <i class="at-envelope-lines-thin"></i>
-      <input id="email" type="email" name="email" placeholder="Email" />
-    </div>
-    <span id="email-error"></span>
-  </div>
-  <div class="form-error-wrapper">
-    <div class="text-field">
-      <i class="at-lock-keyhole-thin"></i>
-      <input id="password" type="password" name="password" placeholder="Password" />
-    </div>
-    <span id="password-error"></span>
-  </div>
-  <div class="form-error-wrapper">
-    <div class="text-field">
-      <i class="at-lock-keyhole-thin"></i>
-      <input id="passwordConfirm" type="password" name="passwordConfirm" placeholder="Confirm Password" />
-    </div>
-    <span id="passwordConfirm-error"></span>
-  </div>
-  <input type="submit" value="Sign me up" />
-  <div id="register-form-error"></div>
-</form>
+	<h1 class="registration-header" hx-swap-oob="outerHTML:.registration-header">I AM A...</h1>
+	<div class="registration-selection" hx-swap-oob="true:.registration-selection">
+		<button hx-get="/auth/register/artist" hx-target=".form-register" hx-swap="outerHTML">Artist</button>
+		<button
+			hx-get="/auth/register/patron"
+			hx-target=".form-register"
+			hx-swap="outerHTML"
+			class="selected"
+			disabled
+		>Patron</button>
+	</div>
+	<form hx-post="/auth/register/patron" class="form-register" hx-target="#register-form-error" hx-swap="outerHTML">
+		<div class="form-error-wrapper">
+			<div class="text-field">
+				<i class="at-envelope-lines-thin"></i>
+				<input id="email" type="email" name="email" placeholder="Email"/>
+			</div>
+			<span id="email-error"></span>
+		</div>
+		<div class="form-error-wrapper">
+			<div class="text-field">
+				<i class="at-lock-keyhole-thin"></i>
+				<input id="password" type="password" name="password" placeholder="Password"/>
+			</div>
+			<span id="password-error"></span>
+		</div>
+		<div class="form-error-wrapper">
+			<div class="text-field">
+				<i class="at-lock-keyhole-thin"></i>
+				<input id="passwordConfirm" type="password" name="passwordConfirm" placeholder="Confirm Password"/>
+			</div>
+			<span id="passwordConfirm-error"></span>
+		</div>
+		<input type="submit" value="Sign me up"/>
+		<div id="register-form-error"></div>
+	</form>
 }
 
 templ ArtistForm() {
-<div class="registration-selection" hx-swap-oob="true:.registration-selection">
-  <button hx-get="/auth/register/artist" hx-target=".form-register" hx-swap="outerHTML" class="selected"
-    disabled>Artist</button>
-  <button hx-get="/auth/register/patron" hx-target=".form-register" hx-swap="outerHTML">Patron</button>
-</div>
-<form hx-post="/auth/register/artist" class="form-register" hx-target="#register-form-error"hx-swap="outerHTML">
-  <div class="form-error-wrapper">
-    <div class="text-field">
-      <i class="at-account-thin"></i>
-      <input id="first_name" type="text" name="first_name" placeholder="First Name" />
-    </div>
-    <span id="first_name-error"></span>
-  </div>
-  <div class="form-error-wrapper">
-    <div class="text-field">
-      <i class="at-account-thin"></i>
-      <input id="last_name" type="text" name="last_name" placeholder="Last Name" />
-    </div>
-    <span id="last_name-error"></span>
-  </div>
-  <div class="form-error-wrapper">
-    <div class="text-field">
-      <i class="at-instagram-thin"></i>
-      <input id="instagram_handle" type="text" name="instagram_handle" placeholder="Instagram Handle" />
-    </div>
-    <span id="instagram_handle-error"></span>
-  </div>
-  <div class="form-error-wrapper">
-    <div class="text-field">
-      <i class="at-write-paper-thin"></i>
-      <textarea id="biography" name="biography" rows="3" placeholder="A tiny biography" maxlength="128"></textarea>
-    </div>
-    <span id="biography-error"></span>
-  </div>
-  <div class="form-error-wrapper">
-    <div class="text-field">
-      <i class="at-envelope-lines-thin"></i>
-      <input id="email" type="email" name="email" placeholder="Email" />
-    </div>
-    <span id="email-error"></span>
-  </div>
-  <div class="form-error-wrapper">
-    <div class="text-field">
-      <i class="at-lock-keyhole-thin"></i>
-      <input id="password" type="password" name="password" placeholder="Password" />
-    </div>
-    <span id="password-error"></span>
-  </div>
-  <div class="form-error-wrapper">
-    <div class="text-field">
-      <i class="at-lock-keyhole-thin"></i>
-      <input id="passwordConfirm" type="password" name="passwordConfirm" placeholder="Confirm Password" />
-    </div>
-    <span id="passwordConfirm-error"></span>
-  </div>
-  <input type="submit" value="Sign me up" />
-  <div id="register-form-error"></div>
-</form>
+	<h1 class="registration-header" hx-swap-oob="outerHTML:.registration-header">I AM AN...</h1>
+	<div class="registration-selection" hx-swap-oob="true:.registration-selection">
+		<button
+			hx-get="/auth/register/artist"
+			hx-target=".form-register"
+			hx-swap="outerHTML"
+			class="selected"
+			disabled
+		>Artist</button>
+		<button hx-get="/auth/register/patron" hx-target=".form-register" hx-swap="outerHTML">Patron</button>
+	</div>
+	<form hx-post="/auth/register/artist" class="form-register" hx-target="#register-form-error" hx-swap="outerHTML">
+		<h3 class="greeting">Wonderful - we need artists like you! Could we trouble you for:</h3>
+		<div class="form-error-wrapper">
+			<div class="text-field">
+				<i class="at-account-thin"></i>
+				<input id="first_name" type="text" name="first_name" placeholder="Your first name"/>
+			</div>
+			<span id="first_name-error"></span>
+		</div>
+		<div class="form-error-wrapper">
+			<div class="text-field">
+				<i class="at-account-thin"></i>
+				<input id="last_name" type="text" name="last_name" placeholder="Your last Name"/>
+			</div>
+			<span id="last_name-error"></span>
+		</div>
+		<div class="form-error-wrapper">
+			<div class="text-field">
+				<i class="at-instagram-thin"></i>
+				<input id="instagram_handle" type="text" name="instagram_handle" placeholder="Your Instagram Handle"/>
+			</div>
+			<span id="instagram_handle-error"></span>
+		</div>
+		<div class="form-error-wrapper">
+			<div class="text-field">
+				<i class="at-write-paper-thin"></i>
+				<textarea id="biography" name="biography" rows="3" placeholder="A tiny biography" maxlength="128"></textarea>
+			</div>
+			<span id="biography-error"></span>
+		</div>
+		<div class="form-error-wrapper">
+			<div class="text-field">
+				<i class="at-envelope-lines-thin"></i>
+				<input id="email" type="email" name="email" placeholder="Your email"/>
+			</div>
+			<span id="email-error"></span>
+		</div>
+		<div class="form-error-wrapper">
+			<div class="text-field">
+				<i class="at-lock-keyhole-thin"></i>
+				<input id="password" type="password" name="password" placeholder="A password"/>
+			</div>
+			<span id="password-error"></span>
+		</div>
+		<div class="form-error-wrapper">
+			<div class="text-field">
+				<i class="at-lock-keyhole-thin"></i>
+				<input id="passwordConfirm" type="password" name="passwordConfirm" placeholder="That password, again"/>
+			</div>
+			<span id="passwordConfirm-error"></span>
+		</div>
+		<input type="submit" value="Sign me up"/>
+		<div id="register-form-error"></div>
+	</form>
 }
 
 var artistErrFields []string = []string{
-"first_name",
-"last_name",
-"instagram_handle",
-"biography",
-"email",
-"password",
-"passwordConfirm",
+	"first_name",
+	"last_name",
+	"instagram_handle",
+	"biography",
+	"email",
+	"password",
+	"passwordConfirm",
 }
 
 templ RegisterFormError(errMap map[string]string) {
-for _, field := range artistErrFields {
-if errMap[field] != "" {
-<p id={ fmt.Sprintf("%s-error", field) } hx-swap-oob="outerHTML" class="error-message">
-  { errMap[field] }
-</p>
-} else {
-<span id={ fmt.Sprintf("%s-error", field) } hx-swap-oob="outerHTML"></span>
-}
-}
-<div id="register-form-error"></div>
+	for _, field := range artistErrFields {
+		if errMap[field] != "" {
+			<p id={ fmt.Sprintf("%s-error", field) } hx-swap-oob="outerHTML" class="error-message">
+				{ errMap[field] }
+			</p>
+		} else {
+			<span id={ fmt.Sprintf("%s-error", field) } hx-swap-oob="outerHTML"></span>
+		}
+	}
+	<div id="register-form-error"></div>
 }
