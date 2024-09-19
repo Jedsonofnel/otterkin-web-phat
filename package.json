@@ -1,19 +1,19 @@
 {
-  "name": "otterkin-web",
-  "version": "1.0.0",
-  "description": "Otterkin website",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Jed Nelson",
-  "license": "ISC",
-  "type": "module",
-  "devDependencies": {
-    "esbuild": "^0.23.1",
-    "eslint": "^9.10.0",
-    "globals": "^15.9.0"
-  },
-  "dependencies": {
-    "htmx.org": "^2.0.2"
-  }
+    "name": "otterkin-web",
+    "version": "1.0.0",
+    "description": "Otterkin website",
+    "scripts": {
+        "dev": "esbuild view/css/app.css view/js/index.js --entry-names=[name] --outdir=static/build --bundle --sourcemap --watch </dev/zero"
+    },
+    "author": "Jed Nelson",
+    "license": "ISC",
+    "type": "module",
+    "devDependencies": {
+        "esbuild": "^0.23.1",
+        "eslint": "^9.10.0",
+        "globals": "^15.9.0"
+    },
+    "dependencies": {
+        "htmx.org": "^2.0.2"
+    }
 }
