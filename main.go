@@ -42,6 +42,21 @@ func main() {
 		hc.AuthHandler(authGroup)
 		e.Router.POST("/logout", hc.LogoutHandler)
 
+		// admin routes
+		adminGroup := e.Router.Group(
+			"/admin",
+			auth.LoadAuthContextFromCookie(e.App),
+			controller.OnlyAdmins,
+		)
+		hc.AdminHandler(adminGroup)
+
+		// user routes
+		userGroup := e.Router.Group(
+			"/user",
+			auth.LoadAuthContextFromCookie(e.App),
+		)
+		hc.UserHandler(userGroup)
+
 		// static files
 		e.Router.Static("/static", "static")
 

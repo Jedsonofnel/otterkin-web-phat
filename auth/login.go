@@ -2,7 +2,6 @@ package auth
 
 import (
 	"errors"
-	"log"
 	"net/http"
 	"time"
 
@@ -19,13 +18,12 @@ func Login(app core.App, c echo.Context) error {
 		password: c.FormValue("password"),
 	}
 
-	log.Printf("We got email: %s, password: %s", loginData.email, loginData.password)
-
-	record, err := app.Dao().FindFirstRecordByData("users", "email", loginData.email)
+	// first try find user and login
+	record, err := app.Dao().FindAuthRecordByEmail("users", loginData.email)
 	if err != nil {
 		return err
 	} else if !record.ValidatePassword(loginData.password) {
-		return errors.New("Password incorrect")
+		return errors.New("Invalid credentials")
 	}
 
 	return setAuthToken(app, c, record)

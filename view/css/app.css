@@ -4,6 +4,7 @@
 @import "./registration.css";
 @import "./typography.css";
 @import "./homepage.css";
+@import "./tables.css";
 
 /* important for the box model */
 * {

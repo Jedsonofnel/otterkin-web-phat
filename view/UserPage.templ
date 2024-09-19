@@ -1,0 +1,31 @@
+package view
+
+import (
+	"fmt"
+	"github.com/Jedsonofnel/otterkin-web/model"
+)
+
+type UserPageData struct {
+	user model.User
+}
+
+func NewUserPageData(user model.User) UserPageData {
+	return UserPageData{user: user}
+}
+
+templ UserPage(ld LayoutData, upd UserPageData) {
+	@layout(ld) {
+		<div class="left-sidebar">hello sidebar</div>
+		<main>
+			<h1>Hello { upd.user.FirstName }</h1>
+			<h2>Update your details</h2>
+			<form hx-post={ string(templ.URL(fmt.Sprintf("/user/%s", upd.user.Id))) }>
+				<label for="first_name">First name</label>
+				<input id="first_name" name="first_name" type="text" value={ upd.user.LastName }/>
+				<label for="last_name">Last name</label>
+				<input id="last_name" name="last_name" type="text" value={ upd.user.LastName }/>
+        <input type="submit" value="Update"/>
+			</form>
+		</main>
+	}
+}

@@ -106,6 +106,7 @@ func RegisterArtist(app core.App, c echo.Context) error {
 		"email":           fd.Email,
 		"password":        fd.Password,
 		"passwordConfirm": fd.PasswordConfirm,
+		"role":            "artist",
 	})
 
 	// extra validation happens here:
@@ -154,6 +155,7 @@ func Register(app core.App, c echo.Context) error {
 		"email":           pd.Email,
 		"password":        pd.Password,
 		"passwordConfirm": pd.PasswordConfirm,
+		"role":            "patron",
 	})
 
 	// validation happens here - returns same type of error

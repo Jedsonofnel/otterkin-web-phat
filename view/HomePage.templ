@@ -1,0 +1,25 @@
+package view
+
+import "github.com/pocketbase/pocketbase/models"
+
+type HomePageData struct {
+	artists []*models.Record
+}
+
+func NewHomePageData(artists []*models.Record) HomePageData {
+	return HomePageData{artists: artists}
+}
+
+templ HomePage(ld LayoutData, pd HomePageData) {
+	@layout(ld) {
+		<main>
+			<h1 class="home-heading">
+				A <span style="font-style:italic">very</span> warm welcome
+			</h1>
+			<h2>Our artists:</h2>
+			for _, artist := range pd.artists {
+				<div>{ artist.GetString("instagram_handle") }</div>
+			}
+		</main>
+	}
+}

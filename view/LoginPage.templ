@@ -2,27 +2,29 @@ package view
 
 templ LoginPage(ld LayoutData) {
 	@layout(ld) {
-		<div class="registration-wrapper">
-			<h1 class="registration-header">Login</h1>
-			<form hx-post="/auth/login" hx-swap="outerHTML" hx-target="#login-form-error" class="form-login">
-				<h3 class="greeting">Welcome home!</h3>
-				<div class="form-error-wrapper">
-					<div class="text-field">
-						<i class="at-envelope-lines-thin"></i>
-						<input id="email" type="email" name="email" placeholder="Email"/>
+		<main>
+			<div class="registration-wrapper">
+				<h1 class="registration-header">Login</h1>
+				<form hx-post="/auth/login" hx-swap="outerHTML" hx-target="#login-form-error" class="form-login">
+					<h3 class="greeting">Welcome home!</h3>
+					<div class="form-error-wrapper">
+						<div class="text-field">
+							<i class="at-envelope-lines-thin"></i>
+							<input id="email" type="email" name="email" placeholder="Email"/>
+						</div>
 					</div>
-				</div>
-				<div class="form-error-wrapper">
-					<div class="text-field">
-						<i class="at-lock-keyhole-thin"></i>
-						<input id="password" type="password" name="password" placeholder="Password"/>
+					<div class="form-error-wrapper">
+						<div class="text-field">
+							<i class="at-lock-keyhole-thin"></i>
+							<input id="password" type="password" name="password" placeholder="Password"/>
+						</div>
+						<span id="login-error"></span>
 					</div>
-					<span id="login-error"></span>
-				</div>
-				<input type="submit" value="Login"/>
-				<div id="login-form-error"></div>
-			</form>
-		</div>
+					<input type="submit" value="Login"/>
+					<div id="login-form-error"></div>
+				</form>
+			</div>
+		</main>
 	}
 }
 

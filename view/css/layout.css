@@ -34,6 +34,17 @@ body {
 }
 
 main {
-    width: min(800px, 90%);
+    grid-area: main;
+}
+
+.left-sidebar {
+    grid-area: left-sidebar;
+}
+
+.grid-wrapper {
     margin: auto;
+    display: grid;
+    grid-template-columns: 200px 1fr 200px;
+    grid-template-areas: "left-sidebar main right-sidebar";
+    width: min(1200px, 90%);
 }

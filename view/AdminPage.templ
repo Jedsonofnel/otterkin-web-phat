@@ -1,0 +1,38 @@
+package view
+
+import "github.com/Jedsonofnel/otterkin-web/model"
+
+type AdminPageData struct {
+	artists []model.Artist
+}
+
+func NewAdminPageData(artists []model.Artist) AdminPageData {
+	return AdminPageData{artists: artists}
+}
+
+templ AdminPage(ld LayoutData, apd AdminPageData) {
+	@layout(ld) {
+		<h1>Hello { ld.authRecord.GetString("First Name") }!</h1>
+		<h2>Artists:</h2>
+		<table>
+			<tr>
+				<th>Name</th>
+				<th>Insta handle</th>
+				<th>Email</th>
+				<th>Approved</th>
+			</tr>
+			for _, artist := range apd.artists {
+				<tr>
+					<td>{ artist.FirstName } { artist.LastName }</td>
+					<td>{ artist.InstagramHandle }</td>
+					<td>{ artist.Email }</td>
+					if artist.Approved {
+						<td>yes</td>
+					} else {
+						<td>no</td>
+					}
+				</tr>
+			}
+		</table>
+	}
+}
