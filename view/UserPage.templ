@@ -35,17 +35,23 @@ func isPage(page string, link string) string {
 templ userDashboardLayout(user model.User, page string) {
 	<nav id="left-sidebar" class="dashboard-sidebar" hx-boost="true">
 		<ul>
-			<h3>User options</h3>
+			<h3>Dashboard</h3>
 			<li>
 				<a href={ templ.URL(fmt.Sprintf("/user/%s", user.Id)) } class={ isPage(page, "user-general") }>
 					<i class="at-sliders-thin"></i>
 					General
 				</a>
 			</li>
+			<li>
+				<a href={ templ.URL(fmt.Sprintf("/user/%s", user.Id)) } class={ isPage(page, "user-commissions") }>
+					<i class="at-handshake-hand-gesture-thin"></i>
+					Commissions
+				</a>
+			</li>
 		</ul>
 		if user.Role == "artist" {
 			<ul>
-				<h3>Artist options</h3>
+				<h3>Artist</h3>
 				<li>
 					<a href={ templ.URL(fmt.Sprintf("/artist/profile/%s", user.Id)) } class={ isPage(page, "artist-general") }>
 						<i class="at-sliders-thin"></i>
@@ -55,10 +61,10 @@ templ userDashboardLayout(user model.User, page string) {
 			</ul>
 		} else if user.Role == "admin" {
 			<ul>
-				<h3>Admin options</h3>
+				<h3>Admin</h3>
 				<li>
 					<a href={ templ.URL(fmt.Sprintf("/admin/%s", user.Id)) } class={ isPage(page, "admin-artists") }>
-						<i class="at-paintbrush-tool-thin"></i>
+						<i class="at-paintbrush-thin"></i>
 						View Artists
 					</a>
 				</li>
