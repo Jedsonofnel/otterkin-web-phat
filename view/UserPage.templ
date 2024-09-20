@@ -37,7 +37,7 @@ templ userDashboardLayout(user model.User) {
 		} else if user.Role == "admin" {
 			<h3>Admin options</h3>
 			<ul>
-				<li><a href="/admin" hx-target="#user-dashboard-main">View Artists</a></li>
+				<li><a href={ templ.URL(fmt.Sprintf("/admin/%s", user.Id)) }>View Artists</a></li>
 			</ul>
 		}
 	</div>

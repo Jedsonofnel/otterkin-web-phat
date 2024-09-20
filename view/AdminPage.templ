@@ -1,35 +1,63 @@
 package view
 
-import "github.com/Jedsonofnel/otterkin-web/model"
+import (
+	"fmt"
+	"github.com/Jedsonofnel/otterkin-web/model"
+)
 
 type AdminPageData struct {
+	user    model.User
 	artists []model.Artist
 }
 
-func NewAdminPageData(artists []model.Artist) AdminPageData {
-	return AdminPageData{artists: artists}
+func NewAdminPageData(artists []model.Artist, user model.User) AdminPageData {
+	return AdminPageData{artists: artists, user: user}
 }
 
 templ AdminArtistPageResponse(ld LayoutData, apd AdminPageData) {
-	<h1>Artists:</h1>
-	<table>
-		<tr>
-			<th>Name</th>
-			<th>Insta handle</th>
-			<th>Email</th>
-			<th>Approved</th>
-		</tr>
-		for _, artist := range apd.artists {
-			<tr>
-				<td>{ artist.FirstName } { artist.LastName }</td>
-				<td>{ artist.InstagramHandle }</td>
-				<td>{ artist.Email }</td>
-				if artist.Approved {
-					<td><button>revoke</button></td>
-				} else {
-					<td><button>approve</button></td>
+	@layout(ld) {
+		@userDashboardLayout(apd.user) {
+			<h1>Artists:</h1>
+			<table>
+				<tr>
+					<th>Name</th>
+					<th>Insta handle</th>
+					<th>Email</th>
+					<th>Approved</th>
+				</tr>
+				for _, artist := range apd.artists {
+					@ArtistRow(artist)
 				}
-			</tr>
+			</table>
 		}
-	</table>
+	}
+}
+
+templ ArtistRow(artist model.Artist) {
+	<tr id={ fmt.Sprintf("artist-row-%s", artist.ArtistId) }>
+		<td>{ artist.FirstName } { artist.LastName }</td>
+		<td>{ artist.InstagramHandle }</td>
+		<td>{ artist.Email }</td>
+		if artist.Approved {
+			<td>
+				<button
+					hx-put={ fmt.Sprintf("/admin/revoke/%s", artist.ArtistId) }
+					hx-target={ fmt.Sprintf("#artist-row-%s",
+      artist.ArtistId) }
+					hx-swap="outerHTML"
+				>
+					revoke
+				</button>
+			</td>
+		} else {
+			<td>
+				<button
+					hx-put={ fmt.Sprintf("/admin/approve/%s", artist.ArtistId) }
+					hx-target={ fmt.Sprintf("#artist-row-%s",
+      artist.ArtistId) }
+					hx-swap="outerHTML"
+				>approve</button>
+			</td>
+		}
+	</tr>
 }
