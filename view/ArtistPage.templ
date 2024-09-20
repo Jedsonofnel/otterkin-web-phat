@@ -19,6 +19,12 @@ templ ArtistProfilePage(ld LayoutData, apd ArtistPageData) {
 	@layout(ld) {
 		@userDashboardLayout(apd.artist.User) {
 			<h1 id="artist-greeting">Hello { apd.artist.User.FirstName }</h1>
+			if !apd.artist.Approved {
+				<p>
+					You haven't yet been approved. Our team should be in touch (if they aren't already)
+					very soon and we hope to get you on your way before long!
+				</p>
+			}
 			<h2>Update your artist details</h2>
 			@artistUpdateForm(apd.artist)
 		}
@@ -38,5 +44,5 @@ templ artistUpdateForm(artist model.Artist) {
 templ ArtistUpdateResponse(artist model.Artist) {
 	@artistUpdateForm(artist)
 	<h1 id="artist-greeting" hx-swap-oob="outerHTML">Hello { artist.User.FirstName }</h1>
-  @flashInfo("Updated your details!")
+	@flashInfo("Updated your details!")
 }
