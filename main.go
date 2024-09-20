@@ -28,7 +28,7 @@ func main() {
 	pb.OnBeforeServe().Add(func(e *core.ServeEvent) error {
 		hc := controller.NewHandlerContext(e)
 
-		// pages
+		// static pages
 		e.Router.GET("/", hc.HomeHandler,
 			auth.LoadAuthContextFromCookie(e.App),
 			controller.LoadFlash)
@@ -56,6 +56,13 @@ func main() {
 			auth.LoadAuthContextFromCookie(e.App),
 		)
 		hc.UserHandler(userGroup)
+
+		// artist routes
+		artistGroup := e.Router.Group(
+			"/artist",
+			auth.LoadAuthContextFromCookie(e.App),
+		)
+		hc.ArtistHandler(artistGroup)
 
 		// static files
 		e.Router.Static("/static", "static")

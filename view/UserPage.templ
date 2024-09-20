@@ -19,6 +19,7 @@ templ UserPage(ld LayoutData, upd UserPageData) {
 			<h1 id="user-greeting">Hello { upd.user.FirstName }</h1>
 			<h2>Update your details</h2>
 			@userUpdateForm(upd.user)
+			<button hx-post="/logout" hx-swap="outerHTML">Logout</button>
 		}
 	}
 }
@@ -32,7 +33,7 @@ templ userDashboardLayout(user model.User) {
 		if user.Role == "artist" {
 			<h3>Artist options</h3>
 			<ul>
-				<li><a href={ templ.URL(fmt.Sprintf("/user/%s", user.Id)) }>General</a></li>
+				<li><a href={ templ.URL(fmt.Sprintf("/artist/profile/%s", user.Id)) }>General</a></li>
 			</ul>
 		} else if user.Role == "admin" {
 			<h3>Admin options</h3>

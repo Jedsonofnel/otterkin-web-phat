@@ -19,7 +19,7 @@ func NewHandlerContext(e *core.ServeEvent) HandlerContext {
 
 // needs the external registry dependency as it caches
 func (hc HandlerContext) HomeHandler(c echo.Context) error {
-	visibleArtists, err := model.FindActiveArtists(hc.e.App.Dao())
+	visibleArtists, err := model.GetActiveArtists(hc.e.App.Dao())
 	if err != nil {
 		return err // this will be a 500 as it's a db error
 	}

@@ -15,7 +15,7 @@ func (hc HandlerContext) AdminHandler(g *echo.Group) {
 }
 
 func (hc HandlerContext) AdminArtistHandler(c echo.Context) error {
-	allArtists, err := model.FindAllArtists(hc.e.App.Dao())
+	allArtists, err := model.GetAllArtists(hc.e.App.Dao())
 	if err != nil {
 		return err // should be a 500
 	}

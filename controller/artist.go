@@ -3,6 +3,8 @@ package controller
 import (
 	"net/http"
 
+	"github.com/Jedsonofnel/otterkin-web/model"
+	"github.com/Jedsonofnel/otterkin-web/view"
 	"github.com/labstack/echo/v5"
 )
 
@@ -11,9 +13,28 @@ import (
 // Artist profile gallery page (where an artist can upload images)
 // Artist public page (for people to look/read about/commission an artist)
 func (hc HandlerContext) ArtistHandler(g *echo.Group) {
-	g.GET("/profile/:id", hc.ArtistProfileHandler, OnlyTheCorrespondingUser)
+	g.GET("/profile/:id", hc.ArtistProfileHandler, OnlyArtists, OnlyTheCorrespondingUser)
+	g.PUT("/profile/:id", hc.ArtistProfileUpdateHandler, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
 }
 
 func (hc HandlerContext) ArtistProfileHandler(c echo.Context) error {
-	return c.NoContent(http.StatusOK)
+	// we can use the GetArtistByUserId function because this route
+	// is protected for only artists
+	artist, err := model.GetArtistByUserId(hc.e.App.Dao(), c.PathParam("id"))
+	if err != nil {
+		return err
+	}
+
+	apd := view.NewArtistPageData(artist)
+	ld := view.NewLayoutData(c, "Artist Profile - Otterkin")
+	return view.Render(c, http.StatusOK, view.ArtistProfilePage(ld, apd))
+}
+
+func (hc HandlerContext) ArtistProfileUpdateHandler(c echo.Context) error {
+	artist, err := model.UpdateArtistById(hc.e.App, c, c.PathParam("id"))
+	if err != nil {
+		return err
+	}
+
+	return view.Render(c, http.StatusOK, view.ArtistUpdateResponse(artist))
 }

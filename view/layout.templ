@@ -33,7 +33,6 @@ templ header(pd LayoutData) {
 					<li><a href="/auth/register">Register</a></li>
 					<li><a href="/auth/login">Login</a></li>
 				} else {
-					<li><button hx-post="/logout" hx-swap="outerHTML">Logout</button></li>
           <li><a href={ templ.URL(fmt.Sprintf("/user/%s", pd.authRecord.Id)) }>Profile</a></li>
 				}
 			</ul>

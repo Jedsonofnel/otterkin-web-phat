@@ -3,6 +3,7 @@ package model
 import (
 	"log"
 
+	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/daos"
@@ -72,7 +73,7 @@ func (adbm ArtistsDBMarshalling) Marshal() []Artist {
 	return artists
 }
 
-func FindActiveArtists(dao *daos.Dao) ([]*models.Record, error) {
+func GetActiveArtists(dao *daos.Dao) ([]*models.Record, error) {
 	query := dao.RecordQuery("artists").
 		AndWhere(dbx.HashExp{"approved": true}).
 		OrderBy("created DESC").
@@ -86,7 +87,7 @@ func FindActiveArtists(dao *daos.Dao) ([]*models.Record, error) {
 	return records, nil
 }
 
-func FindAllArtists(dao *daos.Dao) ([]Artist, error) {
+func GetAllArtists(dao *daos.Dao) ([]Artist, error) {
 	var artists ArtistsDBMarshalling
 	err := dao.DB().
 		Select("artists.id as artist_id", "artists.*", "users.id as user_id", "users.*").
@@ -104,7 +105,7 @@ func FindAllArtists(dao *daos.Dao) ([]Artist, error) {
 	return artists.Marshal(), nil
 }
 
-func FindArtistById(dao *daos.Dao, id string) (Artist, error) {
+func GetArtistByArtistId(dao *daos.Dao, id string) (Artist, error) {
 	artist := ArtistDBMarshalling{}
 	err := dao.DB().
 		Select("artists.id as artist_id", "artists.*", "users.id as user_id", "users.*").
@@ -118,6 +119,40 @@ func FindArtistById(dao *daos.Dao, id string) (Artist, error) {
 	}
 
 	return artist.Marshal(), nil
+}
+
+func GetArtistByUserId(dao *daos.Dao, id string) (Artist, error) {
+	artist := ArtistDBMarshalling{}
+	err := dao.DB().
+		Select("artists.id as artist_id", "artists.*", "users.id as user_id", "users.*").
+		From("artists").
+		InnerJoin("users", dbx.NewExp("artists.user=users.id")).
+		Where(dbx.NewExp("user_id = {:id}", dbx.Params{"id": id})).
+		One(&artist)
+
+	if err != nil {
+		return Artist{}, err
+	}
+
+	return artist.Marshal(), nil
+}
+
+func UpdateArtistById(app core.App, c echo.Context, id string) (Artist, error) {
+	artist, err := app.Dao().FindRecordById("artists", id)
+	if err != nil {
+		return Artist{}, err
+	}
+
+	form := forms.NewRecordUpsert(app, artist)
+	form.LoadData(map[string]any{
+		"instagram_handle": c.FormValue("instagram_handle"),
+		"biography":        c.FormValue("biography"),
+	})
+	if err := form.Submit(); err != nil {
+		return Artist{}, err
+	}
+
+	return GetArtistByArtistId(app.Dao(), id)
 }
 
 func UpdateArtistApprovalById(app core.App, id string, approval bool) (Artist, error) {
@@ -136,5 +171,5 @@ func UpdateArtistApprovalById(app core.App, id string, approval bool) (Artist, e
 		return Artist{}, err
 	}
 
-	return FindArtistById(app.Dao(), id)
+	return GetArtistByArtistId(app.Dao(), id)
 }

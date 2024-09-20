@@ -1,0 +1,41 @@
+package view
+
+import (
+	"fmt"
+	"github.com/Jedsonofnel/otterkin-web/model"
+)
+
+type ArtistPageData struct {
+	artist model.Artist
+}
+
+func NewArtistPageData(artist model.Artist) ArtistPageData {
+	return ArtistPageData{
+		artist: artist,
+	}
+}
+
+templ ArtistProfilePage(ld LayoutData, apd ArtistPageData) {
+	@layout(ld) {
+		@userDashboardLayout(apd.artist.User) {
+			<h1 id="artist-greeting">Hello { apd.artist.User.FirstName }</h1>
+			<h2>Update your artist details</h2>
+			@artistUpdateForm(apd.artist)
+		}
+	}
+}
+
+templ artistUpdateForm(artist model.Artist) {
+	<form hx-put={ string(templ.URL(fmt.Sprintf("/artist/profile/%s", artist.Id))) }>
+		<label for="instagram_handle">Instagram Handle</label>
+		<input id="instagram_handle" name="instagram_handle" type="text" value={ artist.InstagramHandle }/>
+		<label for="biography">Biography</label>
+		<textarea id="biography" name="biography">{ artist.Biography }</textarea>
+		<input type="submit" value="Update"/>
+	</form>
+}
+
+templ ArtistUpdateResponse(artist model.Artist) {
+	@artistUpdateForm(artist)
+	<h1 id="artist-greeting" hx-swap-oob="outerHTML">Hello { artist.User.FirstName }</h1>
+}
