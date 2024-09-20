@@ -25,15 +25,30 @@ templ layout(ld LayoutData) {
 
 templ header(pd LayoutData) {
 	<header>
-		<img src="/static/images/logo.png" class="logo"/>
+		<button hx-get="/" hx-target="body" hx-swap="outerHTML" id="logo-link">
+			<img src="/static/images/logo.png" class="logo"/>
+		</button>
 		<nav>
 			<ul>
-				<li><a href="/">Home</a></li>
+				<li>
+					<button hx-get="/" class="home-button" hx-target="body" hx-swap="outerHTML">
+						<i class="at-home"></i>
+					</button>
+				</li>
 				if pd.authRecord == nil {
 					<li><a href="/auth/register">Register</a></li>
 					<li><a href="/auth/login">Login</a></li>
 				} else {
-					<li><a href={ templ.URL(fmt.Sprintf("/user/%s", pd.authRecord.Id)) }>Profile</a></li>
+					<li>
+						<button
+							hx-get={ string(templ.URL(fmt.Sprintf("/user/%s", pd.authRecord.Id))) }
+							class="account-button"
+							hx-target="body"
+							hx-swap="outerHTML"
+						>
+							<i class="at-account-bold"></i>
+						</button>
+					</li>
 				}
 			</ul>
 		</nav>

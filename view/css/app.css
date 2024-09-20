@@ -18,6 +18,7 @@ html {
     /* colour palette */
     --bg: #faf9f4;
     --fg: #0e292f;
+    --fg-darker: #0b2126;
     --gold: #cdb684;
     --pink: #ffd6d0;
     --grey-200: #e9e6dd;
@@ -30,4 +31,7 @@ html {
     --crotchet: 8px;
     --quaver: 4px;
     --semiquaver: 2px;
+
+    /* key sizes */
+    --header-height: 60px;
 }

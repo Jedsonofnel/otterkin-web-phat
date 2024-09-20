@@ -15,7 +15,7 @@ func NewUserPageData(user model.User) UserPageData {
 
 templ UserPage(ld LayoutData, upd UserPageData) {
 	@layout(ld) {
-		@userDashboardLayout(upd.user) {
+		@userDashboardLayout(upd.user, "user-general") {
 			<h1 id="user-greeting">Hello { upd.user.FirstName }</h1>
 			<h2>Update your details</h2>
 			@userUpdateForm(upd.user)
@@ -24,24 +24,47 @@ templ UserPage(ld LayoutData, upd UserPageData) {
 	}
 }
 
-templ userDashboardLayout(user model.User) {
-	<div class="left-sidebar" hx-boost="true">
-		<h3>User options</h3>
+func isPage(page string, link string) string {
+	if page == link {
+		return "current-page"
+	} else {
+		return ""
+	}
+}
+
+templ userDashboardLayout(user model.User, page string) {
+	<nav id="left-sidebar" class="dashboard-sidebar" hx-boost="true">
 		<ul>
-			<li><a href={ templ.URL(fmt.Sprintf("/user/%s", user.Id)) }>General</a></li>
+			<h3>User options</h3>
+			<li>
+				<a href={ templ.URL(fmt.Sprintf("/user/%s", user.Id)) } class={ isPage(page, "user-general") }>
+					<i class="at-sliders-thin"></i>
+					General
+				</a>
+			</li>
 		</ul>
 		if user.Role == "artist" {
-			<h3>Artist options</h3>
 			<ul>
-				<li><a href={ templ.URL(fmt.Sprintf("/artist/profile/%s", user.Id)) }>General</a></li>
+				<h3>Artist options</h3>
+				<li>
+					<a href={ templ.URL(fmt.Sprintf("/artist/profile/%s", user.Id)) } class={ isPage(page, "artist-general") }>
+						<i class="at-sliders-thin"></i>
+						General
+					</a>
+				</li>
 			</ul>
 		} else if user.Role == "admin" {
-			<h3>Admin options</h3>
 			<ul>
-				<li><a href={ templ.URL(fmt.Sprintf("/admin/%s", user.Id)) }>View Artists</a></li>
+				<h3>Admin options</h3>
+				<li>
+					<a href={ templ.URL(fmt.Sprintf("/admin/%s", user.Id)) } class={ isPage(page, "admin-artists") }>
+						<i class="at-paintbrush-tool-thin"></i>
+						View Artists
+					</a>
+				</li>
 			</ul>
 		}
-	</div>
+	</nav>
 	<main id="user-dashboard-main">
 		{ children... }
 	</main>
@@ -60,5 +83,5 @@ templ userUpdateForm(user model.User) {
 templ UserUpdateResponse(upd UserPageData) {
 	@userUpdateForm(upd.user)
 	<h1 id="user-greeting" hx-swap-oob="outerHTML">Hello { upd.user.FirstName }</h1>
-  @flashInfo("Details updated!")
+	@flashInfo("Details updated!")
 }
