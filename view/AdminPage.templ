@@ -10,29 +10,26 @@ func NewAdminPageData(artists []model.Artist) AdminPageData {
 	return AdminPageData{artists: artists}
 }
 
-templ AdminPage(ld LayoutData, apd AdminPageData) {
-	@layout(ld) {
-		<h1>Hello { ld.authRecord.GetString("First Name") }!</h1>
-		<h2>Artists:</h2>
-		<table>
+templ AdminArtistPageResponse(ld LayoutData, apd AdminPageData) {
+	<h1>Artists:</h1>
+	<table>
+		<tr>
+			<th>Name</th>
+			<th>Insta handle</th>
+			<th>Email</th>
+			<th>Approved</th>
+		</tr>
+		for _, artist := range apd.artists {
 			<tr>
-				<th>Name</th>
-				<th>Insta handle</th>
-				<th>Email</th>
-				<th>Approved</th>
+				<td>{ artist.FirstName } { artist.LastName }</td>
+				<td>{ artist.InstagramHandle }</td>
+				<td>{ artist.Email }</td>
+				if artist.Approved {
+					<td><button>revoke</button></td>
+				} else {
+					<td><button>approve</button></td>
+				}
 			</tr>
-			for _, artist := range apd.artists {
-				<tr>
-					<td>{ artist.FirstName } { artist.LastName }</td>
-					<td>{ artist.InstagramHandle }</td>
-					<td>{ artist.Email }</td>
-					if artist.Approved {
-						<td>yes</td>
-					} else {
-						<td>no</td>
-					}
-				</tr>
-			}
-		</table>
-	}
+		}
+	</table>
 }

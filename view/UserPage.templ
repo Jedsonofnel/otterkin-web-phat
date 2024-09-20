@@ -15,17 +15,48 @@ func NewUserPageData(user model.User) UserPageData {
 
 templ UserPage(ld LayoutData, upd UserPageData) {
 	@layout(ld) {
-		<div class="left-sidebar">hello sidebar</div>
-		<main>
-			<h1>Hello { upd.user.FirstName }</h1>
+		@userDashboardLayout(upd.user) {
+			<h1 id="user-greeting">Hello { upd.user.FirstName }</h1>
 			<h2>Update your details</h2>
-			<form hx-post={ string(templ.URL(fmt.Sprintf("/user/%s", upd.user.Id))) }>
-				<label for="first_name">First name</label>
-				<input id="first_name" name="first_name" type="text" value={ upd.user.LastName }/>
-				<label for="last_name">Last name</label>
-				<input id="last_name" name="last_name" type="text" value={ upd.user.LastName }/>
-        <input type="submit" value="Update"/>
-			</form>
-		</main>
+			@userUpdateForm(upd.user)
+		}
 	}
+}
+
+templ userDashboardLayout(user model.User) {
+	<div class="left-sidebar" hx-boost="true">
+		<h3>User options</h3>
+		<ul>
+			<li><a href={ templ.URL(fmt.Sprintf("/user/%s", user.Id)) }>General</a></li>
+		</ul>
+		if user.Role == "artist" {
+			<h3>Artist options</h3>
+			<ul>
+				<li><a href={ templ.URL(fmt.Sprintf("/user/%s", user.Id)) }>General</a></li>
+			</ul>
+		} else if user.Role == "admin" {
+			<h3>Admin options</h3>
+			<ul>
+				<li><a href="/admin" hx-target="#user-dashboard-main">View Artists</a></li>
+			</ul>
+		}
+	</div>
+	<main id="user-dashboard-main">
+		{ children... }
+	</main>
+}
+
+templ userUpdateForm(user model.User) {
+	<form hx-put={ string(templ.URL(fmt.Sprintf("/user/%s", user.Id))) } hx-swap="outerHTML">
+		<label for="first_name">First name</label>
+		<input id="first_name" name="first_name" type="text" value={ user.FirstName }/>
+		<label for="last_name">Last name</label>
+		<input id="last_name" name="last_name" type="text" value={ user.LastName }/>
+		<input type="submit" value="Update"/>
+	</form>
+}
+
+templ UserUpdateResponse(upd UserPageData) {
+	@userUpdateForm(upd.user)
+	<h1 id="user-greeting" hx-swap-oob="outerHTML">Hello { upd.user.FirstName }</h1>
 }

@@ -9,10 +9,11 @@ import (
 )
 
 func (hc HandlerContext) AdminHandler(g *echo.Group) {
-	g.GET("", hc.AdminDashboardHandler)
+	g.GET("", hc.AdminArtistHandler)
+	g.POST("/approve/:id", hc.AdminArtistHandler)
 }
 
-func (hc HandlerContext) AdminDashboardHandler(c echo.Context) error {
+func (hc HandlerContext) AdminArtistHandler(c echo.Context) error {
 	allArtists, err := model.FindAllArtists(hc.e.App.Dao())
 	if err != nil {
 		return err // should be a 500
@@ -20,5 +21,9 @@ func (hc HandlerContext) AdminDashboardHandler(c echo.Context) error {
 
 	ld := view.NewLayoutData(c, "Admin Dashboard - Otterkin")
 	apd := view.NewAdminPageData(allArtists)
-	return view.Render(c, http.StatusOK, view.AdminPage(ld, apd))
+	return view.Render(c, http.StatusOK, view.AdminArtistPageResponse(ld, apd))
+}
+
+func (hc HandlerContext) AdminApproveArtistHandler(c echo.Context) error {
+	return nil
 }

@@ -10,6 +10,7 @@ import (
 
 func (hc HandlerContext) UserHandler(g *echo.Group) {
 	g.GET("/:id", hc.UserDashboardHandler, OnlyTheCorrespondingUser)
+	g.PUT("/:id", hc.UserUpdateHandler, OnlyTheCorrespondingUser)
 }
 
 func (hc HandlerContext) UserDashboardHandler(c echo.Context) error {
@@ -21,4 +22,14 @@ func (hc HandlerContext) UserDashboardHandler(c echo.Context) error {
 	ld := view.NewLayoutData(c, "User Dashboard - Otterkin")
 	upd := view.NewUserPageData(user)
 	return view.Render(c, http.StatusOK, view.UserPage(ld, upd))
+}
+
+func (hc HandlerContext) UserUpdateHandler(c echo.Context) error {
+	user, err := model.UpdateUserById(hc.e.App, c, c.PathParam("id"))
+	if err != nil {
+		return err // should be a 500
+	}
+
+	upd := view.NewUserPageData(user)
+	return view.Render(c, http.StatusOK, view.UserUpdateResponse(upd))
 }
