@@ -34,16 +34,15 @@ templ AdminArtistPageResponse(ld LayoutData, apd AdminPageData) {
 }
 
 templ ArtistRow(artist model.Artist) {
-	<tr id={ fmt.Sprintf("artist-row-%s", artist.ArtistId) }>
-		<td>{ artist.FirstName } { artist.LastName }</td>
+	<tr id={ fmt.Sprintf("artist-row-%s", artist.Id) }>
+		<td>{ artist.User.FirstName } { artist.User.LastName }</td>
 		<td>{ artist.InstagramHandle }</td>
-		<td>{ artist.Email }</td>
+		<td>{ artist.User.Email }</td>
 		if artist.Approved {
 			<td>
 				<button
-					hx-put={ fmt.Sprintf("/admin/revoke/%s", artist.ArtistId) }
-					hx-target={ fmt.Sprintf("#artist-row-%s",
-      artist.ArtistId) }
+					hx-put={ fmt.Sprintf("/admin/revoke/%s", artist.Id) }
+					hx-target={ fmt.Sprintf("#artist-row-%s", artist.Id) }
 					hx-swap="outerHTML"
 				>
 					revoke
@@ -52,9 +51,8 @@ templ ArtistRow(artist model.Artist) {
 		} else {
 			<td>
 				<button
-					hx-put={ fmt.Sprintf("/admin/approve/%s", artist.ArtistId) }
-					hx-target={ fmt.Sprintf("#artist-row-%s",
-      artist.ArtistId) }
+					hx-put={ fmt.Sprintf("/admin/approve/%s", artist.Id) }
+					hx-target={ fmt.Sprintf("#artist-row-%s", artist.Id) }
 					hx-swap="outerHTML"
 				>approve</button>
 			</td>
