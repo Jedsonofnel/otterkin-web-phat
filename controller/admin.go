@@ -11,6 +11,7 @@ import (
 func (hc HandlerContext) AdminHandler(g *echo.Group) {
 	g.GET("/:id", hc.AdminArtistHandler, OnlyTheCorrespondingUser)
 	g.PUT("/approve/:id", hc.AdminArtistApproveHandler)
+	g.GET("/revoke/:id", hc.AdminArtistRevokeModalHandler)
 	g.PUT("/revoke/:id", hc.AdminArtistRevokeHandler)
 }
 
@@ -54,4 +55,13 @@ func (hc HandlerContext) AdminArtistRevokeHandler(c echo.Context) error {
 	}
 
 	return view.Render(c, http.StatusOK, view.ArtistRow(artist))
+}
+
+func (hc HandlerContext) AdminArtistRevokeModalHandler(c echo.Context) error {
+	artist, err := model.GetArtistByArtistId(hc.e.App.Dao(), c.PathParam("id"))
+	if err != nil {
+		return err
+	}
+
+	return view.Render(c, http.StatusOK, view.ArtistRevokeModal(artist))
 }

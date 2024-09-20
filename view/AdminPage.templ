@@ -41,21 +41,36 @@ templ ArtistRow(artist model.Artist) {
 		if artist.Approved {
 			<td>
 				<button
-					hx-put={ fmt.Sprintf("/admin/revoke/%s", artist.Id) }
-					hx-target={ fmt.Sprintf("#artist-row-%s", artist.Id) }
-					hx-swap="outerHTML"
+					hx-get={ string(templ.URL(fmt.Sprintf("/admin/revoke/%s", artist.Id))) }
+					hx-target="body"
+					hx-swap="beforeend"
 				>
-					revoke
+					Revoke
 				</button>
 			</td>
 		} else {
 			<td>
 				<button
-					hx-put={ fmt.Sprintf("/admin/approve/%s", artist.Id) }
+					hx-put={ string(templ.URL(fmt.Sprintf("/admin/approve/%s", artist.Id))) }
 					hx-target={ fmt.Sprintf("#artist-row-%s", artist.Id) }
 					hx-swap="outerHTML"
-				>approve</button>
+				>Approve</button>
 			</td>
 		}
 	</tr>
+}
+
+templ ArtistRevokeModal(artist model.Artist) {
+	@modal() {
+		<p>Are you sure you want to revoke { artist.User.FirstName } as an artist?</p>
+		<div class="modal-buttons">
+			<button hx-on:click="window.closeModal()">Cancel</button>
+			<button
+				hx-put={ string(templ.URL(fmt.Sprintf("/admin/revoke/%s", artist.Id))) }
+				hx-on:click="window.closeModal()"
+				hx-target={ fmt.Sprintf("#artist-row-%s", artist.Id) }
+				hx-swap="outerHTML"
+			>Confirm</button>
+		</div>
+	}
 }

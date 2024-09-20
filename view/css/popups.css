@@ -1,0 +1,185 @@
+#flash-container {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.flash {
+    padding: var(--crotchet);
+    min-width: 64px;
+    max-width: 250px;
+    color: white;
+    margin-top: var(--quaver);
+
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+
+    &.info {
+        background-color: green;
+        .flash-close {
+            background-color: green;
+            &:hover {
+                background-color: darkgreen;
+            }
+        }
+    }
+    &.error {
+        background-color: red;
+        .flash-close {
+            background-color: red;
+            &:hover {
+                background-color: darkred;
+            }
+        }
+    }
+
+    &.removed {
+        animation: slide-out 0.5s ease-in forwards;
+    }
+
+    .flash-close {
+        height: 24px;
+        width: 24px;
+        border-radius: 50%;
+        position: relative;
+        border: none;
+        cursor: pointer;
+        flex-shrink: 0;
+
+        &::after,
+        &::before {
+            content: " ";
+            display: block;
+            height: 16px;
+            width: 2px;
+            background-color: white;
+            position: absolute;
+            left: 11px;
+            top: 4px;
+        }
+
+        &:after {
+            transform: rotate(45deg);
+        }
+        &:before {
+            transform: rotate(-45deg);
+        }
+    }
+}
+
+@keyframes slide-out {
+    0% {
+        transform: translateX(0px);
+    }
+    100% {
+        transform: translateX(500px);
+        padding: 0;
+        margin: 0;
+        max-height: 0;
+    }
+}
+
+/* modals */
+#modal {
+    /* Underlay covers entire screen. */
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+
+    /* Flexbox centers the .modal-content vertically and horizontally */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    /* Animate when opening */
+    animation-name: fadeIn;
+    animation-duration: 150ms;
+    animation-timing-function: ease;
+}
+
+#modal > .modal-underlay {
+    position: absolute;
+    z-index: -1;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+
+#modal > .modal-content {
+    /* Position visible dialog near the top of the window */
+    margin-top: 10vh;
+
+    /* Sizing for visible dialog */
+    width: 80%;
+    max-width: 600px;
+
+    /* Display properties for visible dialog*/
+    border: solid 1px #999;
+    border-radius: 8px;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.3);
+    background-color: white;
+    padding: 20px;
+
+    /* Animate when opening */
+    animation-name: zoomIn;
+    animation-duration: 150ms;
+    animation-timing-function: ease;
+}
+
+#modal.closing {
+    /* Animate when closing */
+    animation-name: fadeOut;
+    animation-duration: 150ms;
+    animation-timing-function: ease;
+}
+
+#modal.closing > .modal-content {
+    /* Animate when closing */
+    animation-name: zoomOut;
+    animation-duration: 150ms;
+    animation-timing-function: ease;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes zoomIn {
+    0% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes zoomOut {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0.9);
+    }
+}

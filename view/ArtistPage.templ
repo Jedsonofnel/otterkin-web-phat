@@ -38,4 +38,5 @@ templ artistUpdateForm(artist model.Artist) {
 templ ArtistUpdateResponse(artist model.Artist) {
 	@artistUpdateForm(artist)
 	<h1 id="artist-greeting" hx-swap-oob="outerHTML">Hello { artist.User.FirstName }</h1>
+  @flashInfo("Updated your details!")
 }

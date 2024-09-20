@@ -33,7 +33,7 @@ templ header(pd LayoutData) {
 					<li><a href="/auth/register">Register</a></li>
 					<li><a href="/auth/login">Login</a></li>
 				} else {
-          <li><a href={ templ.URL(fmt.Sprintf("/user/%s", pd.authRecord.Id)) }>Profile</a></li>
+					<li><a href={ templ.URL(fmt.Sprintf("/user/%s", pd.authRecord.Id)) }>Profile</a></li>
 				}
 			</ul>
 		</nav>
@@ -41,15 +41,44 @@ templ header(pd LayoutData) {
 }
 
 templ flashMessages(flashError string, flashInfo string) {
-	if flashError != "" {
+	<div id="flash-container">
+		if flashError != "" {
+			<div class="error flash">
+				{ flashError }
+				<button class="flash-close" onclick="window.hideFlash(this)"></button>
+			</div>
+		} else if flashInfo != "" {
+			<div class="info flash">
+				{ flashInfo }
+				<button class="flash-close" onclick="window.hideFlash(this)"></button>
+			</div>
+		}
+	</div>
+}
+
+templ flashError(message string) {
+	<div id="flash-container" hx-swap-oob="beforeend" class="info flash">
 		<div class="error flash">
-			{ flashError }
-			<button class="flash-close" onclick="window.hideFlash('error')"></button>
+			{ message }
+			<button class="flash-close" onclick="window.hideFlash(this)"></button>
 		</div>
-	} else if flashInfo != "" {
+	</div>
+}
+
+templ flashInfo(message string) {
+	<div id="flash-container" hx-swap-oob="beforeend">
 		<div class="info flash">
-			{ flashInfo }
-			<button class="flash-close" onclick="window.hideFlash('info')"></button>
+			{ message }
+			<button class="flash-close" onclick="window.hideFlash(this)"></button>
 		</div>
-	}
+	</div>
+}
+
+templ modal() {
+	<div id="modal">
+		<div class="modal-underlay" hx-on:click="window.closeModal()"></div>
+		<div class="modal-content">
+			{ children... }
+		</div>
+	</div>
 }

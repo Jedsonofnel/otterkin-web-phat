@@ -60,4 +60,5 @@ templ userUpdateForm(user model.User) {
 templ UserUpdateResponse(upd UserPageData) {
 	@userUpdateForm(upd.user)
 	<h1 id="user-greeting" hx-swap-oob="outerHTML">Hello { upd.user.FirstName }</h1>
+  @flashInfo("Details updated!")
 }
