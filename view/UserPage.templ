@@ -37,13 +37,13 @@ templ userDashboardLayout(user model.User, page string) {
 		<ul>
 			<h3>Dashboard</h3>
 			<li>
-				<a href={ templ.URL(fmt.Sprintf("/user/%s", user.Id)) } class={ isPage(page, "user-general") }>
+				<a href={ templ.URL(fmt.Sprintf("/user/profile/%s", user.Id)) } class={ isPage(page, "user-general") }>
 					<i class="at-sliders-thin"></i>
 					General
 				</a>
 			</li>
 			<li>
-				<a href={ templ.URL(fmt.Sprintf("/user/%s", user.Id)) } class={ isPage(page, "user-commissions") }>
+				<a href={ templ.URL(fmt.Sprintf("/user/profile/%s", user.Id)) } class={ isPage(page, "user-commissions") }>
 					<i class="at-handshake-hand-gesture-thin"></i>
 					Commissions
 				</a>

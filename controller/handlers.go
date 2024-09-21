@@ -42,10 +42,10 @@ func (hc HandlerContext) ProfileHandler(c echo.Context) error {
 	if !ok || authRecord == nil {
 		fmt.Println("Not detecting authorisation, redirecting to /auth")
 		// TODO make a "redirecting" page that doesn't need any data
-		c.Response().Header().Set("Hx-Redirect", "/auth")
+		c.Response().Header().Set("Hx-Location", "/auth")
 		return view.Render(c, http.StatusUnauthorized, view.HomePage(ld, hpd))
 	}
 
-	c.Response().Header().Set("Hx-Redirect", fmt.Sprintf("/user/profile/%s", authRecord.Id))
+	c.Response().Header().Set("Hx-Location", fmt.Sprintf("/user/profile/%s", authRecord.Id))
 	return view.Render(c, http.StatusOK, view.HomePage(ld, hpd))
 }

@@ -1,121 +1,117 @@
 package view
 
-import "fmt"
-
 templ layout(ld LayoutData) {
-	<!DOCTYPE html>
-	<html lang="en_gb">
-		<head>
-			<meta charset="UTF-8"/>
-			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<link rel="stylesheet" type="text/css" href="/static/build/app.css"/>
-			<link rel="stylesheet" href="https://unpkg.com/@vectopus/atlas-icons/style.css"/>
-			<title>{ ld.title }</title>
-		</head>
-		<body>
-			@header(ld)
-			@hamburger()
-			<div class="grid-wrapper">
-				{ children... }
-			</div>
-			@flashMessages(ld.flashError, ld.flashInfo)
-			<script src="/static/build/index.js"></script>
-		</body>
-	</html>
+<!DOCTYPE html>
+<html lang="en_gb">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="/static/build/app.css" />
+  <link rel="stylesheet" href="https://unpkg.com/@vectopus/atlas-icons/style.css" />
+  <title>{ ld.title }</title>
+</head>
+
+<body>
+  @header(ld)
+  @hamburger()
+  <div class="grid-wrapper">
+    { children... }
+  </div>
+  @flashMessages(ld.flashError, ld.flashInfo)
+  <script src="/static/build/index.js"></script>
+</body>
+
+</html>
 }
 
 templ header(ld LayoutData) {
-	<header>
-		<button hx-get="/" hx-target="body" hx-swap="outerHTML" id="logo-link">
-			<img src="/static/images/logo.png" class="logo"/>
-		</button>
-		<nav>
-			<button id="hamburger"><span class="hamburger-burger"></span></button>
-			<ul>
-				<li>
-					<button hx-get="/" class="home-button" hx-target="body" hx-swap="outerHTML">
-						<i class="at-home"></i>
-					</button>
-				</li>
-				if ld.authRecord == nil {
-					<li><a href="/auth/register">Register</a></li>
-					<li><a href="/auth/login">Login</a></li>
-				} else {
-					<li>
-						<button
-							hx-get={ string(templ.URL(fmt.Sprintf("/user/%s", ld.authRecord.Id))) }
-							class="account-button"
-							hx-target="body"
-							hx-swap="outerHTML"
-						>
-							<i class="at-account-bold"></i>
-						</button>
-					</li>
-				}
-			</ul>
-		</nav>
-	</header>
+<header>
+  <button hx-get="/" hx-target="body" hx-swap="outerHTML" id="logo-link">
+    <img src="/static/images/logo.png" class="logo" />
+  </button>
+  <nav>
+    <button id="hamburger"><span class="hamburger-burger"></span></button>
+    <ul>
+      <li>
+        <button hx-get="/" class="home-button" hx-target="body" hx-swap="outerHTML">
+          <i class="at-home"></i>
+        </button>
+      </li>
+      if ld.authRecord == nil {
+      <li><a href="/auth/register">Register</a></li>
+      <li><a href="/auth/login">Login</a></li>
+      } else {
+      <li>
+        <button hx-get="/profile" class="account-button" hx-target="body" hx-swap="outerHTML">
+          <i class="at-account-bold"></i>
+        </button>
+      </li>
+      }
+    </ul>
+  </nav>
+</header>
 }
 
 templ hamburger() {
-	<nav id="hamburger-menu" hx-boost="true">
-		<ul class="hamburger-menu-default">
-			<li><a href="/" class="hamburger-menu-link">Home<i class="at-point-right-thin"></i></a></li>
-			<li>
-				<a href="/artist" class="hamburger-menu-link">
-					Artists
-					<i class="at-point-right-thin"></i>
-				</a>
-			</li>
-			<li><a href="/about" class="hamburger-menu-link">About<i class="at-point-right-thin"></i></a></li>
-		</ul>
-		<div class="hamburger-bottom">
-			<a href="/" class="hamburger-menu-link">Home</a>
-			<span class="separator" aria-hidden="true" role="presentation"></span>
-			<a href="/profile" class="hamburger-menu-link">Profile</a>
-		</div>
-	</nav>
+<nav id="hamburger-menu" hx-boost="true">
+  <ul class="hamburger-menu-default">
+    <li><a href="/" class="hamburger-menu-link">Home<i class="at-point-right-thin"></i></a></li>
+    <li>
+      <a href="/artist" class="hamburger-menu-link">
+        Artists
+        <i class="at-point-right-thin"></i>
+      </a>
+    </li>
+    <li><a href="/about" class="hamburger-menu-link">About<i class="at-point-right-thin"></i></a></li>
+  </ul>
+  <div class="hamburger-bottom">
+    <a href="/" class="hamburger-menu-link">Home</a>
+    <span class="separator" aria-hidden="true" role="presentation"></span>
+    <a href="/profile" class="hamburger-menu-link">Profile</a>
+  </div>
+</nav>
 }
 
 templ flashMessages(flashError string, flashInfo string) {
-	<div id="flash-container">
-		if flashError != "" {
-			<div class="error flash">
-				{ flashError }
-				<button class="flash-close" onclick="window.hideFlash(this)"></button>
-			</div>
-		} else if flashInfo != "" {
-			<div class="info flash">
-				{ flashInfo }
-				<button class="flash-close" onclick="window.hideFlash(this)"></button>
-			</div>
-		}
-	</div>
+<div id="flash-container">
+  if flashError != "" {
+  <div class="error flash">
+    { flashError }
+    <button class="flash-close" onclick="window.hideFlash(this)"></button>
+  </div>
+  } else if flashInfo != "" {
+  <div class="info flash">
+    { flashInfo }
+    <button class="flash-close" onclick="window.hideFlash(this)"></button>
+  </div>
+  }
+</div>
 }
 
 templ flashError(message string) {
-	<div id="flash-container" hx-swap-oob="beforeend" class="info flash">
-		<div class="error flash">
-			{ message }
-			<button class="flash-close" onclick="window.hideFlash(this)"></button>
-		</div>
-	</div>
+<div id="flash-container" hx-swap-oob="beforeend" class="info flash">
+  <div class="error flash">
+    { message }
+    <button class="flash-close" onclick="window.hideFlash(this)"></button>
+  </div>
+</div>
 }
 
 templ flashInfo(message string) {
-	<div id="flash-container" hx-swap-oob="beforeend">
-		<div class="info flash">
-			{ message }
-			<button class="flash-close" onclick="window.hideFlash(this)"></button>
-		</div>
-	</div>
+<div id="flash-container" hx-swap-oob="beforeend">
+  <div class="info flash">
+    { message }
+    <button class="flash-close" onclick="window.hideFlash(this)"></button>
+  </div>
+</div>
 }
 
 templ modal() {
-	<div id="modal">
-		<div class="modal-underlay" hx-on:click="window.closeModal()"></div>
-		<div class="modal-content">
-			{ children... }
-		</div>
-	</div>
+<div id="modal">
+  <div class="modal-underlay" hx-on:click="window.closeModal()"></div>
+  <div class="modal-content">
+    { children... }
+  </div>
+</div>
 }
