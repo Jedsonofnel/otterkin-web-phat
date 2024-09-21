@@ -6,6 +6,15 @@
     align-items: center;
 }
 
+.registration-wrapper .greeting {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 1rem;
+    align-self: start;
+    margin: 0;
+    color: var(--grey-800);
+}
+
 .registration-selection {
     display: flex;
     width: auto;
@@ -40,6 +49,27 @@
     }
 }
 
+.registration-selection a {
+    font-family: var(--font-sans);
+    text-decoration: none;
+    font-size: 1rem;
+    color: var(--grey-800);
+
+    width: 120px;
+    padding: var(--crotchet);
+    background-color: var(--pink);
+    border-radius: var(--crotchet);
+    display: flex;
+    justify-content: center;
+
+    &:hover {
+        background-color: var(--pink-darker);
+    }
+    &:active {
+        background-color: var(--pink-lighter);
+    }
+}
+
 .registration-header {
     color: var(--gold);
     font-family: var(--font-serif);
@@ -56,15 +86,6 @@
     gap: var(--crotchet);
     width: min(280px, 100%);
     padding-bottom: var(--semibreve);
-
-    .greeting {
-        font-family: var(--font-sans);
-        font-weight: 400;
-        font-size: 1rem;
-        align-self: start;
-        margin: 0;
-        color: var(--grey-800);
-    }
 
     .text-field {
         max-width: 100%;

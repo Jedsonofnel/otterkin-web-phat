@@ -14,6 +14,7 @@ templ layout(ld LayoutData) {
 		</head>
 		<body>
 			@header(ld)
+			@hamburger()
 			<div class="grid-wrapper">
 				{ children... }
 			</div>
@@ -23,25 +24,26 @@ templ layout(ld LayoutData) {
 	</html>
 }
 
-templ header(pd LayoutData) {
+templ header(ld LayoutData) {
 	<header>
 		<button hx-get="/" hx-target="body" hx-swap="outerHTML" id="logo-link">
 			<img src="/static/images/logo.png" class="logo"/>
 		</button>
 		<nav>
+			<button id="hamburger"><span class="hamburger-burger"></span></button>
 			<ul>
 				<li>
 					<button hx-get="/" class="home-button" hx-target="body" hx-swap="outerHTML">
 						<i class="at-home"></i>
 					</button>
 				</li>
-				if pd.authRecord == nil {
+				if ld.authRecord == nil {
 					<li><a href="/auth/register">Register</a></li>
 					<li><a href="/auth/login">Login</a></li>
 				} else {
 					<li>
 						<button
-							hx-get={ string(templ.URL(fmt.Sprintf("/user/%s", pd.authRecord.Id))) }
+							hx-get={ string(templ.URL(fmt.Sprintf("/user/%s", ld.authRecord.Id))) }
 							class="account-button"
 							hx-target="body"
 							hx-swap="outerHTML"
@@ -53,6 +55,26 @@ templ header(pd LayoutData) {
 			</ul>
 		</nav>
 	</header>
+}
+
+templ hamburger() {
+	<nav id="hamburger-menu" hx-boost="true">
+		<ul class="hamburger-menu-default">
+			<li><a href="/" class="hamburger-menu-link">Home<i class="at-point-right-thin"></i></a></li>
+			<li>
+				<a href="/artist" class="hamburger-menu-link">
+					Artists
+					<i class="at-point-right-thin"></i>
+				</a>
+			</li>
+			<li><a href="/about" class="hamburger-menu-link">About<i class="at-point-right-thin"></i></a></li>
+		</ul>
+		<div class="hamburger-bottom">
+			<a href="/" class="hamburger-menu-link">Home</a>
+			<span class="separator" aria-hidden="true" role="presentation"></span>
+			<a href="/profile" class="hamburger-menu-link">Profile</a>
+		</div>
+	</nav>
 }
 
 templ flashMessages(flashError string, flashInfo string) {

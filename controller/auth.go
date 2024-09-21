@@ -9,6 +9,10 @@ import (
 )
 
 func (hc HandlerContext) AuthHandler(g *echo.Group) {
+	// default page, gives the option to login OR register
+	g.GET("", hc.AuthPageHandler)
+
+	// login
 	g.GET("/login", hc.LoginPageHandler)
 	g.POST("/login", hc.LoginPostHandler)
 
@@ -18,6 +22,11 @@ func (hc HandlerContext) AuthHandler(g *echo.Group) {
 	g.GET("/register/artist", hc.RegisterArtistHandler)
 	g.POST("/register/patron", hc.RegisterPatronPostHandler)
 	g.POST("/register/artist", hc.RegisterArtistPostHandler)
+}
+
+func (h HandlerContext) AuthPageHandler(c echo.Context) error {
+	ld := view.NewLayoutData(c, "Otterkin")
+	return view.Render(c, http.StatusOK, view.AuthPage(ld))
 }
 
 func (h HandlerContext) LoginPageHandler(c echo.Context) error {

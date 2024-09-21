@@ -14,6 +14,22 @@ window.closeModal = () => {
     })
 }
 
+// hamburger menu malarkey
+const hamburgerBtn = document.getElementById("hamburger")
+const hamburgerMenu = document.getElementById("hamburger-menu")
+let menuOpen = false
+hamburgerBtn.addEventListener("click", () => {
+    if (!menuOpen) {
+        hamburgerBtn.classList.add("open")
+        hamburgerMenu.classList.add("open")
+        menuOpen = true
+    } else {
+        hamburgerBtn.classList.remove("open")
+        hamburgerMenu.classList.remove("open")
+        menuOpen = false
+    }
+})
+
 window.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("htmx:beforeSwap", (evt) => {
         if (evt.detail.xhr.status === 422) {

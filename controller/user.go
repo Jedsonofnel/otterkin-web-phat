@@ -9,8 +9,8 @@ import (
 )
 
 func (hc HandlerContext) UserHandler(g *echo.Group) {
-	g.GET("/:id", hc.UserDashboardHandler, OnlyTheCorrespondingUser)
-	g.PUT("/:id", hc.UserUpdateHandler, OnlyTheCorrespondingUser)
+	g.GET("/profile/:id", hc.UserDashboardHandler, OnlyTheCorrespondingUser)
+	g.PUT("/profile/:id", hc.UserUpdateHandler, OnlyTheCorrespondingUser)
 }
 
 func (hc HandlerContext) UserDashboardHandler(c echo.Context) error {

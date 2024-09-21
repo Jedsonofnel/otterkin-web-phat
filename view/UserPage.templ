@@ -77,7 +77,7 @@ templ userDashboardLayout(user model.User, page string) {
 }
 
 templ userUpdateForm(user model.User) {
-	<form hx-put={ string(templ.URL(fmt.Sprintf("/user/%s", user.Id))) } hx-swap="outerHTML">
+	<form hx-put={ string(templ.URL(fmt.Sprintf("/user/profile/%s", user.Id))) } hx-swap="outerHTML">
 		<label for="first_name">First name</label>
 		<input id="first_name" name="first_name" type="text" value={ user.FirstName }/>
 		<label for="last_name">Last name</label>

@@ -28,10 +28,12 @@ func main() {
 	pb.OnBeforeServe().Add(func(e *core.ServeEvent) error {
 		hc := controller.NewHandlerContext(e)
 
-		// static pages
+		// non-grouped pages
 		e.Router.GET("/", hc.HomeHandler,
 			auth.LoadAuthContextFromCookie(e.App),
 			controller.LoadFlash)
+
+		e.Router.GET("/profile", hc.ProfileHandler, auth.LoadAuthContextFromCookie(e.App))
 
 		// auth routes
 		authGroup := e.Router.Group(

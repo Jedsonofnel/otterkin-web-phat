@@ -37,3 +37,17 @@ templ LoginFormError(message string) {
 		<span id="login-error"></span>
 	}
 }
+
+templ AuthPage(ld LayoutData) {
+	@layout(ld) {
+		<main>
+			<div class="registration-wrapper">
+				<h1 class="registration-header">Why, hullo there!</h1>
+				<div class="registration-selection">
+					<a href="/auth/register">Sign up</a>
+					<a href="/auth/login">Sign in</a>
+				</div>
+			</div>
+		</main>
+	}
+}

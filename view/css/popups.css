@@ -1,3 +1,133 @@
+/* hamburger icon + animation */
+#hamburger {
+    height: 40px;
+    width: 40px;
+    margin-right: -8px;
+    border-radius: 50%;
+    background: none;
+    border: none;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    transition: background-color 0s;
+    &:hover,
+    &:active {
+        background-color: var(--fg-darker);
+    }
+}
+.hamburger-burger {
+    width: 20px;
+    height: 2px;
+    border-radius: 1px;
+    background-color: var(--gold);
+    transition: all 0.25s ease-in-out;
+    transform: translateX(2px);
+}
+.hamburger-burger::before,
+.hamburger-burger::after {
+    content: "";
+    display: block;
+    width: 24px;
+    height: 2px;
+    border-radius: 1px;
+    background-color: var(--gold);
+    transition: all 0.25s ease-in-out;
+}
+.hamburger-burger::before {
+    transform: translateY(-10px) translateX(-4px);
+}
+.hamburger-burger::after {
+    transform: translateY(8px) translateX(-4px);
+}
+#hamburger.open {
+    .hamburger-burger {
+        transform: translateX(-24px);
+        background: transparent;
+    }
+    .hamburger-burger::before {
+        transform: rotate(45deg) translate(16.5px, -15px);
+        width: 24px;
+    }
+    .hamburger-burger::after {
+        transform: rotate(-45deg) translate(16.5px, 15px);
+        width: 24px;
+    }
+}
+
+/* the hamburger menu itself */
+#hamburger-menu {
+    position: fixed;
+    top: var(--header-height);
+    z-index: 1000;
+    transform: translateX(100vw);
+    height: calc(100vh - var(--header-height));
+    width: 100vw;
+    background-color: var(--fg);
+    border-top: 1px solid var(--gold);
+    transition: all 0.25s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+#hamburger-menu.open {
+    transform: translateX(calc(100vw - 100%));
+}
+
+.hamburger-menu-default {
+    width: 100%;
+    padding: var(--minim) var(--minim-dotted);
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--quaver);
+}
+
+.hamburger-menu-link {
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--crotchet);
+    font-size: 1.25rem;
+    line-height: 1;
+    padding: var(--minim) var(--crotchet);
+    border-radius: var(--crotchet);
+    color: var(--gold);
+    text-decoration: none;
+    background-color: var(--fg);
+    &:hover {
+        background-color: var(--fg-darker);
+    }
+    &:active {
+        background-color: var(--fg-lighter);
+        color: var(--gold-darker);
+    }
+    i {
+        flex-shrink: 0;
+    }
+}
+
+.hamburger-bottom {
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    .hamburger-menu-link {
+        justify-content: center;
+    }
+
+    .separator {
+        height: calc(100% - var(--minim));
+        width: 2px;
+        background-color: var(--gold);
+    }
+}
+
+/* flash */
 #flash-container {
     position: fixed;
     right: 16px;
