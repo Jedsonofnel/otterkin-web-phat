@@ -1,315 +1,315 @@
 /* hamburger icon + animation */
 #hamburger {
-    height: 40px;
-    width: 40px;
-    margin-right: -8px;
-    border-radius: 50%;
-    background: none;
-    border: none;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.5s ease-in-out;
-    transition: background-color 0s;
-    &:hover,
-    &:active {
-        background-color: var(--fg-darker);
-    }
+  height: 40px;
+  width: 40px;
+  margin-right: -8px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  transition: background-color 0s;
+  &:hover,
+  &:active {
+    background-color: var(--fg-darker);
+  }
 }
 .hamburger-burger {
-    width: 20px;
-    height: 2px;
-    border-radius: 1px;
-    background-color: var(--gold);
-    transition: all 0.25s ease-in-out;
-    transform: translateX(2px);
+  width: 20px;
+  height: 2px;
+  border-radius: 1px;
+  background-color: var(--gold);
+  transition: all 0.25s ease-in-out;
+  transform: translateX(2px);
 }
 .hamburger-burger::before,
 .hamburger-burger::after {
-    content: "";
-    display: block;
-    width: 24px;
-    height: 2px;
-    border-radius: 1px;
-    background-color: var(--gold);
-    transition: all 0.25s ease-in-out;
+  content: "";
+  display: block;
+  width: 24px;
+  height: 2px;
+  border-radius: 1px;
+  background-color: var(--gold);
+  transition: all 0.25s ease-in-out;
 }
 .hamburger-burger::before {
-    transform: translateY(-10px) translateX(-4px);
+  transform: translateY(-10px) translateX(-4px);
 }
 .hamburger-burger::after {
-    transform: translateY(8px) translateX(-4px);
+  transform: translateY(8px) translateX(-4px);
 }
 #hamburger.open {
-    .hamburger-burger {
-        transform: translateX(-24px);
-        background: transparent;
-    }
-    .hamburger-burger::before {
-        transform: rotate(45deg) translate(16.5px, -15px);
-        width: 24px;
-    }
-    .hamburger-burger::after {
-        transform: rotate(-45deg) translate(16.5px, 15px);
-        width: 24px;
-    }
+  .hamburger-burger {
+    transform: translateX(-24px);
+    background: transparent;
+  }
+  .hamburger-burger::before {
+    transform: rotate(45deg) translate(16.5px, -15px);
+    width: 24px;
+  }
+  .hamburger-burger::after {
+    transform: rotate(-45deg) translate(16.5px, 15px);
+    width: 24px;
+  }
 }
 
 /* the hamburger menu itself */
 #hamburger-menu {
-    position: fixed;
-    top: var(--header-height);
-    z-index: 1000;
-    transform: translateX(100vw);
-    height: calc(100vh - var(--header-height));
-    width: 100vw;
-    background-color: var(--fg);
-    border-top: 1px solid var(--gold);
-    transition: all 0.25s ease-in-out;
-    display: flex;
-    flex-direction: column;
+  position: fixed;
+  top: var(--header-height);
+  z-index: 1000;
+  transform: translateX(100vw);
+  height: calc(100vh - var(--header-height));
+  width: 100vw;
+  background-color: var(--fg);
+  border-top: 1px solid var(--gold);
+  transition: all 0.25s ease-in-out;
+  display: flex;
+  flex-direction: column;
 }
 
 #hamburger-menu.open {
-    transform: translateX(calc(100vw - 100%));
+  transform: translateX(calc(100vw - 100%));
 }
 
 .hamburger-menu-default {
-    width: 100%;
-    padding: var(--minim) var(--minim-dotted);
-    list-style-type: none;
-    display: flex;
-    flex-direction: column;
-    gap: var(--quaver);
+  width: 100%;
+  padding: var(--minim) var(--minim-dotted);
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--quaver);
 }
 
 .hamburger-menu-link {
-    flex-grow: 1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: var(--crotchet);
-    font-size: 1.25rem;
-    line-height: 1;
-    padding: var(--minim) var(--crotchet);
-    border-radius: var(--crotchet);
-    color: var(--gold);
-    text-decoration: none;
-    background-color: var(--fg);
-    &:hover {
-        background-color: var(--fg-darker);
-    }
-    &:active {
-        background-color: var(--fg-lighter);
-        color: var(--gold-darker);
-    }
-    i {
-        flex-shrink: 0;
-    }
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--crotchet);
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: var(--minim) var(--crotchet);
+  border-radius: var(--crotchet);
+  color: var(--gold);
+  text-decoration: none;
+  background-color: var(--fg);
+  &:hover {
+    background-color: var(--fg-darker);
+  }
+  &:active {
+    background-color: var(--fg-lighter);
+    color: var(--gold-darker);
+  }
+  i {
+    flex-shrink: 0;
+  }
 }
 
 .hamburger-bottom {
-    margin-top: auto;
-    width: 100%;
-    display: flex;
-    align-items: center;
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
 
-    .hamburger-menu-link {
-        justify-content: center;
-    }
+  .hamburger-menu-link {
+    justify-content: center;
+  }
 
-    .separator {
-        height: calc(100% - var(--minim));
-        width: 2px;
-        background-color: var(--gold);
-    }
+  .separator {
+    height: calc(100% - var(--minim));
+    width: 2px;
+    background-color: var(--gold);
+  }
 }
 
 /* flash */
 #flash-container {
-    position: fixed;
-    right: 16px;
-    bottom: 16px;
-    display: flex;
-    flex-direction: column-reverse;
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 .flash {
-    padding: var(--crotchet);
-    min-width: 64px;
-    max-width: 250px;
-    color: white;
-    margin-top: var(--quaver);
+  padding: var(--crotchet);
+  min-width: 64px;
+  max-width: 250px;
+  color: white;
+  margin-top: var(--quaver);
 
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
 
-    &.info {
-        background-color: green;
-        .flash-close {
-            background-color: green;
-            &:hover {
-                background-color: darkgreen;
-            }
-        }
-    }
-    &.error {
-        background-color: red;
-        .flash-close {
-            background-color: red;
-            &:hover {
-                background-color: darkred;
-            }
-        }
-    }
-
-    &.removed {
-        animation: slide-out 0.5s ease-in forwards;
-    }
-
+  &.info {
+    background-color: green;
     .flash-close {
-        height: 24px;
-        width: 24px;
-        border-radius: 50%;
-        position: relative;
-        border: none;
-        cursor: pointer;
-        flex-shrink: 0;
-
-        &::after,
-        &::before {
-            content: " ";
-            display: block;
-            height: 16px;
-            width: 2px;
-            background-color: white;
-            position: absolute;
-            left: 11px;
-            top: 4px;
-        }
-
-        &:after {
-            transform: rotate(45deg);
-        }
-        &:before {
-            transform: rotate(-45deg);
-        }
+      background-color: green;
+      &:hover {
+        background-color: darkgreen;
+      }
     }
+  }
+  &.error {
+    background-color: red;
+    .flash-close {
+      background-color: red;
+      &:hover {
+        background-color: darkred;
+      }
+    }
+  }
+
+  &.removed {
+    animation: slide-out 0.5s ease-in forwards;
+  }
+
+  .flash-close {
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    position: relative;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+
+    &::after,
+    &::before {
+      content: " ";
+      display: block;
+      height: 16px;
+      width: 2px;
+      background-color: white;
+      position: absolute;
+      left: 11px;
+      top: 4px;
+    }
+
+    &:after {
+      transform: rotate(45deg);
+    }
+    &:before {
+      transform: rotate(-45deg);
+    }
+  }
 }
 
 @keyframes slide-out {
-    0% {
-        transform: translateX(0px);
-    }
-    100% {
-        transform: translateX(500px);
-        padding: 0;
-        margin: 0;
-        max-height: 0;
-    }
+  0% {
+    transform: translateX(0px);
+  }
+  100% {
+    transform: translateX(500px);
+    padding: 0;
+    margin: 0;
+    max-height: 0;
+  }
 }
 
 /* modals */
 #modal {
-    /* Underlay covers entire screen. */
-    position: fixed;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
+  /* Underlay covers entire screen. */
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
 
-    /* Flexbox centers the .modal-content vertically and horizontally */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  /* Flexbox centers the .modal-content vertically and horizontally */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-    /* Animate when opening */
-    animation-name: fadeIn;
-    animation-duration: 150ms;
-    animation-timing-function: ease;
+  /* Animate when opening */
+  animation-name: fadeIn;
+  animation-duration: 150ms;
+  animation-timing-function: ease;
 }
 
 #modal > .modal-underlay {
-    position: absolute;
-    z-index: -1;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
+  position: absolute;
+  z-index: -1;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
 }
 
 #modal > .modal-content {
-    /* Position visible dialog near the top of the window */
-    margin-top: 10vh;
+  /* Position visible dialog near the top of the window */
+  margin-top: 10vh;
 
-    /* Sizing for visible dialog */
-    width: 80%;
-    max-width: 600px;
+  /* Sizing for visible dialog */
+  width: 80%;
+  max-width: 600px;
 
-    /* Display properties for visible dialog*/
-    border: solid 1px #999;
-    border-radius: 8px;
-    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.3);
-    background-color: white;
-    padding: 20px;
+  /* Display properties for visible dialog*/
+  border: solid 1px #999;
+  border-radius: 8px;
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.3);
+  background-color: var(--bg);
+  padding: 20px;
 
-    /* Animate when opening */
-    animation-name: zoomIn;
-    animation-duration: 150ms;
-    animation-timing-function: ease;
+  /* Animate when opening */
+  animation-name: zoomIn;
+  animation-duration: 150ms;
+  animation-timing-function: ease;
 }
 
 #modal.closing {
-    /* Animate when closing */
-    animation-name: fadeOut;
-    animation-duration: 150ms;
-    animation-timing-function: ease;
+  /* Animate when closing */
+  animation-name: fadeOut;
+  animation-duration: 150ms;
+  animation-timing-function: ease;
 }
 
 #modal.closing > .modal-content {
-    /* Animate when closing */
-    animation-name: zoomOut;
-    animation-duration: 150ms;
-    animation-timing-function: ease;
+  /* Animate when closing */
+  animation-name: zoomOut;
+  animation-duration: 150ms;
+  animation-timing-function: ease;
 }
 
 @keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes fadeOut {
-    0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 @keyframes zoomIn {
-    0% {
-        transform: scale(0.9);
-    }
-    100% {
-        transform: scale(1);
-    }
+  0% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes zoomOut {
-    0% {
-        transform: scale(1);
-    }
-    100% {
-        transform: scale(0.9);
-    }
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.9);
+  }
 }

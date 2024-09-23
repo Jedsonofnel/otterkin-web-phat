@@ -16,10 +16,26 @@ func NewUserPageData(user model.User) UserPageData {
 templ UserPage(ld LayoutData, upd UserPageData) {
 	@layout(ld) {
 		@userDashboardLayout(upd.user, "user-general") {
-			<h1 id="user-greeting">Hello { upd.user.FirstName }</h1>
-			<h2>Update your details</h2>
-			@userUpdateForm(upd.user)
-			<button hx-post="/logout" hx-swap="outerHTML">Logout</button>
+			<h1 id="user-greeting" class="dashboard-title">Hello { upd.user.FirstName }</h1>
+			<section class="dashboard-section">
+				<h2 class="dashboard-subtitle">Your details</h2>
+				<div class="user-details">
+					<div class="avatar-edit">
+						<img class="dashboard-avatar" src={ toString("/api/files/users/%s/%s", upd.user.Id, upd.user.Avatar) }/>
+						<button
+							hx-get={ toString("/user/profile/%s/avatar", upd.user.Id) }
+							hx-target="body"
+							hx-swap="beforeend"
+							class="button soft"
+						>Edit</button>
+					</div>
+					@userUpdateForm(upd.user)
+				</div>
+			</section>
+			<section>
+				<h2 class="dashboard-subtitle">Account options</h2>
+				<button class="button subtle" hx-post="/logout" hx-swap="outerHTML">Logout</button>
+			</section>
 		}
 	}
 }
@@ -77,12 +93,21 @@ templ userDashboardLayout(user model.User, page string) {
 }
 
 templ userUpdateForm(user model.User) {
-	<form hx-put={ string(templ.URL(fmt.Sprintf("/user/profile/%s", user.Id))) } hx-swap="outerHTML">
-		<label for="first_name">First name</label>
-		<input id="first_name" name="first_name" type="text" value={ user.FirstName }/>
-		<label for="last_name">Last name</label>
-		<input id="last_name" name="last_name" type="text" value={ user.LastName }/>
-		<input type="submit" value="Update"/>
+	<form
+		hx-put={ string(templ.URL(fmt.Sprintf("/user/profile/%s", user.Id))) }
+		hx-swap="outerHTML"
+		enctype="multipart/form-data"
+		class="details-edit"
+	>
+		<div>
+			<label for="first_name">First name</label>
+			<input class="text-input" id="first_name" name="first_name" type="text" value={ user.FirstName }/>
+		</div>
+		<div>
+			<label for="last_name">Last name</label>
+			<input class="text-input" id="last_name" name="last_name" type="text" value={ user.LastName }/>
+		</div>
+		<input class="button soft" type="submit" value="Update"/>
 	</form>
 }
 
@@ -90,4 +115,22 @@ templ UserUpdateResponse(upd UserPageData) {
 	@userUpdateForm(upd.user)
 	<h1 id="user-greeting" hx-swap-oob="outerHTML">Hello { upd.user.FirstName }</h1>
 	@flashInfo("Details updated!")
+}
+
+templ UserAvatarUpdateForm(user model.User) {
+	@modal() {
+		<form
+			hx-put={ string(templ.URL(fmt.Sprintf("/user/profile/%s/avatar", user.Id))) }
+			hx-target="body"
+			id="avatar-form"
+			enctype="multipart/form-data"
+			hx-on::confirm="window.cropAvatar(event)"
+		>
+			<h2>Upload a new avatar</h2>
+			<input id="avatar-uploader" name="avatar" type="file" accept="image/*"/>
+			<div id="croppie"></div>
+			<input type="submit" value="Submit"/>
+		</form>
+		<button onclick="closeModal()">Cancel</button>
+	}
 }

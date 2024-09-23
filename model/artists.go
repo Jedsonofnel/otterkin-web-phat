@@ -1,8 +1,6 @@
 package model
 
 import (
-	"log"
-
 	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"
@@ -95,8 +93,6 @@ func GetAllArtists(dao *daos.Dao) ([]Artist, error) {
 		InnerJoin("users", dbx.NewExp("artists.user=users.id")).
 		OrderBy("created DESC").
 		All(&artists)
-
-	log.Printf("%+v", artists)
 
 	if err != nil {
 		return nil, err

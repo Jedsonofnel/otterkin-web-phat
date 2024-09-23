@@ -11,6 +11,9 @@ import (
 func (hc HandlerContext) UserHandler(g *echo.Group) {
 	g.GET("/profile/:id", hc.UserDashboardHandler, OnlyTheCorrespondingUser)
 	g.PUT("/profile/:id", hc.UserUpdateHandler, OnlyTheCorrespondingUser)
+
+	g.GET("/profile/:id/avatar", hc.UserAvatarFormHandler, OnlyTheCorrespondingUser)
+	g.PUT("/profile/:id/avatar", hc.UserAvatarUpdateHandler, OnlyTheCorrespondingUser)
 }
 
 func (hc HandlerContext) UserDashboardHandler(c echo.Context) error {
@@ -21,6 +24,25 @@ func (hc HandlerContext) UserDashboardHandler(c echo.Context) error {
 
 	ld := view.NewLayoutData(c, "User Dashboard - Otterkin")
 	upd := view.NewUserPageData(user)
+	return view.Render(c, http.StatusOK, view.UserPage(ld, upd))
+}
+
+func (hc HandlerContext) UserAvatarFormHandler(c echo.Context) error {
+	user, err := model.FindUserById(hc.e.App.Dao(), c.PathParam("id"))
+	if err != nil {
+		return err
+	}
+	return view.Render(c, http.StatusOK, view.UserAvatarUpdateForm(user))
+}
+
+func (hc HandlerContext) UserAvatarUpdateHandler(c echo.Context) error {
+	user, err := model.UpdateUserAvatarById(hc.e.App, c, c.PathParam("id"))
+	if err != nil {
+		return err
+	}
+
+	upd := view.NewUserPageData(user)
+	ld := view.NewLayoutData(c, "User Dashboard - Otterkin")
 	return view.Render(c, http.StatusOK, view.UserPage(ld, upd))
 }
 

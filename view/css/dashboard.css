@@ -1,0 +1,112 @@
+/* User options/settings */
+.dashboard-avatar {
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  border: 2px solid var(--grey-800);
+}
+
+.dashboard-title {
+  margin-top: var(--minim);
+}
+
+.dashboard-subtitle {
+  font-family: var(--font-sans);
+  margin-bottom: var(--crotchet);
+}
+
+.dashboard-section {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  padding: var(--semibreve) 0;
+}
+
+.user-details {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: var(--semibreve);
+}
+
+.avatar-edit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--crotchet);
+}
+
+.details-edit {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: var(--crotchet);
+
+  input[type="submit"] {
+    margin-top: auto;
+  }
+}
+
+/* inputs */
+.text-input {
+  width: min(100%, 240px);
+  padding: var(--crotchet) var(--minim);
+  border-radius: var(--crotchet);
+  border: 1px solid var(--grey-200);
+  outline: none;
+  background-color: var(--bg);
+
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--fg);
+
+  &:focus-within {
+    border-color: var(--grey-800);
+  }
+}
+
+/* buttons */
+.button.soft {
+  min-width: 72px;
+  width: max-content;
+  display: flex;
+  justify-content: center;
+  padding: var(--crotchet);
+  border-radius: var(--crotchet);
+  font-family: var(--font-sans);
+  line-height: 1;
+  font-size: 1rem;
+  color: var(--grey-800);
+  border: none;
+  cursor: pointer;
+  background-color: var(--pink);
+  &:hover {
+    background-color: var(--pink-darker);
+  }
+  &:active {
+    background-color: var(--pink-lighter);
+  }
+}
+
+.button.subtle {
+  min-width: 72px;
+  width: max-content;
+  display: flex;
+  justify-content: center;
+  padding: var(--crotchet);
+  border-radius: var(--crotchet);
+  font-family: var(--font-sans);
+  line-height: 1;
+  font-size: 1rem;
+  color: var(--grey-800);
+  border: none;
+  cursor: pointer;
+  background-color: var(--grey-200);
+  &:hover {
+    background-color: var(--grey-300);
+  }
+  &:active {
+    background-color: var(--grey-400);
+  }
+}
