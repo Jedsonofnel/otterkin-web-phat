@@ -126,11 +126,14 @@ templ UserAvatarUpdateForm(user model.User) {
 			enctype="multipart/form-data"
 			hx-on::confirm="window.cropAvatar(event)"
 		>
-			<h2>Upload a new avatar</h2>
-			<input id="avatar-uploader" name="avatar" type="file" accept="image/*"/>
-			<div id="croppie"></div>
-			<input type="submit" value="Submit"/>
+			<h2 class="dashboard-subtitle">Upload a new avatar</h2>
+			<input id="avatar-uploader" class="avatar-input" name="avatar" type="file" accept="image/*" />
+			<div id="croppie" class="not-visible"></div>
+			<div id="placeholder">Please upload an image</div>
+			<div class="modal-bottom">
+				<button class="button text" type="button" onclick="closeModal()">Cancel</button>
+				<input id="avatar-submit" class="button primary disabled" type="submit" value="Submit"/>
+			</div>
 		</form>
-		<button onclick="closeModal()">Cancel</button>
 	}
 }

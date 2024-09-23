@@ -27,6 +27,8 @@ const croppieOptions = {
 const initializeAvatarMalarkey = () => {
   const avatarUploader = document.getElementById("avatar-uploader")
   const croppie = document.getElementById("croppie")
+  const placeholder = document.getElementById("placeholder")
+  const submitBtn = document.getElementById("avatar-submit")
   const avatarCroppie = new Croppie(croppie, croppieOptions)
 
   const readFile = (input) => {
@@ -34,6 +36,9 @@ const initializeAvatarMalarkey = () => {
       const reader = new FileReader()
       reader.readAsDataURL(input.files[0])
       reader.onload = () => {
+        croppie.classList.remove("not-visible")
+        placeholder.classList.add("not-visible")
+        submitBtn.classList.remove("disabled")
         avatarCroppie.bind({ url: reader.result })
       }
     }

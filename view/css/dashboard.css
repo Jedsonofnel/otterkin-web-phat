@@ -48,6 +48,11 @@
   }
 }
 
+/* avatar modal */
+.not-visible {
+  display: none;
+}
+
 /* inputs */
 .text-input {
   width: min(100%, 240px);
@@ -66,20 +71,65 @@
   }
 }
 
+.avatar-input {
+  display: block;
+  width: 100%;
+  border-top: 2px solid var(--gold);
+  border-bottom: 2px solid var(--gold);
+  padding: var(--quaver) 0;
+  margin-bottom: var(--minim);
+
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--fg);
+
+  &::file-selector-button {
+    padding: var(--crotchet) var(--minim);
+    background-color: var(--pink);
+    border: none;
+    border-radius: var(--crotchet);
+    line-height: 1;
+    color: var(--grey-800);
+    cursor: pointer;
+  }
+  &::file-selector-button:hover {
+    background-color: var(--pink-darker);
+  }
+  &::file-selector-button:active {
+    background-color: var(--pink-lighter);
+  }
+}
+
+#placeholder {
+  display: flex;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--gold-darker);
+  padding: var(--minim);
+}
+
+#placeholder.not-visible {
+  display: none;
+}
+
 /* buttons */
-.button.soft {
+.button {
   min-width: 72px;
   width: max-content;
   display: flex;
   justify-content: center;
-  padding: var(--crotchet);
+  padding: var(--crotchet) var(--minim);
   border-radius: var(--crotchet);
   font-family: var(--font-sans);
   line-height: 1;
   font-size: 1rem;
   color: var(--grey-800);
-  border: none;
   cursor: pointer;
+}
+
+.button.soft {
+  border: none;
   background-color: var(--pink);
   &:hover {
     background-color: var(--pink-darker);
@@ -90,23 +140,43 @@
 }
 
 .button.subtle {
-  min-width: 72px;
-  width: max-content;
-  display: flex;
-  justify-content: center;
-  padding: var(--crotchet);
-  border-radius: var(--crotchet);
-  font-family: var(--font-sans);
-  line-height: 1;
-  font-size: 1rem;
-  color: var(--grey-800);
   border: none;
-  cursor: pointer;
   background-color: var(--grey-200);
   &:hover {
     background-color: var(--grey-300);
   }
   &:active {
     background-color: var(--grey-400);
+  }
+}
+
+.button.text {
+  border: none;
+  background-color: var(--bg);
+  &:hover {
+    background-color: var(--pink-lighter);
+  }
+
+  &:active {
+    background-color: var(--pink);
+  }
+}
+
+.button.primary {
+  border: none;
+  background-color: var(--gold);
+  color: var(--bg);
+  &:hover {
+    background-color: var(--gold-darker);
+  }
+}
+
+.button.disabled {
+  cursor: default;
+  background-color: var(--grey-200);
+  color: var(--grey-400);
+  &:hover,
+  &:active {
+    background-color: var(--grey-200) !important;
   }
 }

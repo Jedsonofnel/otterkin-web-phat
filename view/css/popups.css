@@ -142,6 +142,9 @@
   max-width: 250px;
   color: white;
   margin-top: var(--quaver);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--bg);
 
   display: flex;
   justify-content: space-between;
@@ -248,15 +251,13 @@
   margin-top: 10vh;
 
   /* Sizing for visible dialog */
-  width: 80%;
-  max-width: 600px;
+  width: min(100vw, 600px);
 
   /* Display properties for visible dialog*/
-  border: solid 1px #999;
-  border-radius: 8px;
+  border-radius: var(--crotchet);
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.3);
   background-color: var(--bg);
-  padding: 20px;
+  padding: var(--minim);
 
   /* Animate when opening */
   animation-name: zoomIn;
@@ -312,4 +313,10 @@
   100% {
     transform: scale(0.9);
   }
+}
+
+.modal-bottom {
+  padding-top: var(--minim);
+  display: flex;
+  justify-content: space-between;
 }
