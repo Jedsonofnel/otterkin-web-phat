@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 
+	"github.com/Jedsonofnel/otterkin-web/auth"
 	"github.com/Jedsonofnel/otterkin-web/model"
 	"github.com/Jedsonofnel/otterkin-web/view"
 	"github.com/labstack/echo/v5"
@@ -15,7 +16,10 @@ import (
 func (hc HandlerContext) ArtistHandler(g *echo.Group) {
 	g.GET("/profile/:id", hc.ArtistProfileHandler, OnlyArtists, OnlyTheCorrespondingUser)
 	g.PUT("/profile/:id", hc.ArtistProfileUpdateHandler, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
+
+	// gallery stuff
 	g.GET("/profile/:id/gallery", hc.ArtistProfileGalleryHandler, OnlyArtists, OnlyTheCorrespondingUser)
+	g.POST("/profile/:id/gallery", hc.ArtistProfileGalleryPostHandler, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
 }
 
 func (hc HandlerContext) ArtistProfileHandler(c echo.Context) error {
@@ -26,7 +30,7 @@ func (hc HandlerContext) ArtistProfileHandler(c echo.Context) error {
 		return err
 	}
 
-	apd := view.NewArtistPageData(artist)
+	apd := view.NewArtistProfilePageData(artist)
 	ld := view.NewLayoutData(c, "Artist Profile - Otterkin")
 	return view.Render(c, http.StatusOK, view.ArtistProfilePage(ld, apd))
 }
@@ -46,7 +50,23 @@ func (hc HandlerContext) ArtistProfileGalleryHandler(c echo.Context) error {
 		return err
 	}
 
-	apd := view.NewArtistPageData(artist)
+	images, err := model.GetArtistImagesByArtistId(hc.e.App.Dao(), artist.Id)
+	if err != nil {
+		return err
+	}
+
+	apd := view.NewArtistGalleryPageData(artist, images)
 	ld := view.NewLayoutData(c, "Artist Gallery - Otterkin")
 	return view.Render(c, http.StatusOK, view.ArtistProfileGalleryPage(ld, apd))
+}
+
+func (hc HandlerContext) ArtistProfileGalleryPostHandler(c echo.Context) error {
+	artistImage, err := model.CreateArtistImage(hc.e.App, c)
+	if err != nil {
+		errMap := auth.GetMapOfErrs(err)
+		return view.Render(c, http.StatusUnprocessableEntity, view.GalleryFormError(errMap))
+	}
+
+	// if not we want to append the artist card to the thing
+	return view.Render(c, http.StatusOK, view.GalleryFormSuccess(artistImage))
 }

@@ -48,3 +48,18 @@ func GetArtistImageById(dao *daos.Dao, id string) (ArtistImage, error) {
 
 	return artistImage, nil
 }
+
+func GetArtistImagesByArtistId(dao *daos.Dao, id string) ([]ArtistImage, error) {
+	artistImages := []ArtistImage{}
+	err := dao.DB().
+		Select("*").
+		From("artist_images").
+		Where(dbx.NewExp("artist_id = {:id}", dbx.Params{"id": id})).
+		All(&artistImages)
+
+	if err != nil {
+		return []ArtistImage{}, nil
+	}
+
+	return artistImages, nil
+}

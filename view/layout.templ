@@ -11,7 +11,7 @@ templ layout(ld LayoutData, hb templ.Component) {
 			<script src="/static/build/index.js"></script>
 			<title>{ ld.title }</title>
 		</head>
-		<body>
+		<body hx-ext="reset-on-success">
 			@header(ld)
 			@hb
 			<div class="grid-wrapper">

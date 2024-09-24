@@ -1,18 +1,33 @@
 package view
 
-import "github.com/Jedsonofnel/otterkin-web/model"
+import (
+	"fmt"
+	"github.com/Jedsonofnel/otterkin-web/model"
+)
 
-type ArtistPageData struct {
+type ArtistProfilePageData struct {
 	artist model.Artist
 }
 
-func NewArtistPageData(artist model.Artist) ArtistPageData {
-	return ArtistPageData{
+func NewArtistProfilePageData(artist model.Artist) ArtistProfilePageData {
+	return ArtistProfilePageData{
 		artist: artist,
 	}
 }
 
-templ ArtistProfilePage(ld LayoutData, apd ArtistPageData) {
+type ArtistGalleryPageData struct {
+	artist model.Artist
+	images []model.ArtistImage
+}
+
+func NewArtistGalleryPageData(artist model.Artist, images []model.ArtistImage) ArtistGalleryPageData {
+	return ArtistGalleryPageData{
+		artist: artist,
+		images: images,
+	}
+}
+
+templ ArtistProfilePage(ld LayoutData, apd ArtistProfilePageData) {
 	@layout(ld, dashboardHamburger(apd.artist.User, "artist-settings")) {
 		@userDashboardLayout(apd.artist.User, "artist-settings") {
 			<h1 class="dashboard-title" id="artist-greeting">Hello { apd.artist.User.FirstName }</h1>
@@ -30,12 +45,81 @@ templ ArtistProfilePage(ld LayoutData, apd ArtistPageData) {
 	}
 }
 
-templ ArtistProfileGalleryPage(ld LayoutData, apd ArtistPageData) {
-	@layout(ld, dashboardHamburger(apd.artist.User, "artist-gallery")) {
-		@userDashboardLayout(apd.artist.User, "artist-gallery") {
-			<h1 class="dashboard-title">Gallery</h1>
+templ ArtistProfileGalleryPage(ld LayoutData, agd ArtistGalleryPageData) {
+	@layout(ld, dashboardHamburger(agd.artist.User, "artist-gallery")) {
+		@userDashboardLayout(agd.artist.User, "artist-gallery") {
+			<h1 class="dashboard-title">Your gallery</h1>
+			<section class="dashboard-section">
+				<h2 class="dashboard-subtitle">Add your artwork</h2>
+				<form
+					hx-post={ toString("/artist/profile/%s/gallery", agd.artist.Id) }
+					enctype="multipart/form-data"
+					hx-target="#artist-gallery"
+					hx-swap="beforeend"
+					class="gallery-form"
+          hx-reset-on-success
+				>
+					<div class="columned-form">
+						<div class="image-details">
+							<div class="form-field">
+								<label for="title">Title</label>
+								<input class="text-input" id="title" name="title" type="text"/>
+								<span id="title-error"></span>
+							</div>
+							<div class="form-field">
+								<label for="description">Description (optional)</label>
+								<textarea class="textarea-input" id="description" name="description" rows="3" maxlength="128"></textarea>
+							</div>
+							<input type="hidden" name="visible" value="true"/>
+							<input type="hidden" name="artist_id" value={ agd.artist.Id }/>
+						</div>
+						<div class="image-upload">
+								<img id="gallery-preview" class="hidden"/>
+							<div class="form-field">
+								<label for="image" hidden="true">Image</label>
+								<input id="image" name="image" type="file" accept="image/*"/>
+								<span id="image-error"></span>
+							</div>
+						</div>
+					</div>
+					<input class="button soft" type="submit" value="Add image"/>
+				</form>
+			</section>
+			<section id="artist-gallery" class="dashboard-section">
+        <h2 class="dashboard-subtitle">Your artwork</h2>
+				for _, image := range agd.images {
+					@ArtistImageCard(image)
+				}
+			</section>
 		}
 	}
+}
+
+var galleryErrFields []string = []string{
+	"title",
+	"image",
+}
+
+templ GalleryFormError(errMap map[string]string) {
+	for _,field := range galleryErrFields {
+		if errMap[field] != "" {
+			<p id={ fmt.Sprintf("%s-error", field) } hx-swap-oob="outerHTML" class="form-error">{ errMap[field] }</p>
+		} else {
+			<span id={ fmt.Sprintf("%s-error", field) } hx-swap-oob="outerHTML"></span>
+		}
+	}
+}
+
+templ GalleryFormSuccess(image model.ArtistImage) {
+  <img id="gallery-preview" class="hidden" hx-swap-oob="outerHTML"></img> 
+	@ArtistImageCard(image)
+	@GalleryFormError(make(map[string]string))
+}
+
+templ ArtistImageCard(image model.ArtistImage) {
+	<div>
+		{ image.Title }
+	</div>
 }
 
 templ artistUpdateForm(artist model.Artist) {
