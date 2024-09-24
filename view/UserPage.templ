@@ -70,6 +70,12 @@ templ dashboardHamburger(user model.User, page string) {
 						<i class="at-point-right-thin"></i>
 					</a>
 				</li>
+				<li class="hamburger-menu-li">
+					<a href={ toUrl("/artist/profile/%s/gallery", user.Id) } class={ isPage(page, "artist-gallery") }>
+						Your Gallery
+						<i class="at-point-right-thin"></i>
+					</a>
+				</li>
 			} else if user.Role == "admin" {
 				<li class="hamburger-menu-li">
 					<a href={ toUrl("/artist/profile/%s", user.Id) } class={ isPage(page, "admin-artist") }>
@@ -103,28 +109,28 @@ templ userDashboardLayout(user model.User, page string) {
 					Commissions
 				</a>
 			</li>
-		</ul>
-		if user.Role == "artist" {
-			<ul>
-				<h3>Artist</h3>
+			if user.Role == "artist" {
 				<li>
-					<a href={ templ.URL(fmt.Sprintf("/artist/profile/%s", user.Id)) } class={ isPage(page, "artist-settings") }>
+					<a href={ toUrl("/artist/profile/%s", user.Id) } class={ isPage(page, "artist-settings") }>
 						<i class="at-sliders-thin"></i>
-						General
+						Artist settings
 					</a>
 				</li>
-			</ul>
-		} else if user.Role == "admin" {
-			<ul>
-				<h3>Admin</h3>
+				<li>
+					<a href={ toUrl("/artist/profile/%s/gallery", user.Id) } class={ isPage(page, "artist-gallery") }>
+						<i class="at-sliders-thin"></i>
+						Your gallery
+					</a>
+				</li>
+			} else if user.Role == "admin" {
 				<li>
 					<a href={ templ.URL(fmt.Sprintf("/admin/%s", user.Id)) } class={ isPage(page, "admin-artists") }>
 						<i class="at-paintbrush-thin"></i>
-						View Artists
+						Admin
 					</a>
 				</li>
-			</ul>
-		}
+			}
+		</ul>
 	</nav>
 	<main id="user-dashboard-main">
 		{ children... }

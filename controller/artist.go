@@ -15,6 +15,7 @@ import (
 func (hc HandlerContext) ArtistHandler(g *echo.Group) {
 	g.GET("/profile/:id", hc.ArtistProfileHandler, OnlyArtists, OnlyTheCorrespondingUser)
 	g.PUT("/profile/:id", hc.ArtistProfileUpdateHandler, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
+	g.GET("/profile/:id/gallery", hc.ArtistProfileGalleryHandler, OnlyArtists, OnlyTheCorrespondingUser)
 }
 
 func (hc HandlerContext) ArtistProfileHandler(c echo.Context) error {
@@ -37,4 +38,15 @@ func (hc HandlerContext) ArtistProfileUpdateHandler(c echo.Context) error {
 	}
 
 	return view.Render(c, http.StatusOK, view.ArtistUpdateResponse(artist))
+}
+
+func (hc HandlerContext) ArtistProfileGalleryHandler(c echo.Context) error {
+	artist, err := model.GetArtistByUserId(hc.e.App.Dao(), c.PathParam("id"))
+	if err != nil {
+		return err
+	}
+
+	apd := view.NewArtistPageData(artist)
+	ld := view.NewLayoutData(c, "Artist Gallery - Otterkin")
+	return view.Render(c, http.StatusOK, view.ArtistProfileGalleryPage(ld, apd))
 }

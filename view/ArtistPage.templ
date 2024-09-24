@@ -30,6 +30,14 @@ templ ArtistProfilePage(ld LayoutData, apd ArtistPageData) {
 	}
 }
 
+templ ArtistProfileGalleryPage(ld LayoutData, apd ArtistPageData) {
+	@layout(ld, dashboardHamburger(apd.artist.User, "artist-gallery")) {
+		@userDashboardLayout(apd.artist.User, "artist-gallery") {
+			<h1 class="dashboard-title">Gallery</h1>
+		}
+	}
+}
+
 templ artistUpdateForm(artist model.Artist) {
 	<div class="user-details">
 		<form hx-put={ toString("/artist/profile/%s", artist.Id) } class="details-edit">
