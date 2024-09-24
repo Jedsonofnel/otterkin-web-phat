@@ -89,7 +89,7 @@ templ ArtistProfileGalleryPage(ld LayoutData, agd ArtistGalleryPageData) {
 				<h2 class="dashboard-subtitle">Your artwork</h2>
 				@artistGallery() {
 					for _, image := range agd.images {
-						@LoadImage(toString("/artwork/%s", image.Id))
+						@EditableImage(image)
 					}
 				}
 			</section>
@@ -114,7 +114,7 @@ templ GalleryFormError(errMap map[string]string) {
 
 templ GalleryFormSuccess(image model.ArtistImage) {
 	<img id="gallery-preview" class="hidden" hx-swap-oob="outerHTML"/>
-	@LoadImage(toString("/artwork/%s", image.Id))
+	@EditableImage(image)
 	@GalleryFormError(make(map[string]string))
 }
 

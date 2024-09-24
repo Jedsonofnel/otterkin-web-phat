@@ -30,6 +30,29 @@ htmx.defineExtension("reset-on-success", {
   },
 })
 
+window.visibleToggle = () => {
+  const toggleButtonWrappers = document.querySelectorAll(
+    ".toggle-button-wrapper"
+  )
+  Array.from(toggleButtonWrappers, (wrapper) => {
+    const button = wrapper.querySelector(".toggle-button")
+    const input = wrapper.querySelector(".toggle-input")
+    if (input.value === "true") {
+      button.classList.add("true")
+    }
+
+    button.addEventListener("click", () => {
+      if (input.value === "true") {
+        input.value = "false"
+        button.classList.remove("true")
+      } else {
+        input.value = "true"
+        button.classList.add("true")
+      }
+    })
+  })
+}
+
 window.hideFlash = (elem) => {
   let message = elem.parentNode
   message.classList.add("removed")

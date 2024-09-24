@@ -69,6 +69,7 @@ func main() {
 		// artwork routes
 		artworkGroup := e.Router.Group(
 			"/artwork",
+			auth.LoadAuthContextFromCookie(e.App),
 		)
 		hc.ArtworkHandler(artworkGroup)
 

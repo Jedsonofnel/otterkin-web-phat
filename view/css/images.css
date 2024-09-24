@@ -8,7 +8,7 @@
 }
 
 /* image loading */
-.image-wrapper {
+.image-wrapper-square {
   width: 240px;
   height: 240px;
   overflow: hidden;
@@ -22,8 +22,32 @@
   }
 }
 
+.image-wrapper-fullsize {
+  height: 100%;
+  width: 100%;
+  & > img {
+    height: 100%;
+    width: 100%;
+    display: block;
+    object-fit: contain;
+  }
+}
+
 .image-placeholder {
   background-color: var(--grey-200);
   height: 100%;
   width: 100%;
+}
+
+/* artist gallery */
+.editable-image-button {
+  background: none;
+  border: none;
+  padding: none;
+
+  cursor: pointer;
+}
+
+.image-modal-container {
+  height: 300px;
 }

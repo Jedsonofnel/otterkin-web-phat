@@ -287,6 +287,8 @@
 
   /* Sizing for visible dialog */
   width: min(100vw, 600px);
+  max-height: (80vh);
+  overflow-y: scroll;
 
   /* Display properties for visible dialog*/
   border-radius: var(--crotchet);
