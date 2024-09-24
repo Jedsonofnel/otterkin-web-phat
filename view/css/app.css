@@ -1,11 +1,18 @@
 /* from other files */
-@import "./popups.css";
+
+/* global */
 @import "./layout.css";
-@import "./registration.css";
-@import "./typography.css";
-@import "./homepage.css";
+@import "./images.css";
+@import "./popups.css";
 @import "./tables.css";
+@import "./typography.css";
+
+/* page specific */
+@import "./registration.css";
 @import "./dashboard.css";
+@import "./homepage.css";
+
+/* required by libraries */
 @import "./croppie.css";
 
 /* important for the box model */

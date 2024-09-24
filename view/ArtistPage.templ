@@ -57,7 +57,7 @@ templ ArtistProfileGalleryPage(ld LayoutData, agd ArtistGalleryPageData) {
 					hx-target="#artist-gallery"
 					hx-swap="beforeend"
 					class="gallery-form"
-          hx-reset-on-success
+					hx-reset-on-success
 				>
 					<div class="columned-form">
 						<div class="image-details">
@@ -74,7 +74,7 @@ templ ArtistProfileGalleryPage(ld LayoutData, agd ArtistGalleryPageData) {
 							<input type="hidden" name="artist_id" value={ agd.artist.Id }/>
 						</div>
 						<div class="image-upload">
-								<img id="gallery-preview" class="hidden"/>
+							<img id="gallery-preview" class="hidden"/>
 							<div class="form-field">
 								<label for="image" hidden="true">Image</label>
 								<input id="image" name="image" type="file" accept="image/*"/>
@@ -85,10 +85,12 @@ templ ArtistProfileGalleryPage(ld LayoutData, agd ArtistGalleryPageData) {
 					<input class="button soft" type="submit" value="Add image"/>
 				</form>
 			</section>
-			<section id="artist-gallery" class="dashboard-section">
-        <h2 class="dashboard-subtitle">Your artwork</h2>
-				for _, image := range agd.images {
-					@ArtistImageCard(image)
+			<section class="dashboard-section">
+				<h2 class="dashboard-subtitle">Your artwork</h2>
+				@artistGallery() {
+					for _, image := range agd.images {
+						@LoadImage(toString("/artwork/%s", image.Id))
+					}
 				}
 			</section>
 		}
@@ -111,15 +113,9 @@ templ GalleryFormError(errMap map[string]string) {
 }
 
 templ GalleryFormSuccess(image model.ArtistImage) {
-  <img id="gallery-preview" class="hidden" hx-swap-oob="outerHTML"></img> 
-	@ArtistImageCard(image)
+	<img id="gallery-preview" class="hidden" hx-swap-oob="outerHTML"/>
+	@LoadImage(toString("/artwork/%s", image.Id))
 	@GalleryFormError(make(map[string]string))
-}
-
-templ ArtistImageCard(image model.ArtistImage) {
-	<div>
-		{ image.Title }
-	</div>
 }
 
 templ artistUpdateForm(artist model.Artist) {

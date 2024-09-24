@@ -66,6 +66,12 @@ func main() {
 		)
 		hc.ArtistHandler(artistGroup)
 
+		// artwork routes
+		artworkGroup := e.Router.Group(
+			"/artwork",
+		)
+		hc.ArtworkHandler(artworkGroup)
+
 		// static files
 		e.Router.Static("/static", "static")
 

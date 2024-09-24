@@ -1,0 +1,17 @@
+package view
+
+templ artistGallery() {
+	<div id="artist-gallery" class="image-gallery">
+		{ children... }
+	</div>
+}
+
+templ LoadImage(url string) {
+	<div hx-get={ url } hx-trigger="revealed" class="image-wrapper">
+		<img alt="Image loading..." class="htmx-indicator image-placeholder"/>
+	</div>
+}
+
+templ Image(url string, alt string) {
+	<img alt={ alt } src={ url }/>
+}
