@@ -1,7 +1,7 @@
 package view
 
 templ LoginPage(ld LayoutData) {
-	@layout(ld) {
+	@layout(ld, defaultHamburger()) {
 		<main>
 			<div class="registration-wrapper">
 				<h1 class="registration-header">Login</h1>
@@ -39,7 +39,7 @@ templ LoginFormError(message string) {
 }
 
 templ AuthPage(ld LayoutData) {
-	@layout(ld) {
+	@layout(ld, defaultHamburger()) {
 		<main>
 			<div class="registration-wrapper">
 				<h1 class="registration-header">Why, hullo there!</h1>

@@ -13,8 +13,8 @@ func NewArtistPageData(artist model.Artist) ArtistPageData {
 }
 
 templ ArtistProfilePage(ld LayoutData, apd ArtistPageData) {
-	@layout(ld) {
-		@userDashboardLayout(apd.artist.User, "artist-general") {
+	@layout(ld, dashboardHamburger(apd.artist.User, "artist-settings")) {
+		@userDashboardLayout(apd.artist.User, "artist-settings") {
 			<h1 class="dashboard-title" id="artist-greeting">Hello { apd.artist.User.FirstName }</h1>
 			if !apd.artist.Approved {
 				<p>

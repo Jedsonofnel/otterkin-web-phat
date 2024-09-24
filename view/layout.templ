@@ -1,6 +1,6 @@
 package view
 
-templ layout(ld LayoutData) {
+templ layout(ld LayoutData, hb templ.Component) {
 	<!DOCTYPE html>
 	<html lang="en_gb">
 		<head>
@@ -13,7 +13,7 @@ templ layout(ld LayoutData) {
 		</head>
 		<body>
 			@header(ld)
-			@hamburger()
+			@hb
 			<div class="grid-wrapper">
 				{ children... }
 			</div>
@@ -50,7 +50,7 @@ templ header(ld LayoutData) {
 	</header>
 }
 
-templ hamburger() {
+templ defaultHamburger() {
 	<nav id="hamburger-menu" hx-boost="true">
 		<ul class="hamburger-menu-default">
 			<li><a href="/" class="hamburger-menu-link">Home<i class="at-point-right-thin"></i></a></li>

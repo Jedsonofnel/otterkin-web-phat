@@ -11,7 +11,7 @@ func NewHomePageData(artists []*models.Record) HomePageData {
 }
 
 templ HomePage(ld LayoutData, pd HomePageData) {
-	@layout(ld) {
+	@layout(ld, defaultHamburger()) {
 		<main>
 			<h1 class="home-heading">
 				A <span style="font-style:italic">very</span> warm welcome

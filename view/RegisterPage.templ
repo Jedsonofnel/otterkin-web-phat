@@ -3,7 +3,7 @@ package view
 import "fmt"
 
 templ RegisterPage(ld LayoutData) {
-	@layout(ld) {
+	@layout(ld, defaultHamburger()) {
 		<main>
 			<div class="registration-wrapper">
 				@ArtistForm()

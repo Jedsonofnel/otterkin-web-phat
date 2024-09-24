@@ -15,7 +15,7 @@ func NewAdminPageData(artists []model.Artist, user model.User) AdminPageData {
 }
 
 templ AdminArtistPageResponse(ld LayoutData, apd AdminPageData) {
-	@layout(ld) {
+	@layout(ld, dashboardHamburger(apd.user, "admin-artists")) {
 		@userDashboardLayout(apd.user, "admin-artists") {
 			<h1>Artists:</h1>
 			<table>
