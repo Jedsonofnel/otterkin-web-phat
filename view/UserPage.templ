@@ -32,9 +32,9 @@ templ UserPage(ld LayoutData, upd UserPageData) {
 					@userUpdateForm(upd.user)
 				</div>
 			</section>
-			<section>
+			<section class="dashboard-section">
 				<h2 class="dashboard-subtitle">Account options</h2>
-				<button class="button subtle" hx-post="/logout" hx-swap="outerHTML">Logout</button>
+				<button class="button subtle" hx-post="/logout" hx-swap="outerHTML" style="align-self: end;">Logout</button>
 			</section>
 		}
 	}
@@ -99,11 +99,11 @@ templ userUpdateForm(user model.User) {
 		enctype="multipart/form-data"
 		class="details-edit"
 	>
-		<div>
+		<div class="form-field">
 			<label for="first_name">First name</label>
 			<input class="text-input" id="first_name" name="first_name" type="text" value={ user.FirstName }/>
 		</div>
-		<div>
+		<div class="form-field">
 			<label for="last_name">Last name</label>
 			<input class="text-input" id="last_name" name="last_name" type="text" value={ user.LastName }/>
 		</div>
@@ -127,7 +127,7 @@ templ UserAvatarUpdateForm(user model.User) {
 			hx-on::confirm="window.cropAvatar(event)"
 		>
 			<h2 class="dashboard-subtitle">Upload a new avatar</h2>
-			<input id="avatar-uploader" class="avatar-input" name="avatar" type="file" accept="image/*" />
+			<input id="avatar-uploader" class="avatar-input" name="avatar" type="file" accept="image/*"/>
 			<div id="croppie" class="not-visible"></div>
 			<div id="placeholder">Please upload an image</div>
 			<div class="modal-bottom">

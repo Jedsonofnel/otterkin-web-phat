@@ -1,9 +1,6 @@
 package view
 
-import (
-	"fmt"
-	"github.com/Jedsonofnel/otterkin-web/model"
-)
+import "github.com/Jedsonofnel/otterkin-web/model"
 
 type ArtistPageData struct {
 	artist model.Artist
@@ -18,27 +15,43 @@ func NewArtistPageData(artist model.Artist) ArtistPageData {
 templ ArtistProfilePage(ld LayoutData, apd ArtistPageData) {
 	@layout(ld) {
 		@userDashboardLayout(apd.artist.User, "artist-general") {
-			<h1 id="artist-greeting">Hello { apd.artist.User.FirstName }</h1>
+			<h1 class="dashboard-title" id="artist-greeting">Hello { apd.artist.User.FirstName }</h1>
 			if !apd.artist.Approved {
 				<p>
 					You haven't yet been approved. Our team should be in touch (if they aren't already)
 					very soon and we hope to get you on your way before long!
 				</p>
 			}
-			<h2>Update your artist details</h2>
-			@artistUpdateForm(apd.artist)
+			<section class="dashboard-section">
+				<h2 class="dashboard-subtitle">Update your artist details</h2>
+				@artistUpdateForm(apd.artist)
+			</section>
 		}
 	}
 }
 
 templ artistUpdateForm(artist model.Artist) {
-	<form hx-put={ string(templ.URL(fmt.Sprintf("/artist/profile/%s", artist.Id))) }>
-		<label for="instagram_handle">Instagram Handle</label>
-		<input id="instagram_handle" name="instagram_handle" type="text" value={ artist.InstagramHandle }/>
-		<label for="biography">Biography</label>
-		<textarea id="biography" name="biography">{ artist.Biography }</textarea>
-		<input type="submit" value="Update"/>
-	</form>
+	<div class="user-details">
+		<form hx-put={ toString("/artist/profile/%s", artist.Id) } class="details-edit">
+			<div class="form-field">
+				<label for="instagram_handle">Instagram Handle</label>
+				<input
+					class="text-input"
+					id="instagram_handle"
+					name="instagram_handle"
+					type="text"
+					value={ artist.InstagramHandle }
+				/>
+			</div>
+			<div class="form-field">
+				<label for="biography">Biography</label>
+				<textarea class="textarea-input" id="biography" name="biography" rows="3" maxlength="128">
+					{ artist.Biography }
+				</textarea>
+			</div>
+			<input class="button soft" type="submit" value="Update"/>
+		</form>
+	</div>
 }
 
 templ ArtistUpdateResponse(artist model.Artist) {

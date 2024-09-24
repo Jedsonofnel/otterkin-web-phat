@@ -26,6 +26,7 @@
   display: flex;
   align-items: stretch;
   flex-wrap: wrap;
+  width: 100%;
   gap: var(--semibreve);
 }
 
@@ -45,7 +46,14 @@
 
   input[type="submit"] {
     margin-top: auto;
+    align-self: end;
   }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
 }
 
 /* avatar modal */
@@ -55,7 +63,25 @@
 
 /* inputs */
 .text-input {
-  width: min(100%, 240px);
+  width: min(100%, 320px);
+  padding: var(--crotchet) var(--minim);
+  border-radius: var(--crotchet);
+  border: 1px solid var(--grey-200);
+  outline: none;
+  background-color: var(--bg);
+
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--fg);
+
+  &:focus-within {
+    border-color: var(--grey-800);
+  }
+}
+
+.textarea-input {
+  resize: none;
+  width: min(100%, 320px);
   padding: var(--crotchet) var(--minim);
   border-radius: var(--crotchet);
   border: 1px solid var(--grey-200);
