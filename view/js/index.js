@@ -40,4 +40,12 @@ window.addEventListener("DOMContentLoaded", () => {
       evt.detail.isError = false
     }
   })
+  // because we don't have full page reloads thanks to fancy htmx
+  // link tags
+  document.addEventListener("htmx:afterSettle", (evt) => {
+    // ie if we swap the contents of body, re-register hamburger
+    if (evt.detail.target.tagName == "BODY") {
+      registerHamburger()
+    }
+  })
 })
