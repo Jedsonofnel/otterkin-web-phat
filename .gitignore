@@ -9,5 +9,7 @@ node_modules/
 static/*.map
 static/*.css
 static/*.js
+static/build/*.css
+static/build/*.js
 
 build-errors.log

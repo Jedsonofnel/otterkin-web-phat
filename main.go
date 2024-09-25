@@ -21,6 +21,9 @@ var dev, prod = getAppEnv()
 //go:embed static/*.css static/*.js static/images/* static/*.ico
 var staticAssets embed.FS
 
+//go:embed static/build/*.css static/build/*.js
+var builtAssets embed.FS
+
 func main() {
 	pb := pocketbase.NewWithConfig(pocketbase.Config{
 		DefaultDev: dev,
@@ -91,6 +94,10 @@ func main() {
 		if prod {
 			e.Router.Use(middleware.StaticWithConfig(middleware.StaticConfig{
 				Root:       "static",
+				Filesystem: fs.FS(staticAssets),
+			}))
+			e.Router.Use(middleware.StaticWithConfig(middleware.StaticConfig{
+				Root:       "static/build",
 				Filesystem: fs.FS(staticAssets),
 			}))
 		}
