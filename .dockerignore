@@ -1,2 +1,5 @@
 node_modules
 tmp
+static/*.map
+static/*.css
+static/*.js

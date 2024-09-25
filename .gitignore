@@ -1,10 +1,13 @@
 tmp/
 otterkin-web
 pb_data/
-static/build/
 node_modules/
-air-main
 *_templ.go
 *_templ.txt
+
+# compiled js and css
+static/*.map
+static/*.css
+static/*.js
 
 build-errors.log

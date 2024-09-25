@@ -1,18 +1,25 @@
 package main
 
 import (
+	"embed"
+	"io/fs"
 	"log"
 	"os"
 
 	"github.com/Jedsonofnel/otterkin-web/auth"
 	"github.com/Jedsonofnel/otterkin-web/controller"
 	_ "github.com/Jedsonofnel/otterkin-web/migrations"
+	"github.com/labstack/echo/v5"
+	"github.com/labstack/echo/v5/middleware"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
 )
 
 var dev, prod = getAppEnv()
+
+//go:embed static/*.css static/*.js static/images/* static/*.ico
+var staticAssets embed.FS
 
 func main() {
 	pb := pocketbase.NewWithConfig(pocketbase.Config{
@@ -74,7 +81,19 @@ func main() {
 		hc.ArtworkHandler(artworkGroup)
 
 		// static files
-		e.Router.Static("/static", "static")
+		if dev {
+			e.Router.Use(disableCacheInDevMode, middleware.StaticWithConfig(middleware.StaticConfig{
+				Root:       "static",
+				IgnoreBase: false,
+			}))
+		}
+		// prod uses embedded fs
+		if prod {
+			e.Router.Use(middleware.StaticWithConfig(middleware.StaticConfig{
+				Root:       "static",
+				Filesystem: fs.FS(staticAssets),
+			}))
+		}
 
 		// favicon
 		e.Router.File("/favicon.ico", "./static/favicon.ico")
@@ -93,5 +112,15 @@ func getAppEnv() (dev bool, prod bool) {
 		return true, false // dev by default
 	} else {
 		return false, true
+	}
+}
+
+func disableCacheInDevMode(next echo.HandlerFunc) echo.HandlerFunc {
+	if !dev {
+		return next
+	}
+	return func(c echo.Context) error {
+		c.Response().Header().Add("Cache-control", "no-store")
+		return next(c)
 	}
 }

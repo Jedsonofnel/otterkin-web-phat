@@ -6,9 +6,9 @@ templ layout(ld LayoutData, hb templ.Component) {
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<link rel="stylesheet" type="text/css" href="/static/build/app.css"/>
+			<link rel="stylesheet" type="text/css" href="/app.css"/>
 			<link rel="stylesheet" href="https://unpkg.com/@vectopus/atlas-icons/style.css"/>
-			<script src="/static/build/index.js"></script>
+			<script src="/index.js"></script>
 			<title>{ ld.title }</title>
 		</head>
 		<body hx-ext="reset-on-success">
@@ -25,7 +25,7 @@ templ layout(ld LayoutData, hb templ.Component) {
 templ header(ld LayoutData) {
 	<header>
 		<button hx-get="/" hx-target="body" hx-swap="outerHTML" id="logo-link">
-			<img src="/static/images/logo.png" class="logo"/>
+			<img src="/images/logo.png" class="logo"/>
 		</button>
 		<nav>
 			<button id="hamburger"><span class="hamburger-burger"></span></button>

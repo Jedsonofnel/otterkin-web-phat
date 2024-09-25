@@ -1,3 +1,12 @@
+# prod
+build/templ:
+	templ generate
+
+build/esbuild:
+	./node_modules/esbuild/bin/esbuild view/css/app.css view/js/index.js \
+	--entry-names=[name] --outdir=static --bundle --minify --allow-overwrite \
+
+# dev
 dev-build:
 	docker build -t otterkin-web .
 
@@ -11,13 +20,13 @@ live/templ:
 
 live/esbuild:
 	./node_modules/esbuild/bin/esbuild view/css/app.css view/js/index.js --entry-names=[name] \
-	--outdir=static/build --bundle --sourcemap --watch </dev/zero \
+	--outdir=static --bundle --sourcemap --watch </dev/zero \
 
 live/server:
 	go run github.com/cosmtrek/air@v1.51.0 \
 	--tmp_dir "tmp" \
 	--build.bin "tmp/main" \
-	--build.full_bin "APP_END=dev tmp/main" \
+	--build.full_bin "APP_ENV=dev tmp/main" \
 	--build.args_bin "serve,--http=0.0.0.0:8080"  \
   --build.cmd "go build -o tmp/main ." \
 	--build.delay "100" \
