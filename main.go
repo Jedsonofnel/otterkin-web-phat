@@ -18,7 +18,7 @@ import (
 
 var dev, prod = getAppEnv()
 
-//go:embed static/*.css static/*.js static/images/* static/*.ico
+//go:embed static/images/* static/*.ico
 var staticAssets embed.FS
 
 //go:embed static/build/*.css static/build/*.js
@@ -98,7 +98,7 @@ func main() {
 			}))
 			e.Router.Use(middleware.StaticWithConfig(middleware.StaticConfig{
 				Root:       "static/build",
-				Filesystem: fs.FS(staticAssets),
+				Filesystem: fs.FS(builtAssets),
 			}))
 		}
 

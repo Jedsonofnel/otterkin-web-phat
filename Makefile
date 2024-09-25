@@ -6,14 +6,23 @@ build/esbuild:
 	./node_modules/esbuild/bin/esbuild view/css/app.css view/js/index.js \
 	--entry-names=[name] --outdir=static/build --bundle --minify \
 
+build/server:
+	go build
+
+build:
+	make build/templ build/esbuild build/server
+
+prod-build:
+	docker build --target prod-stage -t otterkin-web .
+
 # dev
 dev-build:
-	docker build -t otterkin-web .
+	docker build --target dev-stage -t otterkin-web-dev .
 
 dev:
-	docker run -p 8080:8080 --rm -it --name otterkin-web-dev \
+	docker run -p 8080:8080 --rm -it --name otterkin-web-dev-live \
 	-v $(shell pwd):/app -v otterkin-web-tmp:/app/tmp -v otterkin-web-dev-db:/app/tmp/pb_data \
-	otterkin-web
+	otterkin-web-dev
  
 live/templ:
 	templ generate --watch --proxy="http://0.0.0.0:8080" --open-browser=false -v

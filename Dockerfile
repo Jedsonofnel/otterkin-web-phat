@@ -22,8 +22,16 @@ WORKDIR /app
 EXPOSE 8080
 CMD ["make","live"]
 
-# prod (ish)
-# esbuild minify for production
-# build binary to have everything fully embedded
-# this is done by setting APP_ENV to prod
+# building binary for prod
 FROM base-stage AS prod-build-stage
+COPY --from=base-stage /app /app
+WORKDIR /app
+RUN make build
+
+# basic binary container
+FROM scratch AS prod-stage
+COPY --from=prod-build-stage /app/otterkin-web /
+EXPOSE 8080
+ENV APP_ENV=prod
+ENTRYPOINT ["/otterkin-web"]
+CMD ["serve", "--http=0.0.0.0:8080"]
