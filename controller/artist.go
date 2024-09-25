@@ -18,7 +18,7 @@ func (hc HandlerContext) ArtistHandler(g *echo.Group) {
 	g.PUT("/profile/:id", hc.ArtistProfileUpdateHandler, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
 
 	// gallery stuff
-	g.GET("/profile/:id/gallery", hc.ArtistProfileGalleryHandler, OnlyArtists, OnlyTheCorrespondingUser)
+	g.GET("/profile/:id/gallery", hc.ArtistProfileGalleryHandler, OnlyArtists, OnlyTheCorrespondingUser, LoadFlash)
 	g.POST("/profile/:id/gallery", hc.ArtistProfileGalleryPostHandler, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
 }
 

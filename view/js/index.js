@@ -30,24 +30,36 @@ htmx.defineExtension("reset-on-success", {
   },
 })
 
-window.visibleToggle = () => {
+const registerToggles = () => {
   const toggleButtonWrappers = document.querySelectorAll(
     ".toggle-button-wrapper"
   )
+
+  if (toggleButtonWrappers.length === 0) return
+
   Array.from(toggleButtonWrappers, (wrapper) => {
     const button = wrapper.querySelector(".toggle-button")
     const input = wrapper.querySelector(".toggle-input")
+    const trueLabel = wrapper.querySelector("p.true")
+    const falseLabel = wrapper.querySelector("p.false")
     if (input.value === "true") {
       button.classList.add("true")
+      falseLabel.classList.add("hidden")
+    } else {
+      trueLabel.classList.add("hidden")
     }
 
     button.addEventListener("click", () => {
       if (input.value === "true") {
         input.value = "false"
         button.classList.remove("true")
+        trueLabel.classList.add("hidden")
+        falseLabel.classList.remove("hidden")
       } else {
         input.value = "true"
         button.classList.add("true")
+        falseLabel.classList.add("hidden")
+        trueLabel.classList.remove("hidden")
       }
     })
   })
@@ -85,8 +97,7 @@ const registerHamburger = () => {
 }
 
 const registerImagePreview = () => {
-  const imageUpload = document.querySelector(".image-upload")
-  if (imageUpload !== null) {
+  if (document.querySelector("#image") !== null) {
     const imgTag = document.getElementById("gallery-preview")
     const imgInput = document.getElementById("image")
 
@@ -120,6 +131,7 @@ window.addEventListener("DOMContentLoaded", () => {
     if (evt.detail.target.tagName == "BODY") {
       registerHamburger()
       registerImagePreview()
+      registerToggles()
     }
   })
 })

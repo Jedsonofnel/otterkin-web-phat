@@ -68,6 +68,22 @@ func GetArtistImagesByArtistId(dao *daos.Dao, id string) ([]ArtistImage, error) 
 	return artistImages, nil
 }
 
+func GetArtistImagesByUserId(dao *daos.Dao, id string) ([]ArtistImage, error) {
+	artistImages := []ArtistImage{}
+	err := dao.DB().
+		Select("artist_images.id as image_id", "artist_images.*", "artists.user as user_id").
+		From("artist_images").
+		InnerJoin("artists", dbx.NewExp("artist_images.artist_id = artists.id")).
+		Where(dbx.NewExp("user_id = {:id}", dbx.Params{"id": id})).
+		All(&artistImages)
+
+	if err != nil {
+		return []ArtistImage{}, nil
+	}
+
+	return artistImages, nil
+}
+
 func UpdateArtistImageById(app core.App, c echo.Context, id string) (ArtistImage, error) {
 	artistImage, err := app.Dao().FindRecordById("artist_images", id)
 	if err != nil {

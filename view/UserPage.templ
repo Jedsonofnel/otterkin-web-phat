@@ -18,23 +18,23 @@ templ UserPage(ld LayoutData, upd UserPageData) {
 		@userDashboardLayout(upd.user, "user-general") {
 			<h1 id="user-greeting" class="dashboard-title">Hello { upd.user.FirstName }</h1>
 			<section class="dashboard-section">
-				<h2 class="dashboard-subtitle">Your details</h2>
-				<div class="user-details">
-					<div class="avatar-edit">
-						<img class="dashboard-avatar" src={ toString("/api/files/users/%s/%s", upd.user.Id, upd.user.Avatar) }/>
-						<button
-							hx-get={ toString("/user/profile/%s/avatar", upd.user.Id) }
-							hx-target="body"
-							hx-swap="beforeend"
-							class="button soft"
-						>Edit</button>
-					</div>
+				<div class="column-form">
+					<h2 class="dashboard-subtitle">Your details</h2>
+					<img class="dashboard-avatar" src={ toString("/api/files/users/%s/%s", upd.user.Id, upd.user.Avatar) }/>
+					<button
+						hx-get={ toString("/user/profile/%s/avatar", upd.user.Id) }
+						hx-target="body"
+						hx-swap="beforeend"
+						class="button soft"
+					>Edit</button>
 					@userUpdateForm(upd.user)
 				</div>
 			</section>
 			<section class="dashboard-section">
-				<h2 class="dashboard-subtitle">Account options</h2>
-				<button class="button subtle" hx-post="/logout" hx-swap="outerHTML" style="align-self: end;">Logout</button>
+				<div class="column-form">
+					<h2 class="dashboard-subtitle">Account options</h2>
+					<button class="button subtle" hx-post="/logout" hx-swap="outerHTML">Logout</button>
+				</div>
 			</section>
 		}
 	}
@@ -142,7 +142,7 @@ templ userUpdateForm(user model.User) {
 		hx-put={ string(templ.URL(fmt.Sprintf("/user/profile/%s", user.Id))) }
 		hx-swap="outerHTML"
 		enctype="multipart/form-data"
-		class="details-edit"
+		class="column-form"
 	>
 		<div class="form-field">
 			<label for="first_name">First name</label>

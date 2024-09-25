@@ -2,15 +2,15 @@
 .image-gallery {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 240px);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   grid-auto-rows: auto;
   gap: var(--crotchet);
 }
 
 /* image loading */
 .image-wrapper-square {
-  width: 240px;
-  height: 240px;
+  aspect-ratio: 1 / 1;
+  width: 100%;
   overflow: hidden;
 
   & > img {
@@ -46,8 +46,4 @@
   padding: none;
 
   cursor: pointer;
-}
-
-.image-modal-container {
-  height: 300px;
 }

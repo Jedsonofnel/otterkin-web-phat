@@ -38,7 +38,6 @@ templ ArtistProfilePage(ld LayoutData, apd ArtistProfilePageData) {
 				</p>
 			}
 			<section class="dashboard-section">
-				<h2 class="dashboard-subtitle">Update your artist details</h2>
 				@artistUpdateForm(apd.artist)
 			</section>
 		}
@@ -50,38 +49,32 @@ templ ArtistProfileGalleryPage(ld LayoutData, agd ArtistGalleryPageData) {
 		@userDashboardLayout(agd.artist.User, "artist-gallery") {
 			<h1 class="dashboard-title">Your gallery</h1>
 			<section class="dashboard-section">
-				<h2 class="dashboard-subtitle">Add your artwork</h2>
 				<form
 					hx-post={ toString("/artist/profile/%s/gallery", agd.artist.Id) }
 					enctype="multipart/form-data"
 					hx-target="#artist-gallery"
 					hx-swap="beforeend"
-					class="gallery-form"
+					class="column-form"
 					hx-reset-on-success
 				>
-					<div class="columned-form">
-						<div class="image-details">
-							<div class="form-field">
-								<label for="title">Title</label>
-								<input class="text-input" id="title" name="title" type="text"/>
-								<span id="title-error"></span>
-							</div>
-							<div class="form-field">
-								<label for="description">Description (optional)</label>
-								<textarea class="textarea-input" id="description" name="description" rows="3" maxlength="128"></textarea>
-							</div>
-							<input type="hidden" name="visible" value="true"/>
-							<input type="hidden" name="artist_id" value={ agd.artist.Id }/>
-						</div>
-						<div class="image-upload">
-							<img id="gallery-preview" class="hidden"/>
-							<div class="form-field">
-								<label for="image" hidden="true">Image</label>
-								<input id="image" name="image" type="file" accept="image/*"/>
-								<span id="image-error"></span>
-							</div>
-						</div>
+					<h2 class="dashboard-subtitle">Add your artwork</h2>
+					<div class="form-field">
+						<label for="title">Title</label>
+						<input class="text-input" id="title" name="title" type="text"/>
+						<span id="title-error"></span>
 					</div>
+					<div class="form-field">
+						<label for="description">Description (optional)</label>
+						<textarea class="textarea-input" id="description" name="description" rows="3" maxlength="128"></textarea>
+					</div>
+					<input type="hidden" name="visible" value="true"/>
+					<input type="hidden" name="artist_id" value={ agd.artist.Id }/>
+					<div class="form-field">
+						<label for="image" hidden="true">Image</label>
+						<input id="image" class="file-input" name="image" type="file" accept="image/*"/>
+						<span id="image-error"></span>
+					</div>
+					<img id="gallery-preview" class="hidden"/>
 					<input class="button soft" type="submit" value="Add image"/>
 				</form>
 			</section>
@@ -119,27 +112,26 @@ templ GalleryFormSuccess(image model.ArtistImage) {
 }
 
 templ artistUpdateForm(artist model.Artist) {
-	<div class="user-details">
-		<form hx-put={ toString("/artist/profile/%s", artist.Id) } class="details-edit">
-			<div class="form-field">
-				<label for="instagram_handle">Instagram Handle</label>
-				<input
-					class="text-input"
-					id="instagram_handle"
-					name="instagram_handle"
-					type="text"
-					value={ artist.InstagramHandle }
-				/>
-			</div>
-			<div class="form-field">
-				<label for="biography">Biography</label>
-				<textarea class="textarea-input" id="biography" name="biography" rows="3" maxlength="128">
-					{ artist.Biography }
-				</textarea>
-			</div>
-			<input class="button soft" type="submit" value="Update"/>
-		</form>
-	</div>
+	<form hx-put={ toString("/artist/profile/%s", artist.Id) } class="column-form">
+		<h2 class="dashboard-subtitle">Update your artist details</h2>
+		<div class="form-field">
+			<label for="instagram_handle">Instagram Handle</label>
+			<input
+				class="text-input"
+				id="instagram_handle"
+				name="instagram_handle"
+				type="text"
+				value={ artist.InstagramHandle }
+			/>
+		</div>
+		<div class="form-field">
+			<label for="biography">Biography</label>
+			<textarea class="textarea-input" id="biography" name="biography" rows="3" maxlength="128">
+				{ artist.Biography }
+			</textarea>
+		</div>
+		<input class="button soft" type="submit" value="Update"/>
+	</form>
 }
 
 templ ArtistUpdateResponse(artist model.Artist) {

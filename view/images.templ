@@ -2,8 +2,6 @@ package view
 
 import "github.com/Jedsonofnel/otterkin-web/model"
 
-var toggleHandle = templ.NewOnceHandle()
-
 func isVisible(image model.ArtistImage) string {
 	if image.Visible {
 		return "true"
@@ -15,24 +13,33 @@ func isVisible(image model.ArtistImage) string {
 templ ImageModal(image model.ArtistImage) {
 	// only rendered once
 	@modal() {
-		<h2 class="dashboard-subtitle">Edit artwork</h2>
-		<div class="image-modal-container">
+		<form
+			hx-put={ toString("/artwork/edit/%s", image.Id) }
+			hx-target="#modal-image-update-form"
+			hx-swap="beforeend"
+			class="column-form"
+			id="modal-image-update-form"
+		>
+			<h2 class="dashboard-subtitle">Edit artwork</h2>
 			@LoadImage(toString("/artwork/%s", image.Id))
-		</div>
-		<form hx-put={ toString("/artwork/edit/%s", image.Id) }>
 			<div class="form-field">
 				<label for="modal-title">Title</label>
 				<input class="text-input" id="modal-title" type="text" value={ image.Title } name="title"/>
+				<span id="title-error-modal"></span>
 			</div>
 			<div class="form-field">
-				<label for="modal-description">Title</label>
+				<label for="modal-description">Description (optional)</label>
 				<textarea class="textarea-input" id="modal-description" rows="3" name="description">{ image.Description }</textarea>
 			</div>
 			<div class="form-field">
-				<div class="toggle-button-wrapper">
-					<p>Visible</p>
-					<button type="button" class="toggle-button"></button>
-					<input type="hidden" class="toggle-input" name="visible" value={ isVisible(image) }/>
+				<div style="display:flex; justify-content:space-between; width:100%;">
+					<div class="toggle-button-wrapper">
+						<button type="button" class="toggle-button"></button>
+						<p class="true">Visible</p>
+						<p class="false">Hidden</p>
+						<input type="hidden" class="toggle-input" name="visible" value={ isVisible(image) }/>
+					</div>
+					<button class="button soft" hx-delete={ toString("/artwork/%s", image.Id) }>Delete</button>
 				</div>
 			</div>
 			<div class="modal-bottom">
@@ -41,10 +48,13 @@ templ ImageModal(image model.ArtistImage) {
 			</div>
 		</form>
 	}
-	@toggleHandle.Once() {
-		<script type="text/javascript">
-  window.visibleToggle()
-</script>
+}
+
+templ ImageUpdateError(errMap map[string]string) {
+	if errMap["title"] != "" {
+		<p id="title-error-modal" hx-swap-oob="outerHTML" class="form-error">{ errMap["title"] }</p>
+	} else {
+		<span id="title-error-modal" hx-swap-oob="outerHTML"></span>
 	}
 }
 
