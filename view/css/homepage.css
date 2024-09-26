@@ -6,6 +6,7 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center 5%;
+  background-color: rgb(from var(--fg) r g b / 0.5);
 }
 .hero-content {
   height: 100%;
@@ -248,4 +249,37 @@
   &:active {
     background-color: rgb(from var(--gold) r g b / 0.6);
   }
+}
+
+/* tell your story bit */
+.homepage-story-section {
+  padding: var(--semibreve);
+  background-color: var(--pink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.homepage-story-heading {
+  font-size: clamp(2rem, 7vw, 6rem);
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1;
+  margin-bottom: var(--semibreve);
+
+  & > span.tag {
+    font-family: var(--font-sans);
+    font-size: clamp(1.25rem, 4vw, 2.5rem);
+    font-weight: bold;
+    letter-spacing: 0.035em;
+    margin-top: var(--minim);
+    display: block;
+  }
+}
+
+.homepage-story {
+  line-height: 1.35;
+  margin: var(--crotchet) 0;
+  font-size: 1.2rem;
+  max-width: 60ch;
 }
