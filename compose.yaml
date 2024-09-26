@@ -19,17 +19,35 @@ services:
     volumes:
       - letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
-  web:
-    image: ghcr.io/jedsonofnel/otterkin-web
-    container_name: otterkin-web
+    profiles: ["dev", "prod"]
+
+  # the dev profile
+  web-dev:
+    image: ghcr.io/jedsonofnel/otterkin-web:dev
+    container_name: otterkin-web-dev
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.otterkin-web.rule=Host(`dev.otterkin.co.uk`)"
       - "traefik.http.routers.otterkin-web.entrypoints=websecure"
       - "traefik.http.routers.otterkin-web.tls.certresolver=myresolver"
     volumes:
+      - database-dev:/pb_data
+    profiles: ["dev"]
+
+  # the prod profile
+  web-prod:
+    image: ghcr.io/jedsonofnel/otterkin-web:prod
+    container_name: otterkin-web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.otterkin-web.rule=Host(`otterkin.co.uk`)"
+      - "traefik.http.routers.otterkin-web.entrypoints=websecure"
+      - "traefik.http.routers.otterkin-web.tls.certresolver=myresolver"
+    volumes:
       - database:/pb_data
+    profiles: ["prod"]
 
 volumes:
   database:
+  database-dev:
   letsencrypt:
