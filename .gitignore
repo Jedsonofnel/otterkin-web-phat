@@ -1,7 +1,12 @@
+# go air live reload stuff
 tmp/
+build-errors.log
+
+# the binary and it's requirements
 otterkin-web
 pb_data/
-node_modules/
+
+# compiled templ
 *_templ.go
 *_templ.txt
 
@@ -12,4 +17,8 @@ static/*.js
 static/build/*.css
 static/build/*.js
 
-build-errors.log
+# any js malarkey
+node_modules/
+
+# env vars
+.env
