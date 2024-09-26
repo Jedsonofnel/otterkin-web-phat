@@ -12,12 +12,15 @@
   display: flex;
   flex-direction: column;
   align-items: start;
-  padding: var(--semibreve) max(5vw, var(--minim));
+  padding-top: calc(100px - clamp(0px, 10vw, 68px));
+  padding-bottom: calc(200px - clamp(0px, 20vw, 168px));
+  padding-left: max(5vw, var(--minim));
+  padding-right: max(5vw, var(--minim));
 }
 .hero-text {
-  width: min(100%, 800px);
+  width: clamp(min(100%, 320px), 60vw, 800px);
   color: var(--bg);
-  font-size: clamp(1.8rem, 8vw, 4.5rem);
+  font-size: clamp(2rem, 6vw, 4.5rem);
   line-height: 1.1;
   letter-spacing: 0.035em;
 }
@@ -45,4 +48,46 @@
   &:hover {
     background-color: rgb(from var(--gold) r g b / 0.6);
   }
+}
+
+/* info banner stuff */
+.info-banner {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--minim);
+  padding: var(--semibreve) var(--semibreve);
+}
+
+@media (800px < width <= 1100px) {
+  .info-banner {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.info-block {
+  max-height: 200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--crotchet);
+}
+
+.info-img {
+  display: block;
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  flex-shrink: 0;
+
+  &.placeholder {
+    width: 120px;
+    height: 120px;
+    border: 2px solid var(--gold);
+  }
+}
+
+.info-text {
+  font-size: 1.25rem;
+  font-family: var(--font-serif);
+  color: var(--gold);
 }

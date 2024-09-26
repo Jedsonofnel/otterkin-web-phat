@@ -13,18 +13,37 @@ func NewHomePageData(artists []*models.Record) HomePageData {
 templ HomePage(ld LayoutData, pd HomePageData) {
 	@layout(ld, defaultHamburger()) {
 		<main>
-			<div class="hero">
+			<section class="hero">
 				<div class="hero-content">
 					<h1 class="hero-text">
 						POV:
 						<br/>
 						YOU JUST COMMISSIONED YOUR FIRST ART PIECE
 					</h1>
-          <a class="cta-button">ST-ART A REVOLT
-          <i class="at-arrow-right"></i>
-          </a>
+					<a class="cta-button">
+						ST-ART A REVOLT
+						<i class="at-arrow-right"></i>
+					</a>
 				</div>
-			</div>
+			</section>
+			<section class="info-banner">
+				<div class="info-block">
+          <img class="info-img placeholder"/>
+          <p class="info-text">REAL ART BY REAL ARTISTS</p>
+				</div>
+				<div class="info-block">
+          <img class="info-img placeholder"/>
+          <p class="info-text">FROM CAMERA ROLL TO CANVAS</p>
+				</div>
+				<div class="info-block">
+          <img class="info-img placeholder"/>
+          <p class="info-text">DON'T TAME THE TIGER: EXPRESS YOURSELF</p>
+				</div>
+				<div class="info-block">
+          <img class="info-img placeholder"/>
+          <p class="info-text">COMMISSION ARTWORK WITHIN MINUTES</p>
+				</div>
+			</section>
 			<p>Some paragraph text</p>
 			<h2>Our artists:</h2>
 			for _, artist := range pd.artists {
