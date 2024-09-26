@@ -22,6 +22,11 @@
   padding: 0;
 }
 
+/* other key things */
+html {
+  scroll-behavior: smooth;
+}
+
 /* variables */
 html {
   /* colour palette */

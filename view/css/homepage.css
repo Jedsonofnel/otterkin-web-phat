@@ -25,6 +25,7 @@
   letter-spacing: 0.035em;
 }
 .cta-button {
+  text-decoration: none;
   margin-top: auto;
   display: inline-flex;
   align-items: center;
@@ -90,4 +91,111 @@
   font-size: 1.25rem;
   font-family: var(--font-serif);
   color: var(--gold);
+}
+
+.homepage-artist-section {
+  padding: var(--semibreve);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.homepage-subtitle {
+  font-size: 2rem;
+}
+
+.homepage-artist-grid {
+  width: 100%;
+  margin: var(--semibreve) 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-rows: 1fr;
+  grid-auto-rows: 0;
+  overflow: hidden;
+  column-gap: var(--minim);
+}
+
+.homepage-artist-card {
+  height: 400px;
+  width: 100%;
+  border: 2px solid var(--gold);
+}
+
+.otterkin-spotlight {
+  background-color: var(--fg);
+  padding: var(--semibreve);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--semibreve);
+
+  & > a {
+    align-self: end;
+    margin-left: auto;
+  }
+}
+
+.otterkin-spotlight-portrait-wrapper {
+  flex-shrink: 0;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.otterkin-spotlight-portrait {
+  width: min(calc(100vw - 2 * var(--semibreve)), 360px);
+  aspect-ratio: 1 / 1.4;
+  object-fit: cover;
+  object-position: center center;
+  border-radius: var(--semibreve);
+
+  &[src=""] {
+    border: 2px solid var(--gold);
+    background-color: var(--pink);
+  }
+}
+
+.otterkin-spotlight-details {
+  flex: 500px 2 1;
+}
+
+.otterkin-spotlight-label {
+  font-size: 1.5rem;
+  font-family: var(--font-sans);
+  color: var(--gold);
+  font-weight: 700;
+  letter-spacing: 0.035em;
+}
+
+.otterkin-spotlight-name {
+  font-size: clamp(2rem, 8vw, 7rem);
+  line-height: 0.9;
+  color: var(--bg);
+}
+
+.otterkin-spotlight-description {
+  margin-top: var(--minim);
+  color: var(--bg);
+}
+
+.commission-button {
+  padding: var(--crotchet) var(--minim);
+  border-radius: var(--crotchet);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--crotchet);
+  cursor: pointer;
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+
+  &:hover {
+    background-color: rgb(from var(--gold) r g b / 0.3);
+  }
+
+  &:active {
+    background-color: rgb(from var(--gold) r g b / 0.6);
+  }
 }

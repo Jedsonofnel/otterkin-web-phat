@@ -20,35 +20,64 @@ templ HomePage(ld LayoutData, pd HomePageData) {
 						<br/>
 						YOU JUST COMMISSIONED YOUR FIRST ART PIECE
 					</h1>
-					<a class="cta-button">
+					<a class="cta-button" href="#info-banner">
 						ST-ART A REVOLT
 						<i class="at-arrow-right"></i>
 					</a>
 				</div>
 			</section>
-			<section class="info-banner">
+			<section class="info-banner" id="info-banner">
 				<div class="info-block">
-          <img class="info-img placeholder"/>
-          <p class="info-text">REAL ART BY REAL ARTISTS</p>
+					<img class="info-img placeholder"/>
+					<p class="info-text">REAL ART BY REAL ARTISTS</p>
 				</div>
 				<div class="info-block">
-          <img class="info-img placeholder"/>
-          <p class="info-text">FROM CAMERA ROLL TO CANVAS</p>
+					<img class="info-img placeholder"/>
+					<p class="info-text">FROM CAMERA ROLL TO CANVAS</p>
 				</div>
 				<div class="info-block">
-          <img class="info-img placeholder"/>
-          <p class="info-text">DON'T TAME THE TIGER: EXPRESS YOURSELF</p>
+					<img class="info-img placeholder"/>
+					<p class="info-text">DON'T TAME THE TIGER: EXPRESS YOURSELF</p>
 				</div>
 				<div class="info-block">
-          <img class="info-img placeholder"/>
-          <p class="info-text">COMMISSION ARTWORK WITHIN MINUTES</p>
+					<img class="info-img placeholder"/>
+					<p class="info-text">COMMISSION ARTWORK WITHIN MINUTES</p>
 				</div>
 			</section>
-			<p>Some paragraph text</p>
-			<h2>Our artists:</h2>
-			for _, artist := range pd.artists {
-				<div>{ artist.GetString("instagram_handle") }</div>
-			}
+			<section class="homepage-artist-section">
+				<h2 class="homepage-subtitle">DISCOVER SOMETHING NEW</h2>
+				<div class="homepage-artist-grid">
+					<div class="homepage-artist-card"></div>
+					<div class="homepage-artist-card"></div>
+					<div class="homepage-artist-card"></div>
+				</div>
+			</section>
+			<section class="otterkin-spotlight">
+				<div class="otterkin-spotlight-portrait-wrapper">
+					<img class="otterkin-spotlight-portrait" src=""/>
+				</div>
+				<div class="otterkin-spotlight-details">
+					<h2 class="otterkin-spotlight-label">OTTERKIN SPOTLIGHT</h2>
+					<h3 class="otterkin-spotlight-name">Arabella Dorman</h3>
+					<p class="otterkin-spotlight-description">
+						Internationally renowned artist and one of Britain’s leading portrait
+						painters. Arabella has painted members of the royal family, senior military personnel and other high profile
+						individuals.
+					</p>
+				</div>
+				<a class="commission-button">
+					Commission Arabella
+					<i class="at-arrow-right"></i>
+				</a>
+			</section>
+			<section class="homepage-artist-section">
+				<h2 class="homepage-subtitle">OR PERHAPS SOMETHING ELSE...?</h2>
+				<div class="homepage-artist-grid">
+					<div class="homepage-artist-card"></div>
+					<div class="homepage-artist-card"></div>
+					<div class="homepage-artist-card"></div>
+				</div>
+			</section>
 		</main>
 	}
 }
