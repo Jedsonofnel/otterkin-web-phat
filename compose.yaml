@@ -6,21 +6,26 @@ services:
       - "--providers.docker"
       - "--providers.docker.exposedbydefault=false"
       - "--entryPoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=jedn@otterkin.co.uk"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
-      # the http port
       - "443:443"
-      # Web UI (enabled by api.insecure=true)
       - "8080:8080"
     volumes:
-      # so that Traefik can listen to Docker events
+      - letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
   web:
     image: ghcr.io/jedsonofnel/otterkin-web
     container_name: otterkin-web
     labels:
+      - "traefik.enable=true"
       - "traefik.http.routers.otterkin-web.rule=Host(`dev.otterkin.co.uk`)"
+      - "traefik.http.routers.otterkin-web.entrypoints=websecure"
+      - "traefik.http.routers.otterkin-web.tls.certresolver=myresolver"
     volumes:
       - database:/pb_data
 
 volumes:
   database:
+  letsencrypt:
