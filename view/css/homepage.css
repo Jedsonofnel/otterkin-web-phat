@@ -103,7 +103,8 @@
 }
 
 .homepage-subtitle {
-  font-size: 2rem;
+  text-transform: uppercase;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
 }
 
 .homepage-artist-grid {
@@ -172,6 +173,18 @@
   width: min(500px, 100%);
 }
 
+.signature-wrapper {
+  margin-top: var(--minim);
+  max-width: 150px;
+}
+
+.homepage-hullo-signature {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
 /* otterkin spotlight */
 .otterkin-spotlight {
   background-color: var(--fg);
@@ -237,7 +250,7 @@
   align-items: center;
   gap: var(--crotchet);
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1.2rem;
   text-transform: uppercase;
   color: var(--gold);
   border: 1px solid var(--gold);
@@ -285,5 +298,39 @@
   line-height: 1.35;
   margin: var(--crotchet) 0;
   font-size: 1.2rem;
-  max-width: 60ch;
+}
+
+/* homepage guild signup bit */
+.homepage-guild-section {
+  padding: var(--semibreve);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.homepage-guild-description {
+  line-height: 1.35;
+  margin: var(--crotchet) 0;
+  font-size: 1.2rem;
+}
+
+.button.guild-signup {
+  margin: var(--minim) 0;
+}
+
+.homepage-guild-legal {
+  font-size: 0.8rem;
+  line-height: 1.35;
+  margin: var(--crotchet) 0;
+}
+
+.logoo-wrapper {
+  max-width: 150px;
+}
+
+.homepage-guild-o {
+  margin-top: var(--semibreve);
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }

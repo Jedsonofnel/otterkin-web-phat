@@ -156,6 +156,7 @@
   font-size: 1rem;
   color: var(--grey-800);
   cursor: pointer;
+  text-decoration: none;
 }
 
 .button.soft {
@@ -189,6 +190,22 @@
 
   &:active {
     background-color: var(--pink);
+  }
+}
+
+.button.outline {
+  border: 1px solid var(--gold);
+  background: none;
+  color: var(--gold);
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  font-family: var(--font-serif);
+
+  &:hover {
+    background-color: rgb(from var(--gold) r g b / 0.3);
+  }
+  &:active {
+    background-color: rgb(from var(--gold) r g b / 0.6);
   }
 }
 

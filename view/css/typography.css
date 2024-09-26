@@ -16,6 +16,7 @@ h5,
 h6,
 p {
   color: var(--fg);
+  max-width: var(--text-maxwidth);
 }
 
 h1 {
