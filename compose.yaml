@@ -3,12 +3,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: prod-stage
     ports:
       - 8080:8080
     volumes:
-      # Important to bind/mount your codebase dir to /app dir for live reload
-      - ./:/app
-      - database:/app/pb_data
+      - database:/pb_data
 
 volumes:
   database:
