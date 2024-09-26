@@ -1,11 +1,20 @@
 services:
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: prod-stage
+  reverse-proxy:
+    image: traefik:v3.1
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker"
     ports:
-      - 8080:8080
+      # the http port
+      - "80:80"
+      # Web UI (enabled by api.insecure=true)
+      - "8080:8080"
+    volumes:
+      # so that Traefik can listen to Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+  web:
+    image: ghcr.io/jedsonofnel/otterkin-web
+    container_name: otterkin-web
     volumes:
       - database:/pb_data
 
