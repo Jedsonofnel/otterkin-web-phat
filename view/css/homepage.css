@@ -122,6 +122,56 @@
   border: 2px solid var(--gold);
 }
 
+/* otterkin hullo */
+.homepage-hullo-section {
+  padding: var(--semibreve);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.mr-otterkin-container {
+  flex-shrink: 0;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.mr-otterkin-img {
+  width: min(calc(100vw - 2 * var(--semibreve)), 360px);
+  aspect-ratio: 1 / 1.4;
+  object-fit: cover;
+  object-position: right center;
+  border-radius: var(--semibreve);
+}
+
+.homepage-hullo-text {
+  flex: 500px 4 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.homepage-hullo-heading {
+  text-transform: uppercase;
+  text-shadow: 4px 4px 0px var(--grey-400);
+  text-align: center;
+  font-size: clamp(4rem, 8vw, 9rem);
+  font-style: italic;
+  & > span {
+    color: var(--pink);
+  }
+}
+
+.homepage-hullo-greeting {
+  font-style: italic;
+  font-size: 1.5rem;
+  font-family: var(--font-serif);
+  text-align: center;
+  width: min(500px, 100%);
+}
+
+/* otterkin spotlight */
 .otterkin-spotlight {
   background-color: var(--fg);
   padding: var(--semibreve);
