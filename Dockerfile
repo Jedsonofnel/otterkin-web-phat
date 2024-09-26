@@ -31,7 +31,7 @@ RUN make build
 # basic binary container
 FROM scratch AS prod-stage
 COPY --from=prod-build-stage /app/otterkin-web /
-EXPOSE 8080
+EXPOSE 8090
 ENV APP_ENV=prod
 ENTRYPOINT ["/otterkin-web"]
 CMD ["serve", "--http=0.0.0.0:8090"]
