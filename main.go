@@ -18,7 +18,7 @@ import (
 
 var dev, prod = getAppEnv()
 
-//go:embed static/images/* static/*.ico
+//go:embed static/images/* static/favicon.ico
 var staticAssets embed.FS
 
 //go:embed static/build/*.css static/build/*.js
