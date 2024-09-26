@@ -34,4 +34,4 @@ COPY --from=prod-build-stage /app/otterkin-web /
 EXPOSE 8080
 ENV APP_ENV=prod
 ENTRYPOINT ["/otterkin-web"]
-CMD ["serve", "--http=0.0.0.0:8080"]
+CMD ["serve", "--http=0.0.0.0:8090"]

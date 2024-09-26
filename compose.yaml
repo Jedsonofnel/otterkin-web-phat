@@ -15,6 +15,8 @@ services:
   web:
     image: ghcr.io/jedsonofnel/otterkin-web
     container_name: otterkin-web
+    labels:
+      - "traefik.http.routers.otterkin-web.rule=Host(`dev.otterkin.co.uk`)"
     volumes:
       - database:/pb_data
 
