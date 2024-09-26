@@ -13,13 +13,16 @@ build:
 	make build/templ build/esbuild build/server
 
 prod-build:
-	docker build --target prod-stage -t otterkin-web .
+	docker build --target prod-stage -t ghcr.io/jedsonofnel/otterkin-web:prod .
 
-# dev
 dev-build:
+	docker build --target prod-stage -t ghcr.io/jedsonofnel/otterkin-web:dev .
+
+# live reload
+live-build:
 	docker build --target dev-stage -t otterkin-web-dev .
 
-dev:
+live-run:
 	docker run -p 8080:8080 --rm -it --name otterkin-web-dev-live \
 	-v $(shell pwd):/app -v otterkin-web-tmp:/app/tmp -v otterkin-web-dev-db:/app/tmp/pb_data \
 	otterkin-web-dev
