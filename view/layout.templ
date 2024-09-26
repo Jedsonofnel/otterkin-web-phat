@@ -14,35 +14,33 @@ templ layout(ld LayoutData, hb templ.Component) {
 		<body hx-ext="reset-on-success">
 			@header(ld)
 			@hb
-			<div class="grid-wrapper">
-				{ children... }
-			</div>
+			{ children... }
 			@flashMessages(ld.flashError, ld.flashInfo)
 		</body>
 	</html>
 }
 
 templ header(ld LayoutData) {
-	<header>
-		<button hx-get="/" hx-target="body" hx-swap="outerHTML" id="logo-link">
+	<header hx-boost="true">
+		<a href="/" id="logo-link">
 			<img src="/images/logo.png" class="logo"/>
-		</button>
+		</a>
 		<nav>
 			<button id="hamburger"><span class="hamburger-burger"></span></button>
 			<ul>
 				<li>
-					<button hx-get="/" class="home-button" hx-target="body" hx-swap="outerHTML">
+					<a href="/" class="home-button">
 						<i class="at-home"></i>
-					</button>
+					</a>
 				</li>
 				if ld.authRecord == nil {
 					<li><a href="/auth/register">Register</a></li>
 					<li><a href="/auth/login">Login</a></li>
 				} else {
 					<li>
-						<button hx-get="/profile" class="account-button" hx-target="body" hx-swap="outerHTML">
+						<a href="/profile" class="account-button">
 							<i class="at-account-bold"></i>
-						</button>
+						</a>
 					</li>
 				}
 			</ul>
@@ -114,7 +112,7 @@ templ modal() {
 }
 
 templ RedirectPage(ld LayoutData) {
-  @layout(ld, defaultHamburger()) {
-    <div>Redirecting...</div>
- }
+	@layout(ld, defaultHamburger()) {
+		<div>Redirecting...</div>
+	}
 }

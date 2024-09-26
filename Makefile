@@ -4,7 +4,8 @@ build/templ:
 
 build/esbuild:
 	./node_modules/esbuild/bin/esbuild view/css/app.css view/js/index.js \
-	--entry-names=[name] --outdir=static/build --bundle --minify \
+	--entry-names=[name] --outdir=static/build --bundle --minify 
+	"--external:/images/*" \
 
 build/server:
 	go build
@@ -32,7 +33,9 @@ live/templ:
 
 live/esbuild:
 	./node_modules/esbuild/bin/esbuild view/css/app.css view/js/index.js --entry-names=[name] \
-	--outdir=static --bundle --sourcemap --watch </dev/zero \
+	--outdir=static --bundle --sourcemap \
+	"--external:/images/*" \
+	--watch </dev/zero \
 
 live/server:
 	go run github.com/cosmtrek/air@v1.51.0 \
