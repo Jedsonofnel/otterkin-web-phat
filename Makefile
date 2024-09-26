@@ -4,7 +4,7 @@ build/templ:
 
 build/esbuild:
 	./node_modules/esbuild/bin/esbuild view/css/app.css view/js/index.js \
-	--entry-names=[name] --outdir=static/build --bundle --minify 
+	--entry-names=[name] --outdir=static/build --bundle --minify \
 	"--external:/images/*" \
 
 build/server:
