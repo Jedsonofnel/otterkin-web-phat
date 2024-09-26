@@ -4,9 +4,11 @@ services:
     command:
       - "--api.insecure=true"
       - "--providers.docker"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.websecure.address=:443"
     ports:
       # the http port
-      - "80:80"
+      - "443:443"
       # Web UI (enabled by api.insecure=true)
       - "8080:8080"
     volumes:
