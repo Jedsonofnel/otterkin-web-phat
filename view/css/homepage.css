@@ -254,6 +254,10 @@
 /* tell your story bit */
 .homepage-story-section {
   padding: var(--semibreve);
+  background: url("/images/crumpled-paper.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: left top;
   background-color: var(--pink);
   display: flex;
   flex-direction: column;
