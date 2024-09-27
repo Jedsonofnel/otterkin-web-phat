@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/Jedsonofnel/otterkin-web/model"
 	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
@@ -40,8 +41,14 @@ func LoadAuthContextFromCookie(app core.App) echo.MiddlewareFunc {
 				return next(c)
 			}
 
+			// use auth record to find user type
+			user, err := model.GetUserById(app.Dao(), record.Id)
+			if err != nil {
+				return next(c)
+			}
+
 			// set the auth record at the common place in the router context
-			c.Set(apis.ContextAuthRecordKey, record)
+			c.Set(apis.ContextAuthRecordKey, user)
 			return next(c)
 		}
 	}

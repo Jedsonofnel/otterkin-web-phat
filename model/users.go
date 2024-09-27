@@ -18,7 +18,7 @@ type User struct {
 	Role      string `db:"role"`
 }
 
-func FindUserById(dao *daos.Dao, id string) (User, error) {
+func GetUserById(dao *daos.Dao, id string) (User, error) {
 	user := User{}
 	err := dao.DB().
 		Select("users.id as user_id", "users.*").
@@ -48,7 +48,7 @@ func UpdateUserById(app core.App, c echo.Context, id string) (User, error) {
 		return User{}, err
 	}
 
-	return FindUserById(app.Dao(), id)
+	return GetUserById(app.Dao(), id)
 }
 
 func UpdateUserAvatarById(app core.App, c echo.Context, id string) (User, error) {
@@ -74,5 +74,5 @@ func UpdateUserAvatarById(app core.App, c echo.Context, id string) (User, error)
 		return User{}, err
 	}
 
-	return FindUserById(app.Dao(), id)
+	return GetUserById(app.Dao(), id)
 }

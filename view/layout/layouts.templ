@@ -1,0 +1,76 @@
+package layout
+
+import (
+	"github.com/Jedsonofnel/otterkin-web/model"
+	"github.com/labstack/echo/v5"
+	"github.com/pocketbase/pocketbase/apis"
+)
+
+type LayoutData struct {
+	title      string
+	user       model.User
+	flashInfo  string
+	flashError string
+}
+
+func NewLayoutData(c echo.Context, title string) LayoutData {
+	ld := LayoutData{}
+
+	ld.title = title
+
+	if user, ok := c.Get(apis.ContextAuthRecordKey).(model.User); ok {
+		ld.user = user
+	} else {
+		ld.user = model.User{}
+	}
+
+	if flashError, ok := c.Get("ferror").(string); ok {
+		ld.flashError = flashError
+	}
+
+	if flashInfo, ok := c.Get("finfo").(string); ok {
+		ld.flashInfo = flashInfo
+	}
+
+	return ld
+}
+
+templ Default(ld LayoutData) {
+	@base(ld.title) {
+		@header(ld.user) {
+			@defaultHamburger()
+		}
+		<main>
+			{ children... }
+		</main>
+		@FlashMessages(ld.flashError, ld.flashInfo)
+	}
+}
+
+// possible pages under dashboard
+// - user-general
+// - user-commissions
+// - artist-settings
+// - artist-gallery
+// - admin-artists
+templ Dashboard(ld LayoutData, page string) {
+	@base(ld.title) {
+		@header(ld.user) {
+			@dashboardHamburger(ld.user, page)
+		}
+		<div class="grid-wrapper">
+			@dashboardSidebar(ld.user, page)
+			<main>
+				{ children... }
+			</main>
+		</div>
+	}
+}
+
+// just a bare bones type page for hx redirect
+// TODO write a hxRedirect helper that doesn't need this :)
+templ RedirectPage() {
+	@base("Redirecting") {
+		<div>Redirecting...</div>
+	}
+}

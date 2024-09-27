@@ -6,6 +6,7 @@
 @import "./popups.css";
 @import "./tables.css";
 @import "./typography.css";
+@import "./form.css";
 
 /* page specific */
 @import "./registration.css";

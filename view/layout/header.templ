@@ -1,0 +1,92 @@
+package layout
+
+import "github.com/Jedsonofnel/otterkin-web/model"
+
+templ header(user model.User) {
+	<header hx-boost="true">
+		<a href="/" id="logo-link">
+			<img src="/images/logo.png" class="logo"/>
+		</a>
+		<nav>
+			<div data-hb-menu>
+				<button data-hb-btn class="hamburger"><span class="hamburger-patty"></span></button>
+				{ children... }
+			</div>
+			<ul>
+				<li>
+					<a href="/" class="home-button">
+						<i class="at-home"></i>
+					</a>
+				</li>
+				if user.Email == "" {
+					<li><a href="/auth/register">Register</a></li>
+					<li><a href="/auth/login">Login</a></li>
+				} else {
+					<li>
+						<a href="/profile" class="account-button">
+							<i class="at-account-bold"></i>
+						</a>
+					</li>
+				}
+			</ul>
+		</nav>
+	</header>
+}
+
+templ defaultHamburger() {
+	<ul data-hb-menu-list hidden class="hamburger-menu">
+		<li class="hamburger-menu-li"><a href="/">Home<i class="at-point-right-thin"></i></a></li>
+		<li class="hamburger-menu-li">
+			<a href="/profile">
+				Profile
+				<i class="at-point-right-thin"></i>
+			</a>
+		</li>
+	</ul>
+}
+
+templ dashboardHamburger(user model.User, page string) {
+	<ul data-hb-menu-list hidden class="hamburger-menu">
+		<h3 class="hamburger-subtitle">Dashboard</h3>
+		<li class="hamburger-menu-li">
+			<a href={ ToUrl("/user/profile/%s", user.Id) } class={ isPage(page, "user-general") }>
+				General<i class="at-point-right-thin"></i>
+			</a>
+		</li>
+		<li class="hamburger-menu-li">
+			<a href={ ToUrl("/user/profile/%s", user.Id) } class={ isPage(page, "user-commissions") }>
+				Commissions
+				<i class="at-point-right-thin"></i>
+			</a>
+		</li>
+		if user.Role == "artist" {
+			<li class="hamburger-menu-li">
+				<a href={ ToUrl("/artist/profile/%s", user.Id) } class={ isPage(page, "artist-settings") }>
+					Artist Settings
+					<i class="at-point-right-thin"></i>
+				</a>
+			</li>
+			<li class="hamburger-menu-li">
+				<a href={ ToUrl("/artist/profile/%s/gallery", user.Id) } class={ isPage(page, "artist-gallery") }>
+					Your Gallery
+					<i class="at-point-right-thin"></i>
+				</a>
+			</li>
+		} else if user.Role == "admin" {
+			<li class="hamburger-menu-li">
+				<a href={ ToUrl("/artist/profile/%s", user.Id) } class={ isPage(page, "admin-artist") }>
+					Admin Settings
+					<i class="at-point-right-thin"></i>
+				</a>
+			</li>
+		}
+		<h3 class="hamburger-subtitle">Somewhere else</h3>
+		<li class="hamburger-menu-li"><a href="/">Home<i class="at-point-right-thin"></i></a></li>
+		<li class="hamburger-menu-li">
+			<a href="/profile">
+				Profile
+				<i class="at-point-right-thin"></i>
+			</a>
+		</li>
+	</ul>
+}

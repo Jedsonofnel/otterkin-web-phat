@@ -1,0 +1,31 @@
+package components
+
+type ToggleButtonProps struct {
+	Value     bool
+	TrueText  string
+	FalseText string
+}
+
+func boolToStr(value bool) string {
+	if value {
+		return "true"
+	} else {
+		return "false"
+	}
+}
+
+templ ToggleButton(tbp ToggleButtonProps) {
+	<label data-toggle-btn class="toggle-button-wrapper" for="visible-checkbox">
+		if tbp.Value {
+			<input role="switch" type="checkbox" name="visible" id="visible-checkbox" class="toggle-checkbox" checked/>
+			<span data-toggle-btn-switch class="toggle-button"></span>
+			<span data-toggle-btn-true>{ tbp.TrueText }</span>
+			<span data-toggle-btn-false hidden>{ tbp.FalseText }</span>
+		} else {
+			<input role="switch" type="checkbox" name="visible" id="visible-checkbox" class="toggle-button"/>
+			<span data-toggle-btn-switch data-toggle-btn-off class="toggle-button"></span>
+			<span data-toggle-btn-true hidden>{ tbp.TrueText }</span>
+			<span data-toggle-btn-false>{ tbp.FalseText }</span>
+		}
+	</label>
+}

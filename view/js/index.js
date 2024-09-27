@@ -1,8 +1,16 @@
 import "htmx.org"
 import "./avatar"
-
 import htmx from "htmx.org"
+import hamburgerMenu from "./behaviours/hamburger"
+import toggleButton from "./behaviours/toggle-button"
 
+// add listeners on page and htmx load
+addEventListener("htmx:load", (e) => {
+  hamburgerMenu(e.target)
+  toggleButton(e.target)
+})
+
+// htmx stuff
 htmx.defineExtension("reset-on-success", {
   onEvent: (name, event) => {
     if (name !== "htmx:beforeSwap") return
@@ -30,41 +38,6 @@ htmx.defineExtension("reset-on-success", {
   },
 })
 
-const registerToggles = () => {
-  const toggleButtonWrappers = document.querySelectorAll(
-    ".toggle-button-wrapper"
-  )
-
-  if (toggleButtonWrappers.length === 0) return
-
-  Array.from(toggleButtonWrappers, (wrapper) => {
-    const button = wrapper.querySelector(".toggle-button")
-    const input = wrapper.querySelector(".toggle-input")
-    const trueLabel = wrapper.querySelector("p.true")
-    const falseLabel = wrapper.querySelector("p.false")
-    if (input.value === "true") {
-      button.classList.add("true")
-      falseLabel.classList.add("hidden")
-    } else {
-      trueLabel.classList.add("hidden")
-    }
-
-    button.addEventListener("click", () => {
-      if (input.value === "true") {
-        input.value = "false"
-        button.classList.remove("true")
-        trueLabel.classList.add("hidden")
-        falseLabel.classList.remove("hidden")
-      } else {
-        input.value = "true"
-        button.classList.add("true")
-        falseLabel.classList.add("hidden")
-        trueLabel.classList.remove("hidden")
-      }
-    })
-  })
-}
-
 window.hideFlash = (elem) => {
   let message = elem.parentNode
   message.classList.add("removed")
@@ -75,24 +48,6 @@ window.closeModal = () => {
   modal.classList.add("closing")
   modal.addEventListener("animationend", () => {
     modal.remove()
-  })
-}
-
-// hamburger menu malarkey
-const registerHamburger = () => {
-  const hamburgerBtn = document.getElementById("hamburger")
-  const hamburgerMenu = document.getElementById("hamburger-menu")
-  let menuOpen = false
-  hamburgerBtn.addEventListener("click", () => {
-    if (!menuOpen) {
-      hamburgerBtn.classList.add("open")
-      hamburgerMenu.classList.add("open")
-      menuOpen = true
-    } else {
-      hamburgerBtn.classList.remove("open")
-      hamburgerMenu.classList.remove("open")
-      menuOpen = false
-    }
   })
 }
 
@@ -116,7 +71,6 @@ const registerImagePreview = () => {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  registerHamburger()
   registerImagePreview()
   document.addEventListener("htmx:beforeSwap", (evt) => {
     if (evt.detail.xhr.status === 422) {
@@ -129,9 +83,7 @@ window.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("htmx:afterSettle", (evt) => {
     // ie if we swap the contents of body, re-register hamburger
     if (evt.detail.target.tagName == "BODY") {
-      registerHamburger()
       registerImagePreview()
-      registerToggles()
     }
   })
 })

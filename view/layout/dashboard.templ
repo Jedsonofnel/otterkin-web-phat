@@ -1,0 +1,55 @@
+package layout
+
+import (
+	"fmt"
+	"github.com/Jedsonofnel/otterkin-web/model"
+)
+
+func isPage(page string, link string) string {
+	if page == link {
+		return "current-page"
+	} else {
+		return ""
+	}
+}
+
+templ dashboardSidebar(user model.User, page string) {
+	<nav id="left-sidebar" class="dashboard-sidebar" hx-boost="true">
+		<ul>
+			<h3>Dashboard</h3>
+			<li>
+				<a href={ ToUrl("/user/profile/%s", user.Id) } class={ isPage(page, "user-general") }>
+					<i class="at-sliders-thin"></i>
+					General
+				</a>
+			</li>
+			<li>
+				<a href={ ToUrl("/user/profile/%s", user.Id) } class={ isPage(page, "user-commissions") }>
+					<i class="at-handshake-hand-gesture-thin"></i>
+					Commissions
+				</a>
+			</li>
+			if user.Role == "artist" {
+				<li>
+					<a href={ ToUrl("/artist/profile/%s", user.Id) } class={ isPage(page, "artist-settings") }>
+						<i class="at-sliders-thin"></i>
+						Artist settings
+					</a>
+				</li>
+				<li>
+					<a href={ ToUrl("/artist/profile/%s/gallery", user.Id) } class={ isPage(page, "artist-gallery") }>
+						<i class="at-hanging-frame-thin"></i>
+						Your gallery
+					</a>
+				</li>
+			} else if user.Role == "admin" {
+				<li>
+					<a href={ templ.URL(fmt.Sprintf("/admin/%s", user.Id)) } class={ isPage(page, "admin-artists") }>
+						<i class="at-paintbrush-thin"></i>
+						Admin
+					</a>
+				</li>
+			}
+		</ul>
+	</nav>
+}

@@ -1,5 +1,5 @@
 /* hamburger icon + animation */
-#hamburger {
+.hamburger {
   height: 40px;
   width: 40px;
   margin-right: -8px;
@@ -18,7 +18,7 @@
     background-color: var(--fg-darker);
   }
 }
-.hamburger-burger {
+.hamburger-patty {
   width: 20px;
   height: 2px;
   border-radius: 1px;
@@ -26,8 +26,8 @@
   transition: all 0.25s ease-in-out;
   transform: translateX(2px);
 }
-.hamburger-burger::before,
-.hamburger-burger::after {
+.hamburger-patty::before,
+.hamburger-patty::after {
   content: "";
   display: block;
   width: 24px;
@@ -36,53 +36,47 @@
   background-color: var(--gold);
   transition: all 0.25s ease-in-out;
 }
-.hamburger-burger::before {
+.hamburger-patty::before {
   transform: translateY(-10px) translateX(-4px);
 }
-.hamburger-burger::after {
+.hamburger-patty::after {
   transform: translateY(8px) translateX(-4px);
 }
-#hamburger.open {
-  .hamburger-burger {
+.hamburger[data-hb-open] {
+  .hamburger-patty {
     transform: translateX(-24px);
     background: transparent;
   }
-  .hamburger-burger::before {
+  .hamburger-patty::before {
     transform: rotate(45deg) translate(16.5px, -15px);
     width: 24px;
   }
-  .hamburger-burger::after {
+  .hamburger-patty::after {
     transform: rotate(-45deg) translate(16.5px, 15px);
     width: 24px;
   }
 }
 
 /* the hamburger menu itself */
-#hamburger-menu {
+.hamburger-menu {
   position: fixed;
   top: var(--header-height);
-  z-index: 1000;
-  transform: translateX(100vw);
+  left: 0;
   height: calc(100vh - var(--header-height));
   width: 100vw;
   background-color: var(--fg);
   border-top: 1px solid var(--gold);
   transition: all 0.25s ease-in-out;
+  &[hidden] {
+    transform: translateX(100vw);
+  }
+
   display: flex;
   flex-direction: column;
 }
 
-#hamburger-menu.open {
+.hamburger-menu {
   transform: translateX(calc(100vw - 100%));
-}
-
-.hamburger-menu-default {
-  width: 100%;
-  padding: var(--minim) var(--minim-dotted);
-  list-style-type: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--quaver);
 }
 
 .hamburger-subtitle {
@@ -113,9 +107,12 @@
   }
 }
 
-.hamburger-menu-li > a,
-.hamburger-bottom > a {
-  flex-grow: 1;
+.hamburger-menu-li {
+  width: 100%;
+  padding: 0 var(--minim-dotted);
+}
+
+.hamburger-menu-li > a {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -140,26 +137,9 @@
   }
 }
 
-.hamburger-bottom > a {
-  justify-content: center;
-}
-
 .hamburger-menu-li > a.current-page {
   background-color: var(--fg-lighter);
   cursor: default;
-}
-
-.hamburger-bottom {
-  margin-top: auto;
-  width: 100%;
-  display: flex;
-  align-items: center;
-
-  .separator {
-    height: calc(100% - var(--minim));
-    width: 2px;
-    background-color: var(--gold);
-  }
 }
 
 /* flash */

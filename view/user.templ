@@ -1,0 +1,88 @@
+package view
+
+import (
+	"fmt"
+	"github.com/Jedsonofnel/otterkin-web/model"
+	"github.com/Jedsonofnel/otterkin-web/view/layout"
+)
+
+type UserPageData struct {
+	user model.User
+}
+
+func NewUserPageData(user model.User) UserPageData {
+	return UserPageData{user: user}
+}
+
+templ UserPage(ld layout.LayoutData, upd UserPageData) {
+	@layout.Dashboard(ld, "user-general") {
+			<h1 id="user-greeting" class="dashboard-title">Hello { upd.user.FirstName }</h1>
+			<section class="dashboard-section">
+				<div class="column-form">
+					<h2 class="dashboard-subtitle">Your details</h2>
+					<img class="dashboard-avatar" src={ fmt.Sprintf("/api/files/users/%s/%s", upd.user.Id, upd.user.Avatar) }/>
+					<button
+						hx-get={ fmt.Sprintf("/user/profile/%s/avatar", upd.user.Id) }
+						hx-target="body"
+						hx-swap="beforeend"
+						class="button soft"
+					>Edit</button>
+					@userUpdateForm(upd.user)
+				</div>
+			</section>
+			<section class="dashboard-section">
+				<div class="column-form">
+					<h2 class="dashboard-subtitle">Account options</h2>
+					<button class="button subtle" hx-post="/logout" hx-swap="outerHTML">Logout</button>
+				</div>
+			</section>
+	}
+}
+
+
+
+templ userUpdateForm(user model.User) {
+	<form
+		hx-put={ string(templ.URL(fmt.Sprintf("/user/profile/%s", user.Id))) }
+		hx-swap="outerHTML"
+		enctype="multipart/form-data"
+		class="column-form"
+	>
+		<div class="form-field">
+			<label for="first_name">First name</label>
+			<input class="text-input" id="first_name" name="first_name" type="text" value={ user.FirstName }/>
+		</div>
+		<div class="form-field">
+			<label for="last_name">Last name</label>
+			<input class="text-input" id="last_name" name="last_name" type="text" value={ user.LastName }/>
+		</div>
+		<input class="button soft" type="submit" value="Update"/>
+	</form>
+}
+
+templ UserUpdateResponse(upd UserPageData) {
+	@userUpdateForm(upd.user)
+	<h1 id="user-greeting" hx-swap-oob="outerHTML">Hello { upd.user.FirstName }</h1>
+	@layout.FlashInfo("Details updated!")
+}
+
+templ UserAvatarUpdateForm(user model.User) {
+	@modal() {
+		<form
+			hx-put={ string(templ.URL(fmt.Sprintf("/user/profile/%s/avatar", user.Id))) }
+			hx-target="body"
+			id="avatar-form"
+			enctype="multipart/form-data"
+			hx-on::confirm="window.cropAvatar(event)"
+		>
+			<h2 class="dashboard-subtitle">Upload a new avatar</h2>
+			<input id="avatar-uploader" class="avatar-input" name="avatar" type="file" accept="image/*"/>
+			<div id="croppie" class="not-visible"></div>
+			<div id="placeholder">Please upload an image</div>
+			<div class="modal-bottom">
+				<button class="button text" type="button" onclick="closeModal()">Cancel</button>
+				<input id="avatar-submit" class="button primary disabled" type="submit" value="Submit"/>
+			</div>
+		</form>
+	}
+}

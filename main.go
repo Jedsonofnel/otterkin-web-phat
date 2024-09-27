@@ -39,11 +39,11 @@ func main() {
 		hc := controller.NewHandlerContext(e)
 
 		// non-grouped pages
-		e.Router.GET("/", hc.HomeHandler,
+		e.Router.GET("/", hc.HandleHomePage,
 			auth.LoadAuthContextFromCookie(e.App),
 			controller.LoadFlash)
 
-		e.Router.GET("/profile", hc.ProfileHandler, auth.LoadAuthContextFromCookie(e.App))
+		e.Router.GET("/profile", hc.HandleProfilePage, auth.LoadAuthContextFromCookie(e.App))
 
 		// auth routes
 		authGroup := e.Router.Group(
@@ -51,8 +51,8 @@ func main() {
 			auth.LoadAuthContextFromCookie(e.App),
 			controller.OnlyUnauthorisedUsers,
 		)
-		hc.AuthHandler(authGroup)
-		e.Router.POST("/logout", hc.LogoutHandler)
+		hc.HandleAuth(authGroup)
+		e.Router.POST("/logout", hc.HandleLogout)
 
 		// admin routes
 		adminGroup := e.Router.Group(
@@ -60,7 +60,7 @@ func main() {
 			auth.LoadAuthContextFromCookie(e.App),
 			controller.OnlyAdmins,
 		)
-		hc.AdminHandler(adminGroup)
+		hc.HandleAdmin(adminGroup)
 
 		// user routes
 		userGroup := e.Router.Group(
@@ -74,14 +74,14 @@ func main() {
 			"/artist",
 			auth.LoadAuthContextFromCookie(e.App),
 		)
-		hc.ArtistHandler(artistGroup)
+		hc.HandleArtist(artistGroup)
 
 		// artwork routes
 		artworkGroup := e.Router.Group(
 			"/artwork",
 			auth.LoadAuthContextFromCookie(e.App),
 		)
-		hc.ArtworkHandler(artworkGroup)
+		hc.HandleArtwork(artworkGroup)
 
 		// static files
 		if dev {

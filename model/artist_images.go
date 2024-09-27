@@ -91,10 +91,10 @@ func UpdateArtistImageById(app core.App, c echo.Context, id string) (ArtistImage
 	}
 
 	var visible bool
-	if c.FormValue("visible") == "false" {
-		visible = false
-	} else {
+	if c.FormValue("visible") == "on" {
 		visible = true
+	} else {
+		visible = false
 	}
 
 	form := forms.NewRecordUpsert(app, artistImage)

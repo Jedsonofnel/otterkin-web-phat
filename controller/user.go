@@ -5,6 +5,7 @@ import (
 
 	"github.com/Jedsonofnel/otterkin-web/model"
 	"github.com/Jedsonofnel/otterkin-web/view"
+	"github.com/Jedsonofnel/otterkin-web/view/layout"
 	"github.com/labstack/echo/v5"
 )
 
@@ -17,22 +18,22 @@ func (hc HandlerContext) UserHandler(g *echo.Group) {
 }
 
 func (hc HandlerContext) UserDashboardHandler(c echo.Context) error {
-	user, err := model.FindUserById(hc.e.App.Dao(), c.PathParam("id"))
+	user, err := model.GetUserById(hc.e.App.Dao(), c.PathParam("id"))
 	if err != nil {
 		return err // should be a 500
 	}
 
-	ld := view.NewLayoutData(c, "User Dashboard - Otterkin")
+	ld := layout.NewLayoutData(c, "User Dashboard - Otterkin")
 	upd := view.NewUserPageData(user)
-	return view.Render(c, http.StatusOK, view.UserPage(ld, upd))
+	return Render(c, http.StatusOK, view.UserPage(ld, upd))
 }
 
 func (hc HandlerContext) UserAvatarFormHandler(c echo.Context) error {
-	user, err := model.FindUserById(hc.e.App.Dao(), c.PathParam("id"))
+	user, err := model.GetUserById(hc.e.App.Dao(), c.PathParam("id"))
 	if err != nil {
 		return err
 	}
-	return view.Render(c, http.StatusOK, view.UserAvatarUpdateForm(user))
+	return Render(c, http.StatusOK, view.UserAvatarUpdateForm(user))
 }
 
 func (hc HandlerContext) UserAvatarUpdateHandler(c echo.Context) error {
@@ -42,8 +43,8 @@ func (hc HandlerContext) UserAvatarUpdateHandler(c echo.Context) error {
 	}
 
 	upd := view.NewUserPageData(user)
-	ld := view.NewLayoutData(c, "User Dashboard - Otterkin")
-	return view.Render(c, http.StatusOK, view.UserPage(ld, upd))
+	ld := layout.NewLayoutData(c, "User Dashboard - Otterkin")
+	return Render(c, http.StatusOK, view.UserPage(ld, upd))
 }
 
 func (hc HandlerContext) UserUpdateHandler(c echo.Context) error {
@@ -53,5 +54,5 @@ func (hc HandlerContext) UserUpdateHandler(c echo.Context) error {
 	}
 
 	upd := view.NewUserPageData(user)
-	return view.Render(c, http.StatusOK, view.UserUpdateResponse(upd))
+	return Render(c, http.StatusOK, view.UserUpdateResponse(upd))
 }

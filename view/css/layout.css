@@ -68,10 +68,7 @@ header {
 
 /* hide hamburger */
 @media (min-width: 601px) {
-  header nav #hamburger {
-    display: none;
-  }
-  #hamburger-menu {
+  div[data-hb-menu] {
     display: none;
   }
 }

@@ -5,33 +5,34 @@ import (
 
 	"github.com/Jedsonofnel/otterkin-web/model"
 	"github.com/Jedsonofnel/otterkin-web/view"
+	"github.com/Jedsonofnel/otterkin-web/view/layout"
 	"github.com/labstack/echo/v5"
 )
 
-func (hc HandlerContext) AdminHandler(g *echo.Group) {
-	g.GET("/:id", hc.AdminArtistHandler, OnlyTheCorrespondingUser)
-	g.PUT("/approve/:id", hc.AdminArtistApproveHandler)
-	g.GET("/revoke/:id", hc.AdminArtistRevokeModalHandler)
-	g.PUT("/revoke/:id", hc.AdminArtistRevokeHandler)
+func (hc HandlerContext) HandleAdmin(g *echo.Group) {
+	g.GET("/:id", hc.HandleAdminArtistPage, OnlyTheCorrespondingUser)
+	g.PUT("/approve/:id", hc.HandleAdminArtistApprove)
+	g.GET("/revoke/:id", hc.HandleAdminGetRevokeModal)
+	g.PUT("/revoke/:id", hc.HandleAdminArtistRevoke)
 }
 
-func (hc HandlerContext) AdminArtistHandler(c echo.Context) error {
+func (hc HandlerContext) HandleAdminArtistPage(c echo.Context) error {
 	allArtists, err := model.GetAllArtists(hc.e.App.Dao())
 	if err != nil {
 		return err // should be a 500
 	}
 
-	user, err := model.FindUserById(hc.e.App.Dao(), c.PathParam("id"))
+	user, err := model.GetUserById(hc.e.App.Dao(), c.PathParam("id"))
 	if err != nil {
 		return err
 	}
 
-	ld := view.NewLayoutData(c, "Admin Dashboard - Otterkin")
+	ld := layout.NewLayoutData(c, "Admin Dashboard - Otterkin")
 	apd := view.NewAdminPageData(allArtists, user)
-	return view.Render(c, http.StatusOK, view.AdminArtistPageResponse(ld, apd))
+	return Render(c, http.StatusOK, view.AdminArtistPageResponse(ld, apd))
 }
 
-func (hc HandlerContext) AdminArtistApproveHandler(c echo.Context) error {
+func (hc HandlerContext) HandleAdminArtistApprove(c echo.Context) error {
 	artist, err := model.UpdateArtistApprovalById(
 		hc.e.App,
 		c.PathParam("id"),
@@ -41,10 +42,10 @@ func (hc HandlerContext) AdminArtistApproveHandler(c echo.Context) error {
 		return err
 	}
 
-	return view.Render(c, http.StatusOK, view.ArtistRow(artist))
+	return Render(c, http.StatusOK, view.ArtistRow(artist))
 }
 
-func (hc HandlerContext) AdminArtistRevokeHandler(c echo.Context) error {
+func (hc HandlerContext) HandleAdminArtistRevoke(c echo.Context) error {
 	artist, err := model.UpdateArtistApprovalById(
 		hc.e.App,
 		c.PathParam("id"),
@@ -54,14 +55,14 @@ func (hc HandlerContext) AdminArtistRevokeHandler(c echo.Context) error {
 		return err
 	}
 
-	return view.Render(c, http.StatusOK, view.ArtistRow(artist))
+	return Render(c, http.StatusOK, view.ArtistRow(artist))
 }
 
-func (hc HandlerContext) AdminArtistRevokeModalHandler(c echo.Context) error {
+func (hc HandlerContext) HandleAdminGetRevokeModal(c echo.Context) error {
 	artist, err := model.GetArtistByArtistId(hc.e.App.Dao(), c.PathParam("id"))
 	if err != nil {
 		return err
 	}
 
-	return view.Render(c, http.StatusOK, view.ArtistRevokeModal(artist))
+	return Render(c, http.StatusOK, view.ArtistRevokeModal(artist))
 }

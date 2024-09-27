@@ -6,6 +6,7 @@ import (
 	"github.com/Jedsonofnel/otterkin-web/auth"
 	"github.com/Jedsonofnel/otterkin-web/model"
 	"github.com/Jedsonofnel/otterkin-web/view"
+	"github.com/Jedsonofnel/otterkin-web/view/layout"
 	"github.com/labstack/echo/v5"
 )
 
@@ -13,16 +14,16 @@ import (
 // Artist profile main page (where you can change artist-specific info)
 // Artist profile gallery page (where an artist can upload images)
 // Artist public page (for people to look/read about/commission an artist)
-func (hc HandlerContext) ArtistHandler(g *echo.Group) {
-	g.GET("/profile/:id", hc.ArtistProfileHandler, OnlyArtists, OnlyTheCorrespondingUser)
-	g.PUT("/profile/:id", hc.ArtistProfileUpdateHandler, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
+func (hc HandlerContext) HandleArtist(g *echo.Group) {
+	g.GET("/profile/:id", hc.HandleArtistProfile, OnlyArtists, OnlyTheCorrespondingUser)
+	g.PUT("/profile/:id", hc.HandleUpdateArtistProfile, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
 
 	// gallery stuff
-	g.GET("/profile/:id/gallery", hc.ArtistProfileGalleryHandler, OnlyArtists, OnlyTheCorrespondingUser, LoadFlash)
-	g.POST("/profile/:id/gallery", hc.ArtistProfileGalleryPostHandler, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
+	g.GET("/profile/:id/gallery", hc.HandleArtistProfileGallery, OnlyArtists, OnlyTheCorrespondingUser, LoadFlash)
+	g.POST("/profile/:id/gallery", hc.HandleCreateArtistImage, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
 }
 
-func (hc HandlerContext) ArtistProfileHandler(c echo.Context) error {
+func (hc HandlerContext) HandleArtistProfile(c echo.Context) error {
 	// we can use the GetArtistByUserId function because this route
 	// is protected for only artists
 	artist, err := model.GetArtistByUserId(hc.e.App.Dao(), c.PathParam("id"))
@@ -31,20 +32,20 @@ func (hc HandlerContext) ArtistProfileHandler(c echo.Context) error {
 	}
 
 	apd := view.NewArtistProfilePageData(artist)
-	ld := view.NewLayoutData(c, "Artist Profile - Otterkin")
-	return view.Render(c, http.StatusOK, view.ArtistProfilePage(ld, apd))
+	ld := layout.NewLayoutData(c, "Artist Profile - Otterkin")
+	return Render(c, http.StatusOK, view.ArtistProfilePage(ld, apd))
 }
 
-func (hc HandlerContext) ArtistProfileUpdateHandler(c echo.Context) error {
+func (hc HandlerContext) HandleUpdateArtistProfile(c echo.Context) error {
 	artist, err := model.UpdateArtistById(hc.e.App, c, c.PathParam("id"))
 	if err != nil {
 		return err
 	}
 
-	return view.Render(c, http.StatusOK, view.ArtistUpdateResponse(artist))
+	return Render(c, http.StatusOK, view.ArtistUpdateResponse(artist))
 }
 
-func (hc HandlerContext) ArtistProfileGalleryHandler(c echo.Context) error {
+func (hc HandlerContext) HandleArtistProfileGallery(c echo.Context) error {
 	artist, err := model.GetArtistByUserId(hc.e.App.Dao(), c.PathParam("id"))
 	if err != nil {
 		return err
@@ -56,17 +57,17 @@ func (hc HandlerContext) ArtistProfileGalleryHandler(c echo.Context) error {
 	}
 
 	apd := view.NewArtistGalleryPageData(artist, images)
-	ld := view.NewLayoutData(c, "Artist Gallery - Otterkin")
-	return view.Render(c, http.StatusOK, view.ArtistProfileGalleryPage(ld, apd))
+	ld := layout.NewLayoutData(c, "Artist Gallery - Otterkin")
+	return Render(c, http.StatusOK, view.ArtistProfileGalleryPage(ld, apd))
 }
 
-func (hc HandlerContext) ArtistProfileGalleryPostHandler(c echo.Context) error {
+func (hc HandlerContext) HandleCreateArtistImage(c echo.Context) error {
 	artistImage, err := model.CreateArtistImage(hc.e.App, c)
 	if err != nil {
 		errMap := auth.GetMapOfErrs(err)
-		return view.Render(c, http.StatusUnprocessableEntity, view.GalleryFormError(errMap))
+		return Render(c, http.StatusUnprocessableEntity, view.GalleryFormError(errMap))
 	}
 
 	// if not we want to append the artist card to the thing
-	return view.Render(c, http.StatusOK, view.GalleryFormSuccess(artistImage))
+	return Render(c, http.StatusOK, view.GalleryFormSuccess(artistImage))
 }

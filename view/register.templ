@@ -1,14 +1,15 @@
 package view
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/Jedsonofnel/otterkin-web/view/layout"
+)
 
-templ RegisterPage(ld LayoutData) {
-	@layout(ld, defaultHamburger()) {
-		<main>
-			<div class="registration-wrapper">
-				@ArtistForm()
-			</div>
-		</main>
+templ RegisterPage(ld layout.LayoutData) {
+	@layout.Default(ld) {
+		<div class="registration-wrapper">
+			@ArtistForm()
+		</div>
 	}
 }
 
