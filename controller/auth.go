@@ -46,7 +46,7 @@ func (h HandlerContext) LoginPostHandler(c echo.Context) error {
 }
 
 func (h HandlerContext) RegisterPageHandler(c echo.Context) error {
-	ld := view.NewLayoutData(c, "Register - Otterking")
+	ld := view.NewLayoutData(c, "Register - Otterkin")
 	return view.Render(c, http.StatusOK, view.RegisterPage(ld))
 }
 
