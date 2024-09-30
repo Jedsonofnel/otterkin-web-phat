@@ -54,6 +54,7 @@ templ ArtistProfileGalleryPage(ld layout.LayoutData, agd ArtistGalleryPageData) 
 				hx-swap="beforeend"
 				class="column-form"
 				hx-reset-on-success
+        data-image-preview-form
 			>
 				<h2 class="dashboard-subtitle">Add your artwork</h2>
 				<div class="form-field">
@@ -69,10 +70,10 @@ templ ArtistProfileGalleryPage(ld layout.LayoutData, agd ArtistGalleryPageData) 
 				<input type="hidden" name="artist_id" value={ agd.artist.Id }/>
 				<div class="form-field">
 					<label for="image" hidden="true">Image</label>
-					<input id="image" class="file-input" name="image" type="file" accept="image/*"/>
+					<input id="image" class="file-input" name="image" type="file" accept="image/*" data-image-preview-input/>
 					<span id="image-error"></span>
 				</div>
-				<img id="gallery-preview" class="hidden"/>
+				<img data-image-preview-img hidden class="image-preview"/>
 				<input class="button soft" type="submit" value="Add image"/>
 			</form>
 		</section>

@@ -43,16 +43,12 @@
 }
 
 /* gallery uploading */
-#gallery-preview {
+.image-preview {
   border-radius: var(--quaver);
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
-}
-
-#gallery-preview.hidden {
-  display: none;
 }
 
 /* avatar modal */

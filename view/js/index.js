@@ -5,6 +5,7 @@ import hamburgerMenu from "./behaviours/hamburger"
 import toggleButton from "./behaviours/toggle-button"
 import flashMessages from "./behaviours/flash-message"
 import modal from "./behaviours/modal"
+import imagePreview from "./behaviours/image-preview"
 
 // add behaviours on page and htmx load
 addEventListener("htmx:load", (e) => {
@@ -12,6 +13,7 @@ addEventListener("htmx:load", (e) => {
   toggleButton(e.target)
   flashMessages(e.target)
   modal(e.target)
+  imagePreview(e.target)
 })
 
 // htmx stuff
@@ -42,39 +44,11 @@ htmx.defineExtension("reset-on-success", {
   },
 })
 
-const registerImagePreview = () => {
-  if (document.querySelector("#image") !== null) {
-    const imgTag = document.getElementById("gallery-preview")
-    const imgInput = document.getElementById("image")
-
-    const readFile = (input) => {
-      if (input.files && input.files[0]) {
-        const reader = new FileReader()
-        reader.readAsDataURL(input.files[0])
-        reader.onload = () => {
-          imgTag.setAttribute("src", reader.result)
-          imgTag.classList.remove("hidden")
-        }
-      }
-    }
-    imgInput.addEventListener("change", () => readFile(imgInput))
-  }
-}
-
 window.addEventListener("DOMContentLoaded", () => {
-  registerImagePreview()
   document.addEventListener("htmx:beforeSwap", (evt) => {
     if (evt.detail.xhr.status === 422) {
       evt.detail.shouldSwap = true
       evt.detail.isError = false
-    }
-  })
-  // because we don't have full page reloads thanks to fancy htmx
-  // link tags
-  document.addEventListener("htmx:afterSettle", (evt) => {
-    // ie if we swap the contents of body, re-register hamburger
-    if (evt.detail.target.tagName == "BODY") {
-      registerImagePreview()
     }
   })
 })
