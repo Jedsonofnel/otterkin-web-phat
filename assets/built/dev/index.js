@@ -5138,7 +5138,7 @@
   });
 
   // assets/js/index.js
-  var import_htmx = __toESM(require_htmx(), 1);
+  var import_htmx = __toESM(require_htmx());
 
   // assets/js/behaviours/hamburger.js
   function hamburgerMenu(tree = document) {
@@ -5234,7 +5234,7 @@
   }
 
   // assets/js/behaviours/avatar-modal.js
-  var import_croppie = __toESM(require_croppie(), 1);
+  var import_croppie = __toESM(require_croppie());
   var croppieOptions = {
     showZoomer: true,
     enableOrientation: true,

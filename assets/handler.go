@@ -8,9 +8,6 @@ import (
 	"github.com/labstack/echo/v5/middleware"
 )
 
-//go:embed images/*
-var imageAssets embed.FS
-
 //go:embed built/prod/*.js built/prod/*.css
 var builtAssets embed.FS
 
@@ -29,18 +26,15 @@ func NewAssetHandler(dev bool, fsRoot string, pa embed.FS) assetHandler {
 }
 
 func (ah assetHandler) Handle(router *echo.Echo) {
+	// files already in public folder (take priority)
 	router.Use(
-		middleware.StaticWithConfig(middleware.StaticConfig{
-			Root:       "public",
-			Filesystem: fs.FS(imageAssets),
-		}),
 		middleware.StaticWithConfig(middleware.StaticConfig{
 			Root:       "public",
 			Filesystem: fs.FS(ah.publicAssets),
 		}),
 	)
 
-	// otherAssets
+	// built assets
 	if ah.dev {
 		router.Use(
 			disableCacheInDevMode,
