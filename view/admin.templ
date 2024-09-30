@@ -3,6 +3,7 @@ package view
 import (
 	"fmt"
 	"github.com/Jedsonofnel/otterkin-web/model"
+	"github.com/Jedsonofnel/otterkin-web/view/components"
 	"github.com/Jedsonofnel/otterkin-web/view/layout"
 )
 
@@ -60,15 +61,15 @@ templ ArtistRow(artist model.Artist) {
 }
 
 templ ArtistRevokeModal(artist model.Artist) {
-	@modal() {
+	@components.Modal() {
 		<p>Are you sure you want to revoke { artist.User.FirstName } as an artist?</p>
 		<div class="modal-buttons">
-			<button hx-on:click="window.closeModal()">Cancel</button>
+			<button data-modal-close-btn>Cancel</button>
 			<button
 				hx-put={ string(templ.URL(fmt.Sprintf("/admin/revoke/%s", artist.Id))) }
-				hx-on:click="window.closeModal()"
 				hx-target={ fmt.Sprintf("#artist-row-%s", artist.Id) }
 				hx-swap="outerHTML"
+				data-modal-close-btn
 			>Confirm</button>
 		</div>
 	}

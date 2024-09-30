@@ -274,14 +274,14 @@
   animation-timing-function: ease;
 }
 
-#modal.closing {
+#modal[hidden] {
   /* Animate when closing */
   animation-name: fadeOut;
   animation-duration: 150ms;
   animation-timing-function: ease;
 }
 
-#modal.closing > .modal-content {
+#modal[hidden] > .modal-content {
   /* Animate when closing */
   animation-name: zoomOut;
   animation-duration: 150ms;

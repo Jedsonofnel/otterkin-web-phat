@@ -1,12 +1,14 @@
 package view
 
-import "github.com/Jedsonofnel/otterkin-web/model"
-import "github.com/Jedsonofnel/otterkin-web/view/components"
-import "fmt"
+import (
+	"fmt"
+	"github.com/Jedsonofnel/otterkin-web/model"
+	"github.com/Jedsonofnel/otterkin-web/view/components"
+)
 
 templ ImageModal(image model.ArtistImage) {
 	// only rendered once
-	@modal() {
+	@components.Modal() {
 		<form
 			hx-put={ fmt.Sprintf("/artwork/edit/%s", image.Id) }
 			hx-target="#modal-image-update-form"
@@ -27,16 +29,16 @@ templ ImageModal(image model.ArtistImage) {
 			</div>
 			<div class="form-field">
 				<div style="display:flex; justify-content:space-between; width:100%;">
-          @components.ToggleButton(components.ToggleButtonProps{
-            Value: image.Visible,
-            TrueText: "Visible",
-            FalseText: "Hidden",
-          })
+					@components.ToggleButton(components.ToggleButtonProps{
+						Value:     image.Visible,
+						TrueText:  "Visible",
+						FalseText: "Hidden",
+					})
 					<button class="button soft" hx-delete={ fmt.Sprintf("/artwork/%s", image.Id) }>Delete</button>
 				</div>
 			</div>
 			<div class="modal-bottom">
-				<button class="button text" type="button" onclick="closeModal()">Cancel</button>
+				<button class="button text" type="button" data-close-modal-btn>Cancel</button>
 				<input class="button primary" type="submit" value="Edit"/>
 			</div>
 		</form>

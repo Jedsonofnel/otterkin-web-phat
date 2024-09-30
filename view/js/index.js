@@ -4,12 +4,14 @@ import htmx from "htmx.org"
 import hamburgerMenu from "./behaviours/hamburger"
 import toggleButton from "./behaviours/toggle-button"
 import flashMessages from "./behaviours/flash-message"
+import modal from "./behaviours/modal"
 
 // add behaviours on page and htmx load
 addEventListener("htmx:load", (e) => {
   hamburgerMenu(e.target)
   toggleButton(e.target)
   flashMessages(e.target)
+  modal(e.target)
 })
 
 // htmx stuff
@@ -39,14 +41,6 @@ htmx.defineExtension("reset-on-success", {
     }
   },
 })
-
-window.closeModal = () => {
-  modal = document.getElementById("modal")
-  modal.classList.add("closing")
-  modal.addEventListener("animationend", () => {
-    modal.remove()
-  })
-}
 
 const registerImagePreview = () => {
   if (document.querySelector("#image") !== null) {
