@@ -11,11 +11,8 @@ pb_data/
 *_templ.txt
 
 # compiled js and css
-static/*.map
-static/*.css
-static/*.js
-static/build/*.css
-static/build/*.js
+assets/built/prod/*
+assets/built/dev/*
 
 # any js malarkey
 node_modules/

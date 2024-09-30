@@ -14,38 +14,33 @@ func isPage(page string, link string) string {
 }
 
 templ dashboardSidebar(user model.User, page string) {
-	<nav id="left-sidebar" class="dashboard-sidebar" hx-boost="true">
-		<ul>
-			<h3>Dashboard</h3>
-			<li>
+	<nav class="dashboard-sidebar" hx-boost="true">
+		<ul class="dashboard-sidebar-ul">
+			<h3 class="dashboard-sidebar-subtitle">My <span style="font-style:italic;">Atelier</span></h3>
+			<li class="dashboard-sidebar-li">
 				<a href={ ToUrl("/user/profile/%s", user.Id) } class={ isPage(page, "user-general") }>
-					<i class="at-sliders-thin"></i>
 					General
 				</a>
 			</li>
-			<li>
+			<li class="dashboard-sidebar-li">
 				<a href={ ToUrl("/user/profile/%s", user.Id) } class={ isPage(page, "user-commissions") }>
-					<i class="at-handshake-hand-gesture-thin"></i>
 					Commissions
 				</a>
 			</li>
 			if user.Role == "artist" {
-				<li>
+				<li class="dashboard-sidebar-li">
 					<a href={ ToUrl("/artist/profile/%s", user.Id) } class={ isPage(page, "artist-settings") }>
-						<i class="at-sliders-thin"></i>
 						Artist settings
 					</a>
 				</li>
-				<li>
+				<li class="dashboard-sidebar-li">
 					<a href={ ToUrl("/artist/profile/%s/gallery", user.Id) } class={ isPage(page, "artist-gallery") }>
-						<i class="at-hanging-frame-thin"></i>
 						Your gallery
 					</a>
 				</li>
 			} else if user.Role == "admin" {
-				<li>
+				<li class="dashboard-sidebar-li">
 					<a href={ templ.URL(fmt.Sprintf("/admin/%s", user.Id)) } class={ isPage(page, "admin-artists") }>
-						<i class="at-paintbrush-thin"></i>
 						Admin
 					</a>
 				</li>

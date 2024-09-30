@@ -1,4 +1,4 @@
-import htmx from "./vendored/htmx.cjs"
+import htmx from "./vendored/htmx"
 import hamburgerMenu from "./behaviours/hamburger"
 import toggleButton from "./behaviours/toggle-button"
 import flashMessages from "./behaviours/flash-message"

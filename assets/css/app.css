@@ -45,12 +45,14 @@ html {
   --pink: #ffd6d0;
   --pink-darker: #ccaba6;
 
+  --grey-100: #eeece4;
   --grey-200: #e9e6dd;
   --grey-300: #c5bdaa;
   --grey-400: #9e9788;
   --grey-800: #43474a;
 
   /* spacing */
+  --breve: 64px;
   --semibreve: 32px;
   --minim-dotted: 24px;
   --minim: 16px;
