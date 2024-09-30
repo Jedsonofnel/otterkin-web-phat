@@ -1,5 +1,4 @@
-import "htmx.org"
-import htmx from "htmx.org"
+import htmx from "./vendored/htmx"
 import hamburgerMenu from "./behaviours/hamburger"
 import toggleButton from "./behaviours/toggle-button"
 import flashMessages from "./behaviours/flash-message"
