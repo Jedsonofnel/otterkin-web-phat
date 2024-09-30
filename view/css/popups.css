@@ -164,70 +164,62 @@
   display: flex;
   justify-content: space-between;
   gap: 16px;
-
-  &.info {
-    background-color: green;
-    .flash-close {
-      background-color: green;
-      &:hover {
-        background-color: darkgreen;
-      }
-    }
-  }
-  &.error {
-    background-color: red;
-    .flash-close {
-      background-color: red;
-      &:hover {
-        background-color: darkred;
-      }
-    }
-  }
-
-  &.removed {
-    animation: slide-out 0.5s ease-in forwards;
-  }
-
+  animation-name: zoomIn;
+  animation-duration: 150ms;
+  animation-timing-function: ease;
+}
+.flash.info {
+  background-color: green;
   .flash-close {
-    height: 24px;
-    width: 24px;
-    border-radius: 50%;
-    position: relative;
-    border: none;
-    cursor: pointer;
-    flex-shrink: 0;
-
-    &::after,
-    &::before {
-      content: " ";
-      display: block;
-      height: 16px;
-      width: 2px;
-      background-color: white;
-      position: absolute;
-      left: 11px;
-      top: 4px;
+    background-color: green;
+    &:hover {
+      background-color: darkgreen;
     }
-
-    &:after {
-      transform: rotate(45deg);
-    }
-    &:before {
-      transform: rotate(-45deg);
+  }
+}
+.flash.error {
+  background-color: red;
+  .flash-close {
+    background-color: red;
+    &:hover {
+      background-color: darkred;
     }
   }
 }
 
-@keyframes slide-out {
-  0% {
-    transform: translateX(0px);
+.flash .flash-close {
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  position: relative;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+
+  &::after,
+  &::before {
+    content: " ";
+    display: block;
+    height: 16px;
+    width: 2px;
+    background-color: white;
+    position: absolute;
+    left: 11px;
+    top: 4px;
   }
-  100% {
-    transform: translateX(500px);
-    padding: 0;
-    margin: 0;
-    max-height: 0;
+
+  &:after {
+    transform: rotate(45deg);
   }
+  &:before {
+    transform: rotate(-45deg);
+  }
+}
+
+.flash[hidden] {
+  animation-name: zoomOut;
+  animation-duration: 150ms;
+  animation-timing-function: ease;
 }
 
 /* modals */

@@ -3,14 +3,14 @@ package layout
 templ FlashMessages(flashError string, flashInfo string) {
 	<div id="flash-container">
 		if flashError != "" {
-			<div class="error flash">
+			<div class="error flash" data-flash-msg>
 				{ flashError }
-				<button class="flash-close" onclick="window.hideFlash(this)"></button>
+				<button class="flash-close"></button>
 			</div>
 		} else if flashInfo != "" {
-			<div class="info flash">
+			<div class="info flash" data-flash-msg>
 				{ flashInfo }
-				<button class="flash-close" onclick="window.hideFlash(this)"></button>
+				<button class="flash-close"></button>
 			</div>
 		}
 	</div>
@@ -18,18 +18,18 @@ templ FlashMessages(flashError string, flashInfo string) {
 
 templ FlashError(message string) {
 	<div id="flash-container" hx-swap-oob="beforeend" class="info flash">
-		<div class="error flash">
+		<div class="error flash" data-flash-msg>
 			{ message }
-			<button class="flash-close" onclick="window.hideFlash(this)"></button>
+			<button class="flash-close"></button>
 		</div>
 	</div>
 }
 
 templ FlashInfo(message string) {
 	<div id="flash-container" hx-swap-oob="beforeend">
-		<div class="info flash">
+		<div class="info flash" data-flash-msg>
 			{ message }
-			<button class="flash-close" onclick="window.hideFlash(this)"></button>
+			<button class="flash-close"></button>
 		</div>
 	</div>
 }

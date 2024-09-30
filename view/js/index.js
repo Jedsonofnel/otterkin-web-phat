@@ -3,11 +3,13 @@ import "./avatar"
 import htmx from "htmx.org"
 import hamburgerMenu from "./behaviours/hamburger"
 import toggleButton from "./behaviours/toggle-button"
+import flashMessages from "./behaviours/flash-message"
 
-// add listeners on page and htmx load
+// add behaviours on page and htmx load
 addEventListener("htmx:load", (e) => {
   hamburgerMenu(e.target)
   toggleButton(e.target)
+  flashMessages(e.target)
 })
 
 // htmx stuff
@@ -37,11 +39,6 @@ htmx.defineExtension("reset-on-success", {
     }
   },
 })
-
-window.hideFlash = (elem) => {
-  let message = elem.parentNode
-  message.classList.add("removed")
-}
 
 window.closeModal = () => {
   modal = document.getElementById("modal")
