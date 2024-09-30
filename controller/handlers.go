@@ -10,7 +10,6 @@ import (
 	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
-	"github.com/pocketbase/pocketbase/models"
 )
 
 type HandlerContext struct {
@@ -33,8 +32,8 @@ func (hc HandlerContext) HandleHomePage(c echo.Context) error {
 
 // TODO fix this by using hxRedirect
 func (hc HandlerContext) HandleProfilePage(c echo.Context) error {
-	authRecord, ok := c.Get(apis.ContextAuthRecordKey).(*models.Record)
-	if !ok || authRecord == nil {
+	authRecord, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
+	if !ok || authRecord.Id == "" {
 		c.Response().Header().Set("Hx-Location", "/auth")
 		return Render(c, http.StatusUnauthorized, layout.RedirectPage())
 	}

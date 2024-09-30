@@ -7,12 +7,11 @@ import (
 	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
-	"github.com/pocketbase/pocketbase/models"
 )
 
 func OnlyUnauthorisedUsers(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		_, ok := c.Get(apis.ContextAuthRecordKey).(*models.Record)
+		_, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
 
 		// ie if there is a valid auth record, redirect
 		if ok {
@@ -26,7 +25,7 @@ func OnlyUnauthorisedUsers(next echo.HandlerFunc) echo.HandlerFunc {
 
 func OnlyTheCorrespondingUser(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		authRecord, ok := c.Get(apis.ContextAuthRecordKey).(*models.Record)
+		authRecord, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
 		if !ok || authRecord.Id != c.PathParam("id") {
 			SetFlash(c, "error", "Don't be silly - you don't have approval to go in there!")
 			return c.Redirect(http.StatusTemporaryRedirect, "/")
@@ -39,7 +38,7 @@ func OnlyTheCorrespondingUser(next echo.HandlerFunc) echo.HandlerFunc {
 func OnlyTheCorrespondingArtist(app core.App) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			authRecord, ok := c.Get(apis.ContextAuthRecordKey).(*models.Record)
+			authRecord, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
 			artist, err := model.GetArtistByArtistId(app.Dao(), c.PathParam("id"))
 			if !ok || err != nil || authRecord.Id != artist.User.Id {
 				SetFlash(c, "error", "Don't be silly - you don't have approval to go in there!")
@@ -54,7 +53,7 @@ func OnlyTheCorrespondingArtist(app core.App) echo.MiddlewareFunc {
 func OnlyTheOwnerArtist(app core.App) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			authRecord, ok := c.Get(apis.ContextAuthRecordKey).(*models.Record)
+			authRecord, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
 			artwork, err := model.GetArtistImageById(app.Dao(), c.PathParam("id"))
 			if !ok || err != nil || authRecord.Id != artwork.UserId {
 				SetFlash(c, "error", "Don't be silly - you don't have approval to go in there!")
@@ -68,8 +67,8 @@ func OnlyTheOwnerArtist(app core.App) echo.MiddlewareFunc {
 
 func OnlyAdmins(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		authRecord, ok := c.Get(apis.ContextAuthRecordKey).(*models.Record)
-		if !ok || authRecord.GetString("role") != "admin" {
+		authRecord, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
+		if !ok || authRecord.Role != "admin" {
 			SetFlash(c, "error", "Don't be silly - you don't have approval to go in there!")
 			return c.Redirect(http.StatusTemporaryRedirect, "/")
 		}
@@ -80,8 +79,8 @@ func OnlyAdmins(next echo.HandlerFunc) echo.HandlerFunc {
 
 func OnlyArtists(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		authRecord, ok := c.Get(apis.ContextAuthRecordKey).(*models.Record)
-		if !ok || authRecord.GetString("role") != "artist" {
+		authRecord, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
+		if !ok || authRecord.Role != "artist" {
 			SetFlash(c, "error", "Don't be silly - you don't have approval to go in there!")
 			return c.Redirect(http.StatusTemporaryRedirect, "/")
 		}
