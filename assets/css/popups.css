@@ -1,0 +1,332 @@
+/* hamburger icon + animation */
+.hamburger {
+  height: 40px;
+  width: 40px;
+  margin-right: -8px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  transition: background-color 0s;
+  &:hover,
+  &:active {
+    background-color: var(--fg-darker);
+  }
+}
+.hamburger-patty {
+  width: 20px;
+  height: 2px;
+  border-radius: 1px;
+  background-color: var(--gold);
+  transition: all 0.25s ease-in-out;
+  transform: translateX(2px);
+}
+.hamburger-patty::before,
+.hamburger-patty::after {
+  content: "";
+  display: block;
+  width: 24px;
+  height: 2px;
+  border-radius: 1px;
+  background-color: var(--gold);
+  transition: all 0.25s ease-in-out;
+}
+.hamburger-patty::before {
+  transform: translateY(-10px) translateX(-4px);
+}
+.hamburger-patty::after {
+  transform: translateY(8px) translateX(-4px);
+}
+.hamburger[data-hb-open] {
+  .hamburger-patty {
+    transform: translateX(-24px);
+    background: transparent;
+  }
+  .hamburger-patty::before {
+    transform: rotate(45deg) translate(16.5px, -15px);
+    width: 24px;
+  }
+  .hamburger-patty::after {
+    transform: rotate(-45deg) translate(16.5px, 15px);
+    width: 24px;
+  }
+}
+
+/* the hamburger menu itself */
+.hamburger-menu {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  height: calc(100vh - var(--header-height));
+  width: 100vw;
+  background-color: var(--fg);
+  border-top: 1px solid var(--gold);
+  transition: all 0.25s ease-in-out;
+  &[hidden] {
+    transform: translateX(100vw);
+  }
+
+  display: flex;
+  flex-direction: column;
+}
+
+.hamburger-menu {
+  transform: translateX(calc(100vw - 100%));
+}
+
+.hamburger-subtitle {
+  padding: 0 var(--crotchet);
+  color: var(--gold);
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: var(--quaver);
+  margin: var(--quaver) 0;
+  line-height: 1;
+
+  &::before {
+    content: "";
+    display: block;
+    height: 0;
+    width: var(--semibreve);
+    padding-top: var(--quaver);
+    border-bottom: 1px solid var(--gold);
+  }
+  &::after {
+    content: "";
+    display: block;
+    height: 0;
+    padding-top: var(--quaver);
+    border-bottom: 1px solid var(--gold);
+    flex-grow: 1;
+  }
+}
+
+.hamburger-menu-li {
+  width: 100%;
+  padding: 0 var(--minim-dotted);
+}
+
+.hamburger-menu-li > a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--crotchet);
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: var(--minim) var(--crotchet);
+  border-radius: var(--crotchet);
+  color: var(--gold);
+  text-decoration: none;
+  background-color: var(--fg);
+  cursor: pointer;
+  &:hover {
+    background-color: var(--fg-darker);
+  }
+  &:active {
+    background-color: var(--fg-lighter);
+    color: var(--gold-darker);
+  }
+  i {
+    flex-shrink: 0;
+  }
+}
+
+.hamburger-menu-li > a.current-page {
+  background-color: var(--fg-lighter);
+  cursor: default;
+}
+
+/* flash */
+#flash-container {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.flash {
+  padding: var(--crotchet);
+  min-width: 64px;
+  max-width: 250px;
+  color: white;
+  margin-top: var(--quaver);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--bg);
+
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  animation-name: zoomIn;
+  animation-duration: 150ms;
+  animation-timing-function: ease;
+}
+.flash.info {
+  background-color: green;
+  .flash-close {
+    background-color: green;
+    &:hover {
+      background-color: darkgreen;
+    }
+  }
+}
+.flash.error {
+  background-color: red;
+  .flash-close {
+    background-color: red;
+    &:hover {
+      background-color: darkred;
+    }
+  }
+}
+
+.flash .flash-close {
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  position: relative;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+
+  &::after,
+  &::before {
+    content: " ";
+    display: block;
+    height: 16px;
+    width: 2px;
+    background-color: white;
+    position: absolute;
+    left: 11px;
+    top: 4px;
+  }
+
+  &:after {
+    transform: rotate(45deg);
+  }
+  &:before {
+    transform: rotate(-45deg);
+  }
+}
+
+.flash[hidden] {
+  animation-name: zoomOut;
+  animation-duration: 150ms;
+  animation-timing-function: ease;
+}
+
+/* modals */
+#modal {
+  /* Underlay covers entire screen. */
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+
+  /* Flexbox centers the .modal-content vertically and horizontally */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  /* Animate when opening */
+  animation-name: fadeIn;
+  animation-duration: 150ms;
+  animation-timing-function: ease;
+}
+
+#modal > .modal-underlay {
+  position: absolute;
+  z-index: -1;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+}
+
+#modal > .modal-content {
+  /* Position visible dialog near the top of the window */
+  margin-top: 10vh;
+
+  /* Sizing for visible dialog */
+  width: min(100vw, 600px);
+  max-height: 80vh;
+  overflow-y: scroll;
+
+  /* Display properties for visible dialog*/
+  border-radius: var(--crotchet);
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.3);
+  background-color: var(--bg);
+  padding: var(--minim);
+
+  /* Animate when opening */
+  animation-name: zoomIn;
+  animation-duration: 150ms;
+  animation-timing-function: ease;
+}
+
+#modal[hidden] {
+  /* Animate when closing */
+  animation-name: fadeOut;
+  animation-duration: 150ms;
+  animation-timing-function: ease;
+}
+
+#modal[hidden] > .modal-content {
+  /* Animate when closing */
+  animation-name: zoomOut;
+  animation-duration: 150ms;
+  animation-timing-function: ease;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes zoomIn {
+  0% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes zoomOut {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.9);
+  }
+}
+
+.modal-bottom {
+  width: 100%;
+  padding-top: var(--minim);
+  display: flex;
+  justify-content: space-between;
+}

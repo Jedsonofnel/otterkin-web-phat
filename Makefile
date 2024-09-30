@@ -3,8 +3,8 @@ build/templ:
 	templ generate
 
 build/esbuild:
-	./node_modules/esbuild/bin/esbuild view/css/app.css view/js/index.js \
-	--entry-names=[name] --outdir=static/build --bundle --minify \
+	esbuild assets/css/app.css assets/js/index.js \
+	--entry-names=[name] --outdir=assets/built/prod --bundle --minify \
 	"--external:/images/*" \
 
 build/server:
@@ -32,8 +32,8 @@ live/templ:
 	templ generate --watch --proxy="http://0.0.0.0:8080" --open-browser=false -v
 
 live/esbuild:
-	./node_modules/esbuild/bin/esbuild view/css/app.css view/js/index.js --entry-names=[name] \
-	--outdir=static --bundle --sourcemap \
+	esbuild assets/css/app.css assets/js/index.js --entry-names=[name] \
+	--outdir=assets/built/dev --bundle --sourcemap \
 	"--external:/images/*" \
 	--watch </dev/zero \
 
@@ -51,4 +51,4 @@ live/server:
   --misc.clean_on_exit = false \
 
 live:
-	make -j live/esbuild live/templ live/server
+	make -j live/templ live/esbuild live/server

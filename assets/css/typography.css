@@ -1,0 +1,47 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display+SC:ital@0;1&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+
+/* let's add some variables */
+html {
+  --font-serif: "Playfair Display", serif;
+  --font-serif-fc: "Playfair Display SC", serif;
+  --font-sans: "Montserrat", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  color: var(--fg);
+  max-width: var(--text-maxwidth);
+}
+
+h1 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 2rem;
+}
+
+h2 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 1.8rem;
+}
+
+h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 1.5rem;
+}
+
+p,
+a,
+li,
+label,
+input,
+textarea {
+  font-family: var(--font-sans);
+}

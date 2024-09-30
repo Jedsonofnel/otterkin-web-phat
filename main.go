@@ -2,15 +2,13 @@ package main
 
 import (
 	"embed"
-	"io/fs"
 	"log"
 	"os"
 
+	"github.com/Jedsonofnel/otterkin-web/assets"
 	"github.com/Jedsonofnel/otterkin-web/auth"
 	"github.com/Jedsonofnel/otterkin-web/controller"
 	_ "github.com/Jedsonofnel/otterkin-web/migrations"
-	"github.com/labstack/echo/v5"
-	"github.com/labstack/echo/v5/middleware"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
@@ -18,11 +16,8 @@ import (
 
 var dev, prod = getAppEnv()
 
-//go:embed static/images/* static/favicon.ico
-var staticAssets embed.FS
-
-//go:embed static/build/*.css static/build/*.js
-var builtAssets embed.FS
+//go:embed public/*
+var publicAssets embed.FS // this is served FIRST
 
 func main() {
 	pb := pocketbase.NewWithConfig(pocketbase.Config{
@@ -37,6 +32,10 @@ func main() {
 	// Routing
 	pb.OnBeforeServe().Add(func(e *core.ServeEvent) error {
 		hc := controller.NewHandlerContext(e)
+
+		// static first
+		ah := assets.NewAssetHandler(dev, "", publicAssets)
+		ah.Handle(e.Router)
 
 		// non-grouped pages
 		e.Router.GET("/", hc.HandleHomePage,
@@ -83,28 +82,6 @@ func main() {
 		)
 		hc.HandleArtwork(artworkGroup)
 
-		// static files
-		if dev {
-			e.Router.Use(disableCacheInDevMode, middleware.StaticWithConfig(middleware.StaticConfig{
-				Root:       "static",
-				IgnoreBase: false,
-			}))
-		}
-		// prod uses embedded fs
-		if prod {
-			e.Router.Use(middleware.StaticWithConfig(middleware.StaticConfig{
-				Root:       "static",
-				Filesystem: fs.FS(staticAssets),
-			}))
-			e.Router.Use(middleware.StaticWithConfig(middleware.StaticConfig{
-				Root:       "static/build",
-				Filesystem: fs.FS(builtAssets),
-			}))
-		}
-
-		// favicon
-		e.Router.File("/favicon.ico", "./static/favicon.ico")
-
 		return nil
 	})
 
@@ -119,15 +96,5 @@ func getAppEnv() (dev bool, prod bool) {
 		return true, false // dev by default
 	} else {
 		return false, true
-	}
-}
-
-func disableCacheInDevMode(next echo.HandlerFunc) echo.HandlerFunc {
-	if !dev {
-		return next
-	}
-	return func(c echo.Context) error {
-		c.Response().Header().Add("Cache-control", "no-store")
-		return next(c)
 	}
 }
