@@ -70,17 +70,16 @@ templ UserAvatarUpdateForm(user model.User) {
 		<form
 			hx-put={ string(templ.URL(fmt.Sprintf("/user/profile/%s/avatar", user.Id))) }
 			hx-target="body"
-			id="avatar-form"
 			enctype="multipart/form-data"
-			hx-on::confirm="window.cropAvatar(event)"
+			data-avatar-modal-form
 		>
 			<h2 class="dashboard-subtitle">Upload a new avatar</h2>
-			<input id="avatar-uploader" class="avatar-input" name="avatar" type="file" accept="image/*"/>
-			<div id="croppie" class="not-visible"></div>
-			<div id="placeholder">Please upload an image</div>
+			<input class="avatar-input" name="avatar" type="file" accept="image/*" data-avatar-modal-input/>
+			<div data-avatar-modal-croppie hidden></div>
+			<div data-avatar-modal-placeholder class="avatar-placeholder">Please upload an image</div>
 			<div class="modal-bottom">
 				<button class="button text" type="button" data-modal-close-btn>Cancel</button>
-				<input id="avatar-submit" class="button primary disabled" type="submit" value="Submit"/>
+				<input id="avatar-submit" class="button primary" type="submit" value="Submit" data-avatar-modal-submit disabled/>
 			</div>
 		</form>
 	}

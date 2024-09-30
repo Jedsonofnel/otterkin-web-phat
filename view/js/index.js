@@ -1,11 +1,11 @@
 import "htmx.org"
-import "./avatar"
 import htmx from "htmx.org"
 import hamburgerMenu from "./behaviours/hamburger"
 import toggleButton from "./behaviours/toggle-button"
 import flashMessages from "./behaviours/flash-message"
 import modal from "./behaviours/modal"
 import imagePreview from "./behaviours/image-preview"
+import avatarModal from "./behaviours/avatar-modal"
 
 // add behaviours on page and htmx load
 addEventListener("htmx:load", (e) => {
@@ -14,6 +14,7 @@ addEventListener("htmx:load", (e) => {
   flashMessages(e.target)
   modal(e.target)
   imagePreview(e.target)
+  avatarModal(e.target)
 })
 
 // htmx stuff

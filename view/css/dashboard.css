@@ -56,7 +56,7 @@
   display: none;
 }
 
-#placeholder {
+.avatar-placeholder {
   display: flex;
   justify-content: center;
   font-family: var(--font-sans);
@@ -65,7 +65,7 @@
   padding: var(--minim);
 }
 
-#placeholder.not-visible {
+.avatar-placeholder[hidden] {
   display: none;
 }
 
