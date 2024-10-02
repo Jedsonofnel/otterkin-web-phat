@@ -3,9 +3,30 @@ package view
 import (
 	"fmt"
 	"github.com/Jedsonofnel/otterkin-web/model"
+	"github.com/Jedsonofnel/otterkin-web/view/components"
 	"github.com/Jedsonofnel/otterkin-web/view/layout"
 )
 
+// public artist view page
+type ArtistPageData struct {
+	artist   model.Artist
+	artworks []model.Artwork
+}
+
+func NewArtistPageData(artist model.Artist, artworks []model.Artwork) ArtistPageData {
+	return ArtistPageData{
+		artist:   artist,
+		artworks: artworks,
+	}
+}
+
+templ ArtistPage(ld layout.LayoutData, apd ArtistPageData) {
+	@layout.Default(ld) {
+		<h1>Artist page for { apd.artist.User.FirstName }</h1>
+	}
+}
+
+// profile edit page
 type ArtistProfilePageData struct {
 	artist model.Artist
 }
@@ -16,30 +37,85 @@ func NewArtistProfilePageData(artist model.Artist) ArtistProfilePageData {
 	}
 }
 
-type ArtistGalleryPageData struct {
-	artist model.Artist
-	images []model.ArtistImage
-}
-
-func NewArtistGalleryPageData(artist model.Artist, images []model.ArtistImage) ArtistGalleryPageData {
-	return ArtistGalleryPageData{
-		artist: artist,
-		images: images,
+templ ArtistProfilePage(ld layout.LayoutData, apd ArtistProfilePageData) {
+	@layout.Dashboard(ld, "artist-settings") {
+		<section class="dashboard-section fw" hx-boost>
+			<h1 class="dashboard-title" id="artist-greeting">Hello { apd.artist.User.FirstName }</h1>
+			if !apd.artist.Approved {
+				<p>
+					You haven't yet been approved. Our team should be in touch (if they aren't already)
+					very soon and we hope to get you on your way before long!
+				</p>
+			}
+			<a href={ templ.URL(fmt.Sprintf("/artist/%s", apd.artist.Id)) }>See your profile</a>
+		</section>
+		<section class="dashboard-form-section">
+			<h2 class="profile-form-subtitle">Artist details</h2>
+			@artistUpdateForm(apd.artist)
+		</section>
+		@artistTagInputs()
+		@artistServicesTable()
 	}
 }
 
-templ ArtistProfilePage(ld layout.LayoutData, apd ArtistProfilePageData) {
-	@layout.Dashboard(ld, "artist-settings") {
-		<h1 class="dashboard-title" id="artist-greeting">Hello { apd.artist.User.FirstName }</h1>
-		if !apd.artist.Approved {
-			<p>
-				You haven't yet been approved. Our team should be in touch (if they aren't already)
-				very soon and we hope to get you on your way before long!
-			</p>
-		}
-		<section class="dashboard-section">
-			@artistUpdateForm(apd.artist)
-		</section>
+templ artistTagInputs() {
+	<section class="dashboard-form-section">
+		<h2 class="profile-form-subtitle">
+			Tags
+		</h2>
+		@components.DropdownMultiSelect(components.DropdownMultiSelectProps{
+			Name: "mediums",
+			Options: []string{"option 1", "option 2", "option 3"},
+		})
+	</section>
+}
+
+templ artistUpdateForm(artist model.Artist) {
+	<form hx-put={ fmt.Sprintf("/artist/profile/%s", artist.Id) } class="profile-form">
+		<div class="form-field">
+			<label for="instagram_handle">Instagram Handle</label>
+			<input
+				class="text-input"
+				id="instagram_handle"
+				name="instagram_handle"
+				type="text"
+				value={ artist.InstagramHandle }
+			/>
+		</div>
+		<div class="form-field">
+			<label for="biography">Short Biography</label>
+			<textarea class="textarea-input" id="biography" name="biography" rows="3" maxlength="128">
+				{ artist.Biography }
+			</textarea>
+		</div>
+		<input class="button soft" type="submit" value="Update"/>
+	</form>
+}
+
+templ ArtistUpdateResponse(artist model.Artist) {
+	@artistUpdateForm(artist)
+	<h1 id="artist-greeting" hx-swap-oob="outerHTML">Hello { artist.User.FirstName }</h1>
+	@layout.FlashInfo("Updated your details!")
+}
+
+templ artistServicesTable() {
+	<section class="dashboard-section fw">
+		<h2 class="dashboard-subtitle">
+			Services table
+		</h2>
+	</section>
+}
+
+// gallery page
+type ArtistGalleryPageData struct {
+	artist   model.Artist
+	artworks []model.Artwork
+}
+
+func NewArtistGalleryPageData(artist model.Artist, artworks []model.Artwork) ArtistGalleryPageData {
+	return ArtistGalleryPageData{
+		artist:   artist,
+		artworks: artworks,
 	}
 }
 
@@ -54,7 +130,7 @@ templ ArtistProfileGalleryPage(ld layout.LayoutData, agd ArtistGalleryPageData) 
 				hx-swap="beforeend"
 				class="column-form"
 				hx-reset-on-success
-        data-image-preview-form
+				data-image-preview-form
 			>
 				<h2 class="dashboard-subtitle">Add your artwork</h2>
 				<div class="form-field">
@@ -80,7 +156,7 @@ templ ArtistProfileGalleryPage(ld layout.LayoutData, agd ArtistGalleryPageData) 
 		<section class="dashboard-section">
 			<h2 class="dashboard-subtitle">Your artwork</h2>
 			@artistGallery() {
-				for _, image := range agd.images {
+				for _, image := range agd.artworks {
 					@EditableImage(image)
 				}
 			}
@@ -103,37 +179,8 @@ templ GalleryFormError(errMap map[string]string) {
 	}
 }
 
-templ GalleryFormSuccess(image model.ArtistImage) {
+templ GalleryFormSuccess(artwork model.Artwork) {
 	<img id="gallery-preview" class="hidden" hx-swap-oob="outerHTML"/>
-	@EditableImage(image)
+	@EditableImage(artwork)
 	@GalleryFormError(make(map[string]string))
-}
-
-templ artistUpdateForm(artist model.Artist) {
-	<form hx-put={ fmt.Sprintf("/artist/profile/%s", artist.Id) } class="column-form">
-		<h2 class="dashboard-subtitle">Update your artist details</h2>
-		<div class="form-field">
-			<label for="instagram_handle">Instagram Handle</label>
-			<input
-				class="text-input"
-				id="instagram_handle"
-				name="instagram_handle"
-				type="text"
-				value={ artist.InstagramHandle }
-			/>
-		</div>
-		<div class="form-field">
-			<label for="biography">Biography</label>
-			<textarea class="textarea-input" id="biography" name="biography" rows="3" maxlength="128">
-				{ artist.Biography }
-			</textarea>
-		</div>
-		<input class="button soft" type="submit" value="Update"/>
-	</form>
-}
-
-templ ArtistUpdateResponse(artist model.Artist) {
-	@artistUpdateForm(artist)
-	<h1 id="artist-greeting" hx-swap-oob="outerHTML">Hello { artist.User.FirstName }</h1>
-	@layout.FlashInfo("Updated your details!")
 }

@@ -6,35 +6,35 @@ import (
 	"github.com/Jedsonofnel/otterkin-web/view/components"
 )
 
-templ ImageModal(image model.ArtistImage) {
+templ ImageModal(artwork model.Artwork) {
 	// only rendered once
 	@components.Modal() {
 		<form
-			hx-put={ fmt.Sprintf("/artwork/edit/%s", image.Id) }
+			hx-put={ fmt.Sprintf("/artwork/edit/%s", artwork.Id) }
 			hx-target="#modal-image-update-form"
 			hx-swap="beforeend"
 			class="column-form"
 			id="modal-image-update-form"
 		>
 			<h2 class="dashboard-subtitle">Edit artwork</h2>
-			@LoadImage(fmt.Sprintf("/artwork/%s", image.Id))
+			@LoadImage(fmt.Sprintf("/artwork/%s", artwork.Id))
 			<div class="form-field">
 				<label for="modal-title">Title</label>
-				<input class="text-input" id="modal-title" type="text" value={ image.Title } name="title"/>
+				<input class="text-input" id="modal-title" type="text" value={ artwork.Title } name="title"/>
 				<span id="title-error-modal"></span>
 			</div>
 			<div class="form-field">
 				<label for="modal-description">Description (optional)</label>
-				<textarea class="textarea-input" id="modal-description" rows="3" name="description">{ image.Description }</textarea>
+				<textarea class="textarea-input" id="modal-description" rows="3" name="description">{ artwork.Description }</textarea>
 			</div>
 			<div class="form-field">
 				<div style="display:flex; justify-content:space-between; width:100%;">
 					@components.ToggleButton(components.ToggleButtonProps{
-						Value:     image.Visible,
+						Value:     artwork.Visible,
 						TrueText:  "Visible",
 						FalseText: "Hidden",
 					})
-					<button class="button soft" hx-delete={ fmt.Sprintf("/artwork/%s", image.Id) }>Delete</button>
+					<button class="button soft" hx-delete={ fmt.Sprintf("/artwork/%s", artwork.Id) }>Delete</button>
 				</div>
 			</div>
 			<div class="modal-bottom">
@@ -53,15 +53,15 @@ templ ImageUpdateError(errMap map[string]string) {
 	}
 }
 
-templ EditableImage(image model.ArtistImage) {
+templ EditableImage(artwork model.Artwork) {
 	<button
 		class="editable-image-button"
-		hx-get={ fmt.Sprintf("/artwork/edit/%s", image.Id) }
+		hx-get={ fmt.Sprintf("/artwork/edit/%s", artwork.Id) }
 		hx-target="body"
 		hx-swap="beforeend"
 		hx-trigger="click"
 	>
-		@LoadImageSquare(fmt.Sprintf("/artwork/%s", image.Id))
+		@LoadImageSquare(fmt.Sprintf("/artwork/%s", artwork.Id))
 	</button>
 }
 

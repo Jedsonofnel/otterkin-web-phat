@@ -60,7 +60,7 @@ templ Dashboard(ld LayoutData, page string) {
 		}
 		<div class="grid-wrapper">
 			@dashboardSidebar(ld.user, page)
-			<main>
+			<main class="dashboard-grid-wrapper">
 				{ children... }
 			</main>
 		</div>

@@ -4,7 +4,7 @@
 /* let's add some variables */
 html {
   --font-serif: "Playfair Display", serif;
-  --font-serif-fc: "Playfair Display SC", serif;
+  --font-serif-sc: "Playfair Display SC", serif;
   --font-sans: "Montserrat", sans-serif;
 }
 

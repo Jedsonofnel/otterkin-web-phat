@@ -1,4 +1,37 @@
 /* User options/settings */
+.dashboard-grid-wrapper {
+  display: grid;
+  padding: var(--minim);
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: auto;
+}
+
+.dashboard-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--semibreve) 0;
+
+  /* TODO remove thise */
+  border: 1px solid black;
+
+  &.fw {
+    grid-column: 1 / -1;
+  }
+}
+
+.dashboard-form-section {
+  display: flex;
+  padding: var(--minim) 0;
+
+  & > h2.profile-form-subtitle {
+    font-family: var(--font-serif-sc);
+    color: var(--gold);
+    writing-mode: vertical-rl;
+    text-orientation: sideways;
+  }
+}
+
 .dashboard-avatar {
   width: 128px;
   height: 128px;
@@ -15,13 +48,6 @@
   margin-bottom: var(--crotchet);
   align-self: start;
   text-align: left;
-}
-
-.dashboard-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: var(--semibreve) 0;
 }
 
 /* general */

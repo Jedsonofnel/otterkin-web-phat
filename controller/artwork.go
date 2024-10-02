@@ -10,12 +10,11 @@ import (
 	"github.com/Jedsonofnel/otterkin-web/view/layout"
 	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/pocketbase/apis"
-	"github.com/pocketbase/pocketbase/models"
 )
 
-func artworkUrl(artwork model.ArtistImage) string {
+func artworkUrl(artwork model.Artwork) string {
 	return fmt.Sprintf(
-		"/api/files/artist_images/%s/%s",
+		"/api/files/artwork/%s/%s",
 		artwork.Id,
 		artwork.Image,
 	)
@@ -29,7 +28,7 @@ func (hc HandlerContext) HandleArtwork(g *echo.Group) {
 }
 
 func (hc HandlerContext) HandleGetArtwork(c echo.Context) error {
-	artwork, err := model.GetArtistImageById(hc.e.App.Dao(), c.PathParam("id"))
+	artwork, err := model.GetArtworkById(hc.e.App.Dao(), c.PathParam("id"))
 	if err != nil {
 		return err
 	}
@@ -38,7 +37,7 @@ func (hc HandlerContext) HandleGetArtwork(c echo.Context) error {
 }
 
 func (hc HandlerContext) HandleGetArtworkUpdateModal(c echo.Context) error {
-	artwork, err := model.GetArtistImageById(hc.e.App.Dao(), c.PathParam("id"))
+	artwork, err := model.GetArtworkById(hc.e.App.Dao(), c.PathParam("id"))
 	if err != nil {
 		return err
 	}
@@ -47,50 +46,50 @@ func (hc HandlerContext) HandleGetArtworkUpdateModal(c echo.Context) error {
 }
 
 func (hc HandlerContext) HandleUpdateArtwork(c echo.Context) error {
-	_, err := model.UpdateArtistImageById(hc.e.App, c, c.PathParam("id"))
+	_, err := model.UpdateArtworkById(hc.e.App, c, c.PathParam("id"))
 	if err != nil {
 		errMap := auth.GetMapOfErrs(err)
 		return Render(c, http.StatusUnprocessableEntity, view.ImageUpdateError(errMap))
 	}
 
 	// this is safe as we have middleware
-	authRecord := c.Get(apis.ContextAuthRecordKey).(*models.Record)
-	artist, err := model.GetArtistByUserId(hc.e.App.Dao(), authRecord.Id)
+	user := c.Get(apis.ContextAuthRecordKey).(model.User)
+	artist, err := model.GetArtistByUserId(hc.e.App.Dao(), user.Id)
 	if err != nil {
 		return err
 	}
-	images, err := model.GetArtistImagesByArtistId(hc.e.App.Dao(), artist.Id)
+	artworks, err := model.GetArtworksByArtistId(hc.e.App.Dao(), artist.Id)
 	if err != nil {
 		return err
 	}
 
 	SetFlash(c, "info", "Updated image!")
-	agd := view.NewArtistGalleryPageData(artist, images)
+	agd := view.NewArtistGalleryPageData(artist, artworks)
 	ld := layout.NewLayoutData(c, "Artist Gallery - Otterkin")
-	c.Response().Header().Set("Hx-Location", fmt.Sprintf("/artist/profile/%s/gallery", authRecord.Id))
+	c.Response().Header().Set("Hx-Location", fmt.Sprintf("/artist/profile/%s/gallery", user.Id))
 	return Render(c, http.StatusOK, view.ArtistProfileGalleryPage(ld, agd))
 }
 
 func (hc HandlerContext) HandleDeleteArtwork(c echo.Context) error {
-	err := model.DeleteArtistImageById(hc.e.App.Dao(), c.PathParam("id"))
+	err := model.DeleteArtworkById(hc.e.App.Dao(), c.PathParam("id"))
 	if err != nil {
 		return err
 	}
 
 	// this is safe as we have middleware
-	authRecord := c.Get(apis.ContextAuthRecordKey).(*models.Record)
-	artist, err := model.GetArtistByUserId(hc.e.App.Dao(), authRecord.Id)
+	user := c.Get(apis.ContextAuthRecordKey).(model.User)
+	artist, err := model.GetArtistByUserId(hc.e.App.Dao(), user.Id)
 	if err != nil {
 		return err
 	}
-	images, err := model.GetArtistImagesByArtistId(hc.e.App.Dao(), artist.Id)
+	artworks, err := model.GetArtworksByArtistId(hc.e.App.Dao(), artist.Id)
 	if err != nil {
 		return err
 	}
 
 	SetFlash(c, "info", "Deleted image!")
-	agd := view.NewArtistGalleryPageData(artist, images)
+	agd := view.NewArtistGalleryPageData(artist, artworks)
 	ld := layout.NewLayoutData(c, "Artist Gallery - Otterkin")
-	c.Response().Header().Set("Hx-Location", fmt.Sprintf("/artist/profile/%s/gallery", authRecord.Id))
+	c.Response().Header().Set("Hx-Location", fmt.Sprintf("/artist/profile/%s/gallery", user.Id))
 	return Render(c, http.StatusOK, view.ArtistProfileGalleryPage(ld, agd))
 }

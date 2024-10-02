@@ -1,0 +1,43 @@
+package components
+
+import "fmt"
+
+// we need a dropdown add things like tags
+// this will work by sending a PUT request to add/remove tags on
+// menu button or cross button press
+
+type DropdownMultiSelectProps struct {
+	Name    string
+	Options []string
+}
+
+// TODO create a helper function to
+templ DropdownMultiSelect(ddmsp DropdownMultiSelectProps) {
+	<div class="ddms">
+		<div class="ddms-header" data-menu-wrapper>
+			<p>Select things</p>
+			<button
+				type="button"
+				id={ fmt.Sprintf("dd-menubutton-%s", ddmsp.Name) }
+				aria-haspopup="menu"
+				aria-expanded="false"
+				aria-controls={ fmt.Sprintf("dd-menu-%s", ddmsp.Name) }
+			>Add</button>
+			<ul
+				id={ fmt.Sprintf("dd-menu-%s", ddmsp.Name) }
+				role="menu"
+				hidden
+				tabindex="-1"
+				aria-labelledby={ fmt.Sprintf("dd-menubutton-%s", ddmsp.Name) }
+				aria-activedescendant={ fmt.Sprintf("dd-mi-%s-1", ddmsp.Name) }
+			>
+				for index, option := range ddmsp.Options {
+					<li id={ fmt.Sprintf("dd-mi-%s-%v", ddmsp.Name, index) } role="menuitem">
+						<button hx-vals={ fmt.Sprintf("{'%sAdd': '%s' }", ddmsp.Name, option) }>{ option }</button>
+					</li>
+				}
+			</ul>
+		</div>
+		<div class="ddms-tag-container"></div>
+	</div>
+}

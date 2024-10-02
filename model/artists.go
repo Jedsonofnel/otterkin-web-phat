@@ -104,7 +104,14 @@ func GetAllArtists(dao *daos.Dao) ([]Artist, error) {
 func GetArtistByArtistId(dao *daos.Dao, id string) (Artist, error) {
 	artist := ArtistDBMarshalling{}
 	err := dao.DB().
-		Select("artists.id as artist_id", "artists.*", "users.id as user_id", "users.*").
+		Select(
+			"artists.id as artist_id",
+			"artists.*",
+			"users.first_name",
+			"users.last_name",
+			"users.email",
+			"users.role",
+		).
 		From("artists").
 		InnerJoin("users", dbx.NewExp("artists.user=users.id")).
 		Where(dbx.NewExp("artist_id = {:id}", dbx.Params{"id": id})).
@@ -120,9 +127,16 @@ func GetArtistByArtistId(dao *daos.Dao, id string) (Artist, error) {
 func GetArtistByUserId(dao *daos.Dao, id string) (Artist, error) {
 	artist := ArtistDBMarshalling{}
 	err := dao.DB().
-		Select("artists.id as artist_id", "artists.*", "users.id as user_id", "users.*").
+		Select(
+			"artists.id as artist_id",
+			"artists.*",
+			"users.first_name",
+			"users.last_name",
+			"users.email",
+			"users.role",
+		).
 		From("artists").
-		InnerJoin("users", dbx.NewExp("artists.user=users.id")).
+		InnerJoin("users", dbx.NewExp("artists.user_id=users.id")).
 		Where(dbx.NewExp("user_id = {:id}", dbx.Params{"id": id})).
 		One(&artist)
 

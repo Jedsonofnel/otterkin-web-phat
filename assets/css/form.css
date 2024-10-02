@@ -1,3 +1,16 @@
+/* form layout */
+.profile-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--crotchet);
+}
+
+/* dropdown multiselct */
+.ddms-header {
+  display: flex;
+}
+
 /* toggle button stuff */
 .toggle-button-wrapper {
   display: flex;

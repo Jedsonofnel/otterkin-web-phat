@@ -15,12 +15,32 @@ import (
 // Artist profile gallery page (where an artist can upload images)
 // Artist public page (for people to look/read about/commission an artist)
 func (hc HandlerContext) HandleArtist(g *echo.Group) {
+	// public artist page
+	g.GET("/:id", hc.HandleArtistPage)
+
+	// artist profile settings
 	g.GET("/profile/:id", hc.HandleArtistProfile, OnlyArtists, OnlyTheCorrespondingUser)
 	g.PUT("/profile/:id", hc.HandleUpdateArtistProfile, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
 
 	// gallery stuff
 	g.GET("/profile/:id/gallery", hc.HandleArtistProfileGallery, OnlyArtists, OnlyTheCorrespondingUser, LoadFlash)
 	g.POST("/profile/:id/gallery", hc.HandleCreateArtistImage, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
+}
+
+func (hc HandlerContext) HandleArtistPage(c echo.Context) error {
+	artist, err := model.GetArtistByArtistId(hc.e.App.Dao(), c.PathParam("id"))
+	if err != nil {
+		return err
+	}
+
+	artworks, err := model.GetArtworksByArtistId(hc.e.App.Dao(), c.PathParam("id"))
+	if err != nil {
+		return err
+	}
+
+	apd := view.NewArtistPageData(artist, artworks)
+	ld := layout.NewLayoutData(c, "Artist Page - Otterkin")
+	return Render(c, http.StatusOK, view.ArtistPage(ld, apd))
 }
 
 func (hc HandlerContext) HandleArtistProfile(c echo.Context) error {
@@ -51,23 +71,23 @@ func (hc HandlerContext) HandleArtistProfileGallery(c echo.Context) error {
 		return err
 	}
 
-	images, err := model.GetArtistImagesByArtistId(hc.e.App.Dao(), artist.Id)
+	artworks, err := model.GetArtworksByArtistId(hc.e.App.Dao(), artist.Id)
 	if err != nil {
 		return err
 	}
 
-	apd := view.NewArtistGalleryPageData(artist, images)
+	apd := view.NewArtistGalleryPageData(artist, artworks)
 	ld := layout.NewLayoutData(c, "Artist Gallery - Otterkin")
 	return Render(c, http.StatusOK, view.ArtistProfileGalleryPage(ld, apd))
 }
 
 func (hc HandlerContext) HandleCreateArtistImage(c echo.Context) error {
-	artistImage, err := model.CreateArtistImage(hc.e.App, c)
+	artwork, err := model.CreateArtwork(hc.e.App, c)
 	if err != nil {
 		errMap := auth.GetMapOfErrs(err)
 		return Render(c, http.StatusUnprocessableEntity, view.GalleryFormError(errMap))
 	}
 
 	// if not we want to append the artist card to the thing
-	return Render(c, http.StatusOK, view.GalleryFormSuccess(artistImage))
+	return Render(c, http.StatusOK, view.GalleryFormSuccess(artwork))
 }
