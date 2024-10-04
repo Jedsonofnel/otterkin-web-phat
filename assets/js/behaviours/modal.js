@@ -19,5 +19,15 @@ export default function modal(tree = document) {
       modal.querySelectorAll("[data-modal-close-btn]").forEach((btn) => {
         btn.addEventListener("click", () => closeModal())
       })
+
+      document.addEventListener("htmx:beforeSwap", (evt) => {
+        // crude but if there is a modal and there is a 200 htmx swap
+        // then close the modal
+        if (evt.detail.xhr.status === 200) {
+          if (modal) {
+            closeModal()
+          }
+        }
+      })
     })
 }
