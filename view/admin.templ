@@ -74,3 +74,16 @@ templ ArtistRevokeModal(artist model.Artist) {
 		</div>
 	}
 }
+
+templ AdminTagsPage(ld layout.LayoutData) {
+	@layout.Dashboard(ld, "admin-tags") {
+		<section class="dashboard-section fw">
+			<h1 class="dashboard-title">Manage tags</h1>
+			<p>Here you can manage what tags are available for artists to tag themselves (mediums, styles, subjects).</p>
+		</section>
+		<section class="dashboard-section fw">
+			<h2 class="dashboard-subtitle">Add mediums</h2>
+			<div hx-get="/tag/table?type=medium" hx-trigger="load"></div>
+		</section>
+	}
+}

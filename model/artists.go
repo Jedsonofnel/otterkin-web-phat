@@ -1,6 +1,9 @@
 package model
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"
@@ -9,12 +12,33 @@ import (
 	"github.com/pocketbase/pocketbase/models"
 )
 
+var PossibleArtistMediums []string = []string{
+	"Oils",
+	"Charcoal",
+	"Watercolour",
+}
+
+var PossibleArtistStyles []string = []string{
+	"Realism",
+	"Impressionist",
+	"Modern",
+}
+
+var PossibleArtistSubjects []string = []string{
+	"Landscapes",
+	"Portraits",
+	"Still Life",
+}
+
 type Artist struct {
 	Id              string `db:"artist_id"`
 	InstagramHandle string `db:"instagram_handle"`
 	Biography       string `db:"biography"`
 	Approved        bool   `db:"approved"`
 	User            User
+	Mediums         []string `db:"mediums"`
+	Styles          []string `db:"styles"`
+	Subjects        []string `db:"subjects"`
 }
 
 // we can't do nested `db` tags so we need to get database info
@@ -26,6 +50,9 @@ type ArtistDBMarshalling struct {
 	Biography       string `db:"biography"`
 	Approved        bool   `db:"approved"`
 	UserId          string `db:"user_id"`
+	Mediums         string `db:"mediums"`
+	Styles          string `db:"styles"`
+	Subjects        string `db:"subjects"`
 	FirstName       string `db:"first_name"`
 	LastName        string `db:"last_name"`
 	Email           string `db:"email"`
@@ -39,6 +66,9 @@ func (adbm ArtistDBMarshalling) Marshal() Artist {
 		InstagramHandle: adbm.InstagramHandle,
 		Biography:       adbm.Biography,
 		Approved:        adbm.Approved,
+		Mediums:         strings.Split(adbm.Mediums, ","),
+		Styles:          strings.Split(adbm.Styles, ","),
+		Subjects:        strings.Split(adbm.Subjects, ","),
 		User: User{
 			Id:        adbm.UserId,
 			FirstName: adbm.FirstName,
@@ -58,6 +88,9 @@ func (adbm ArtistsDBMarshalling) Marshal() []Artist {
 				InstagramHandle: adb.InstagramHandle,
 				Biography:       adb.Biography,
 				Approved:        adb.Approved,
+				Mediums:         strings.Split(adb.Mediums, ","),
+				Styles:          strings.Split(adb.Styles, ","),
+				Subjects:        strings.Split(adb.Subjects, ","),
 				User: User{
 					Id:        adb.UserId,
 					FirstName: adb.FirstName,
@@ -90,7 +123,7 @@ func GetAllArtists(dao *daos.Dao) ([]Artist, error) {
 	err := dao.DB().
 		Select("artists.id as artist_id", "artists.*", "users.id as user_id", "users.*").
 		From("artists").
-		InnerJoin("users", dbx.NewExp("artists.user=users.id")).
+		InnerJoin("users", dbx.NewExp("artists.user_id=users.id")).
 		OrderBy("created DESC").
 		All(&artists)
 
@@ -113,7 +146,7 @@ func GetArtistByArtistId(dao *daos.Dao, id string) (Artist, error) {
 			"users.role",
 		).
 		From("artists").
-		InnerJoin("users", dbx.NewExp("artists.user=users.id")).
+		InnerJoin("users", dbx.NewExp("artists.user_id=users.id")).
 		Where(dbx.NewExp("artist_id = {:id}", dbx.Params{"id": id})).
 		One(&artist)
 
@@ -182,4 +215,57 @@ func UpdateArtistApprovalById(app core.App, id string, approval bool) (Artist, e
 	}
 
 	return GetArtistByArtistId(app.Dao(), id)
+}
+
+// looks at form data, parses into a map, adds to corresponding
+// field and returns the name of the new tag
+func UpdateArtistTagsById(c echo.Context, app core.App, id string) (string, error) {
+	// tagMap (very likely) to be of length 1
+	tagMap, err := c.FormValues()
+	if err != nil {
+		return "", err
+	}
+
+	artist, err := GetArtistByArtistId(app.Dao(), id)
+	if err != nil {
+		return "", err
+	}
+
+	newMediums := artist.Mediums
+	newStyles := artist.Styles
+	newSubjects := artist.Subjects
+	var newTag string
+
+	for key, value := range tagMap {
+		switch key {
+		case "mediums":
+			newTag = value[0]
+			newMediums = append(newMediums, newTag)
+			fmt.Printf("newMediums: %+v\n", newMediums)
+		case "subjects":
+			newTag = value[0]
+			newStyles = append(newStyles, newTag)
+		case "styles":
+			newTag = value[0]
+			newSubjects = append(newSubjects, newTag)
+		}
+	}
+
+	// now to update
+	record, err := app.Dao().FindRecordById("artists", id)
+	if err != nil {
+		return "", err
+	}
+	form := forms.NewRecordUpsert(app, record)
+	form.LoadData(map[string]any{
+		"mediums":  strings.Join(newMediums, ","),
+		"subjects": strings.Join(newSubjects, ","),
+		"styles":   strings.Join(newStyles, ","),
+	})
+
+	if err := form.Submit(); err != nil {
+		return "", nil
+	}
+
+	return newTag, nil
 }

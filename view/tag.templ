@@ -1,0 +1,56 @@
+package view
+
+import (
+	"fmt"
+	"github.com/Jedsonofnel/otterkin-web/model"
+	"github.com/Jedsonofnel/otterkin-web/view/components"
+)
+
+// by default returns it with an empty errmap
+templ TagCreateModal(tag model.Tag) {
+	@components.Modal() {
+		@TagCreateForm(tag, make(map[string]string))
+	}
+}
+
+// if there's an error return this with errors included
+templ TagCreateForm(tag model.Tag, errMap map[string]string) {
+	<form hx-post="/tag" hx-swap="outerHTML" hx-target={ fmt.Sprintf("#table-tag-%s", tag.Type) } hx-target-error="this">
+		<h2>Create { tag.Type } tag</h2>
+		<div class="text-field">
+			<label for="new-tag">Tag name</label>
+			<input id="new-tag" name="name" type="text" class="text-input" value={ tag.Name }/>
+			if errMap["name"] != "" {
+				<p class="error-message">{ errMap["name"] }</p>
+			}
+		</div>
+		<input name="type" type="hidden" value={ tag.Type }/>
+		<input type="submit" value="Add" class="button soft"/>
+	</form>
+}
+
+templ TagUpdateModal(tag model.Tag) {
+	@components.Modal() {
+		@TagUpdateForm(tag, make(map[string]string))
+	}
+}
+
+templ TagUpdateForm(tag model.Tag, errMap map[string]string) {
+	<form
+		hx-put={ fmt.Sprintf("/tag/%s", tag.Id) }
+		hx-swap="outerHTML"
+		hx-target={ fmt.Sprintf("#table-tag-%s", tag.Type) }
+		hx-target-error="this"
+	>
+		<h2>Update { tag.Type } tag</h2>
+		<div class="text-field">
+			<label for="update-tag-name">Tag name</label>
+			<input id="update-tag-name" name="name" type="text" class="text-input" value={ tag.Name }/>
+			if errMap["name"] != "" {
+				<p class="error-message">{ errMap["name"] }</p>
+			}
+		</div>
+		<input name="type" type="hidden" value={ tag.Type }/>
+		<input type="submit" value="Update" class="button soft"/>
+	</form>
+}

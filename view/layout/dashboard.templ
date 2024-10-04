@@ -13,6 +13,13 @@ func isPage(page string, link string) string {
 	}
 }
 
+// possible pages under dashboard
+// - user-general
+// - user-commissions
+// - artist-settings
+// - artist-gallery
+// - admin-artists
+// - admin-tags
 templ dashboardSidebar(user model.User, page string) {
 	<nav class="dashboard-sidebar" hx-boost="true">
 		<ul class="dashboard-sidebar-ul">
@@ -41,7 +48,12 @@ templ dashboardSidebar(user model.User, page string) {
 			} else if user.Role == "admin" {
 				<li class="dashboard-sidebar-li">
 					<a href={ templ.URL(fmt.Sprintf("/admin/%s", user.Id)) } class={ isPage(page, "admin-artists") }>
-						Admin
+						Manage Artists
+					</a>
+				</li>
+				<li class="dashboard-sidebar-li">
+					<a href="/admin/tags" class={ isPage(page, "admin-tags") }>
+						Manage Tags
 					</a>
 				</li>
 			}

@@ -6,6 +6,7 @@ import (
 	"github.com/Jedsonofnel/otterkin-web/auth"
 	"github.com/Jedsonofnel/otterkin-web/model"
 	"github.com/Jedsonofnel/otterkin-web/view"
+	"github.com/Jedsonofnel/otterkin-web/view/components"
 	"github.com/Jedsonofnel/otterkin-web/view/layout"
 	"github.com/labstack/echo/v5"
 )
@@ -21,6 +22,7 @@ func (hc HandlerContext) HandleArtist(g *echo.Group) {
 	// artist profile settings
 	g.GET("/profile/:id", hc.HandleArtistProfile, OnlyArtists, OnlyTheCorrespondingUser)
 	g.PUT("/profile/:id", hc.HandleUpdateArtistProfile, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
+	g.PUT("/profile/:id/tags", hc.HandleUpdateArtistTags, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
 
 	// gallery stuff
 	g.GET("/profile/:id/gallery", hc.HandleArtistProfileGallery, OnlyArtists, OnlyTheCorrespondingUser, LoadFlash)
@@ -63,6 +65,14 @@ func (hc HandlerContext) HandleUpdateArtistProfile(c echo.Context) error {
 	}
 
 	return Render(c, http.StatusOK, view.ArtistUpdateResponse(artist))
+}
+
+func (hc HandlerContext) HandleUpdateArtistTags(c echo.Context) error {
+	newTag, err := model.UpdateArtistTagsById(c, hc.e.App, c.PathParam("id"))
+	if err != nil {
+		return err
+	}
+	return Render(c, http.StatusOK, components.DropdownMultiSelectTag(newTag))
 }
 
 func (hc HandlerContext) HandleArtistProfileGallery(c echo.Context) error {

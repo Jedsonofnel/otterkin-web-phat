@@ -1,4 +1,5 @@
 import htmx from "./vendored/htmx"
+import "./vendored/htmx-response-targets-2.01"
 import hamburgerMenu from "./behaviours/hamburger"
 import toggleButton from "./behaviours/toggle-button"
 import flashMessages from "./behaviours/flash-message"
@@ -37,7 +38,7 @@ htmx.defineExtension("reset-on-success", {
         triggeringElt.value = triggeringElt.defaultValue
         break
       case "SELECT":
-        //too much work
+        // too much work
         break
       case "FORM":
         triggeringElt.reset()
@@ -48,6 +49,7 @@ htmx.defineExtension("reset-on-success", {
 
 window.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("htmx:beforeSwap", (evt) => {
+    // server will only respond like this on an invalid form
     if (evt.detail.xhr.status === 422) {
       evt.detail.shouldSwap = true
       evt.detail.isError = false

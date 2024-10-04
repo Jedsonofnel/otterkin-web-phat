@@ -1,0 +1,84 @@
+package components
+
+import (
+	"fmt"
+	"github.com/Jedsonofnel/otterkin-web/model"
+)
+
+type TableProps struct {
+	CreateURL string
+}
+
+// Tag Table
+templ TagTable(tp TableProps, rows []model.Tag, tagType string) {
+	<div id={ fmt.Sprintf("table-tag-%s", tagType) }>
+		<h2>Add { tagType } tags</h2>
+		<button hx-get={ tp.CreateURL } hx-target="body" hx-swap="beforeend">Add Tag</button>
+		<table>
+			<thead>
+				<tr>
+					<th>Tag Name</th>
+				</tr>
+			</thead>
+			<tbody>
+				if len(rows) > 0 {
+					for _, row := range rows {
+						@TagTableRow(row)
+					}
+				} else {
+					<tr>
+						<td>No rows yet</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+}
+
+templ TagTableRow(tag model.Tag) {
+	<tr>
+		<td>{ tag.Name }</td>
+		<td class="table-contextbtn-td">
+			<div data-menu-wrapper class="table-contextbtn-wrapper">
+				<button
+					class="table-contextbtn"
+					type="button"
+					id={ fmt.Sprintf("tt-contextbtn-%s", tag.Id) }
+					aria-haspopup="menu"
+					aria-expanded="false"
+					aria-controls={ fmt.Sprintf("tt-contextmenu-%s", tag.Id) }
+				>
+					<span class="table-contextbtn-icon"></span>
+				</button>
+				<ul
+					class="table-contextmenu"
+					id={ fmt.Sprintf("tt-contextmenu-%s", tag.Id) }
+					role="menu"
+					hidden
+					tabindex="-1"
+					aria-labelledby={ fmt.Sprintf("tt-contextbtn-%s", tag.Id) }
+					aria-activedescendant={ fmt.Sprintf("tt-mi-%s-1",
+        tag.Id) }
+				>
+					<li class="table-contextmenu-item" id={ fmt.Sprintf("tt-mi-%s-1", tag.Id) } role="menuitem">
+						<button
+							class="table-contextmenu-button"
+							hx-get={ fmt.Sprintf("/tag/table/update-modal/%s", tag.Id) }
+							hx-target="body"
+							hx-swap="beforeend"
+						>Edit</button>
+					</li>
+					<li class="table-contextmenu-item" id={ fmt.Sprintf("tt-mi-%s-2", tag.Id) } role="menuitem">
+						<button
+							class="table-contextmenu-button"
+							style="color:red;"
+							hx-delete={ fmt.Sprintf("/tag/%s", tag.Id) }
+							hx-target={ fmt.Sprintf("#table-tag-%s", tag.Type) }
+							hx-swap="outerHTML"
+						>Delete</button>
+					</li>
+				</ul>
+			</div>
+		</td>
+	</tr>
+}

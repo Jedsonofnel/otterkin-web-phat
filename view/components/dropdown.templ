@@ -7,37 +7,54 @@ import "fmt"
 // menu button or cross button press
 
 type DropdownMultiSelectProps struct {
-	Name    string
-	Options []string
+	Name     string
+	Options  []string
+	Path     string
+	Selected []string
 }
 
 // TODO create a helper function to
 templ DropdownMultiSelect(ddmsp DropdownMultiSelectProps) {
 	<div class="ddms">
-		<div class="ddms-header" data-menu-wrapper>
+		<div class="ddms-header">
 			<p>Select things</p>
-			<button
-				type="button"
-				id={ fmt.Sprintf("dd-menubutton-%s", ddmsp.Name) }
-				aria-haspopup="menu"
-				aria-expanded="false"
-				aria-controls={ fmt.Sprintf("dd-menu-%s", ddmsp.Name) }
-			>Add</button>
-			<ul
-				id={ fmt.Sprintf("dd-menu-%s", ddmsp.Name) }
-				role="menu"
-				hidden
-				tabindex="-1"
-				aria-labelledby={ fmt.Sprintf("dd-menubutton-%s", ddmsp.Name) }
-				aria-activedescendant={ fmt.Sprintf("dd-mi-%s-1", ddmsp.Name) }
-			>
-				for index, option := range ddmsp.Options {
-					<li id={ fmt.Sprintf("dd-mi-%s-%v", ddmsp.Name, index) } role="menuitem">
-						<button hx-vals={ fmt.Sprintf("{'%sAdd': '%s' }", ddmsp.Name, option) }>{ option }</button>
-					</li>
-				}
-			</ul>
+			<div data-menu-wrapper>
+				<button
+					type="button"
+					id={ fmt.Sprintf("dd-menubutton-%s", ddmsp.Name) }
+					aria-haspopup="menu"
+					aria-expanded="false"
+					aria-controls={ fmt.Sprintf("dd-menu-%s", ddmsp.Name) }
+				>Add</button>
+				<ul
+					id={ fmt.Sprintf("dd-menu-%s", ddmsp.Name) }
+					role="menu"
+					hidden
+					tabindex="-1"
+					aria-labelledby={ fmt.Sprintf("dd-menubutton-%s", ddmsp.Name) }
+					aria-activedescendant={ fmt.Sprintf("dd-mi-%s-1", ddmsp.Name) }
+				>
+					for index, option := range ddmsp.Options {
+						<li id={ fmt.Sprintf("dd-mi-%s-%v", ddmsp.Name, index+1) } role="menuitem">
+							<button
+								hx-put={ ddmsp.Path }
+								hx-target={ fmt.Sprintf("#ddms-tags-%s", ddmsp.Name) }
+								hx-swap="beforeend"
+								hx-vals={ fmt.Sprintf(`{"%s": "%s" }`, ddmsp.Name, option) }
+							>{ option }</button>
+						</li>
+					}
+				</ul>
+			</div>
 		</div>
-		<div class="ddms-tag-container"></div>
+		<div class="ddms-tag-container" id={ fmt.Sprintf("ddms-tags-%s", ddmsp.Name) }>
+			for _, option := range ddmsp.Selected {
+				<div>{ option } </div>
+			}
+		</div>
 	</div>
+}
+
+templ DropdownMultiSelectTag(text string) {
+	<div>{ text }</div>
 }

@@ -10,10 +10,14 @@ import (
 )
 
 func (hc HandlerContext) HandleAdmin(g *echo.Group) {
+	// manage artists page
 	g.GET("/:id", hc.HandleAdminArtistPage, OnlyTheCorrespondingUser)
 	g.PUT("/approve/:id", hc.HandleAdminArtistApprove)
 	g.GET("/revoke/:id", hc.HandleAdminGetRevokeModal)
 	g.PUT("/revoke/:id", hc.HandleAdminArtistRevoke)
+
+	// manage tags page
+	g.GET("/tags", hc.HandleAdminTagsPage)
 }
 
 func (hc HandlerContext) HandleAdminArtistPage(c echo.Context) error {
@@ -65,4 +69,9 @@ func (hc HandlerContext) HandleAdminGetRevokeModal(c echo.Context) error {
 	}
 
 	return Render(c, http.StatusOK, view.ArtistRevokeModal(artist))
+}
+
+func (hc HandlerContext) HandleAdminTagsPage(c echo.Context) error {
+	ld := layout.NewLayoutData(c, "Manage Tags - Otterkin")
+	return Render(c, http.StatusOK, view.AdminTagsPage(ld))
 }

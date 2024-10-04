@@ -82,6 +82,13 @@ func main() {
 		)
 		hc.HandleArtwork(artworkGroup)
 
+		// tag routes
+		tagGroup := e.Router.Group("/tag",
+			auth.LoadAuthContextFromCookie(e.App),
+			controller.OnlyAdmins,
+		)
+		hc.HandleTag(tagGroup)
+
 		return nil
 	})
 

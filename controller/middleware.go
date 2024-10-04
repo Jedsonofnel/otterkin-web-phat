@@ -38,9 +38,9 @@ func OnlyTheCorrespondingUser(next echo.HandlerFunc) echo.HandlerFunc {
 func OnlyTheCorrespondingArtist(app core.App) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			authRecord, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
+			user, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
 			artist, err := model.GetArtistByArtistId(app.Dao(), c.PathParam("id"))
-			if !ok || err != nil || authRecord.Id != artist.User.Id {
+			if !ok || err != nil || user.Id != artist.User.Id {
 				SetFlash(c, "error", "Don't be silly - you don't have approval to go in there!")
 				return c.Redirect(http.StatusTemporaryRedirect, "/")
 			}
@@ -67,10 +67,10 @@ func OnlyTheOwnerArtist(app core.App) echo.MiddlewareFunc {
 
 func OnlyAdmins(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		authRecord, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
-		if !ok || authRecord.Role != "admin" {
+		user, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
+		if !ok || user.Role != "admin" {
 			SetFlash(c, "error", "Don't be silly - you don't have approval to go in there!")
-			return c.Redirect(http.StatusTemporaryRedirect, "/")
+			hxRedirect(c, http.StatusForbidden)
 		}
 
 		return next(c)
@@ -79,8 +79,8 @@ func OnlyAdmins(next echo.HandlerFunc) echo.HandlerFunc {
 
 func OnlyArtists(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		authRecord, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
-		if !ok || authRecord.Role != "artist" {
+		user, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
+		if !ok || user.Role != "artist" {
 			SetFlash(c, "error", "Don't be silly - you don't have approval to go in there!")
 			return c.Redirect(http.StatusTemporaryRedirect, "/")
 		}

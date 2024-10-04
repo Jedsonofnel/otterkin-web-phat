@@ -53,19 +53,20 @@ templ ArtistProfilePage(ld layout.LayoutData, apd ArtistProfilePageData) {
 			<h2 class="profile-form-subtitle">Artist details</h2>
 			@artistUpdateForm(apd.artist)
 		</section>
-		@artistTagInputs()
+		@artistTagInputs(apd.artist)
 		@artistServicesTable()
 	}
 }
 
-templ artistTagInputs() {
+templ artistTagInputs(artist model.Artist) {
 	<section class="dashboard-form-section">
 		<h2 class="profile-form-subtitle">
 			Tags
 		</h2>
 		@components.DropdownMultiSelect(components.DropdownMultiSelectProps{
 			Name: "mediums",
-			Options: []string{"option 1", "option 2", "option 3"},
+			Options: model.PossibleArtistMediums,
+      Path: fmt.Sprintf("/artist/profile/%s/tags", artist.Id),
 		})
 	</section>
 }

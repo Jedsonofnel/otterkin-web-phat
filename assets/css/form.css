@@ -11,6 +11,76 @@
   display: flex;
 }
 
+/* input styling */
+.text-input {
+  width: min(100%, 320px);
+  padding: var(--crotchet) var(--minim);
+  border-radius: var(--crotchet);
+  border: 1px solid var(--grey-200);
+  outline: none;
+  background-color: var(--bg);
+
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--fg);
+
+  &:focus-within {
+    border-color: var(--grey-800);
+  }
+}
+
+.textarea-input {
+  resize: none;
+  width: min(100%, 320px);
+  padding: var(--crotchet) var(--minim);
+  border-radius: var(--crotchet);
+  border: 1px solid var(--grey-200);
+  outline: none;
+  background-color: var(--bg);
+
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--fg);
+
+  &:focus-within {
+    border-color: var(--grey-800);
+  }
+}
+
+.file-input,
+.avatar-input {
+  display: block;
+  padding: var(--quaver) 0;
+
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--fg);
+
+  &::file-selector-button {
+    padding: var(--crotchet) var(--minim);
+    background-color: var(--pink);
+    border: none;
+    border-radius: var(--crotchet);
+    line-height: 1;
+    font-family: var(--sans);
+    color: var(--grey-800);
+    cursor: pointer;
+  }
+  &::file-selector-button:hover {
+    background-color: var(--pink-darker);
+  }
+  &::file-selector-button:active {
+    background-color: var(--pink-lighter);
+  }
+}
+
+.avatar-input {
+  width: 100%;
+  border-top: 2px solid var(--gold);
+  border-bottom: 2px solid var(--gold);
+  margin-bottom: var(--minim);
+}
+
 /* toggle button stuff */
 .toggle-button-wrapper {
   display: flex;

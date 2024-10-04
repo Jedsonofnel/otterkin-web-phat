@@ -119,7 +119,7 @@ func RegisterArtist(app core.App, c echo.Context) error {
 	artistForm.LoadData(map[string]any{
 		"instagram_handle": fd.InstagramHandle,
 		"biography":        fd.Biography,
-		"user":             newUser.Id,
+		"user_id":          newUser.Id,
 		"approved":         false,
 	})
 

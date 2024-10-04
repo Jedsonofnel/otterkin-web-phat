@@ -1,5 +1,10 @@
 export default function menu(tree = document) {
   tree.querySelectorAll("[data-menu-wrapper]").forEach((wrapper) => {
+    // guard clause to prevent double registration
+    if (wrapper.hasAttribute("data-menu-handled")) return
+
+    wrapper.setAttribute("data-menu-handled", "")
+
     const button = wrapper.querySelector("[aria-haspopup=menu]"),
       menu = wrapper.querySelector("[role=menu]"),
       items = [...menu.querySelectorAll("[role=menuitem]")]
