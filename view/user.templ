@@ -17,7 +17,13 @@ func NewUserPageData(user model.User) UserPageData {
 
 templ UserPage(ld layout.LayoutData, upd UserPageData) {
 	@layout.Dashboard(ld, "user-general") {
-		<h1 id="user-greeting" class="dashboard-title">Hello { upd.user.FirstName }</h1>
+		<section class="dashboard-section fw">
+			<h1 id="user-greeting" class="dashboard-title">Hello { upd.user.FirstName }</h1>
+			<p>
+				Welcome to your account centre, where you can update your account details. Please do consider adding a profile
+				picture if you feel so inclined!
+			</p>
+		</section>
 		<section class="dashboard-section">
 			<div class="column-form">
 				<h2 class="dashboard-subtitle">Your details</h2>

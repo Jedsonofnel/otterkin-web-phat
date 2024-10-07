@@ -8,8 +8,7 @@
   row-gap: var(--semibreve);
 }
 
-.dashboard-section,
-.dashboard-table-wrapper {
+.dashboard-section {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -53,7 +52,7 @@
 /* general */
 .column-form {
   width: min(320px, 100%);
-  margin: auto;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
