@@ -12,24 +12,6 @@ import (
 	"github.com/pocketbase/pocketbase/models"
 )
 
-var PossibleArtistMediums []string = []string{
-	"Oils",
-	"Charcoal",
-	"Watercolour",
-}
-
-var PossibleArtistStyles []string = []string{
-	"Realism",
-	"Impressionist",
-	"Modern",
-}
-
-var PossibleArtistSubjects []string = []string{
-	"Landscapes",
-	"Portraits",
-	"Still Life",
-}
-
 type Artist struct {
 	Id              string `db:"artist_id"`
 	InstagramHandle string `db:"instagram_handle"`

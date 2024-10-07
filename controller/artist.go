@@ -22,7 +22,7 @@ func (hc HandlerContext) HandleArtist(g *echo.Group) {
 	// artist profile settings
 	g.GET("/profile/:id", hc.HandleArtistProfile, OnlyArtists, OnlyTheCorrespondingUser)
 	g.PUT("/profile/:id", hc.HandleUpdateArtistProfile, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
-	g.PUT("/profile/:id/tags", hc.HandleUpdateArtistTags, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
+	g.POST("/profile/:id/tags", hc.HandleAddArtistTags, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
 
 	// gallery stuff
 	g.GET("/profile/:id/gallery", hc.HandleArtistProfileGallery, OnlyArtists, OnlyTheCorrespondingUser, LoadFlash)
@@ -53,7 +53,12 @@ func (hc HandlerContext) HandleArtistProfile(c echo.Context) error {
 		return err
 	}
 
-	apd := view.NewArtistProfilePageData(artist)
+	tagOptions, err := model.GetTagOptionsByType(hc.e.App.Dao(), "medium")
+	if err != nil {
+		return err
+	}
+
+	apd := view.NewArtistProfilePageData(artist, tagOptions)
 	ld := layout.NewLayoutData(c, "Artist Profile - Otterkin")
 	return Render(c, http.StatusOK, view.ArtistProfilePage(ld, apd))
 }
@@ -67,12 +72,26 @@ func (hc HandlerContext) HandleUpdateArtistProfile(c echo.Context) error {
 	return Render(c, http.StatusOK, view.ArtistUpdateResponse(artist))
 }
 
-func (hc HandlerContext) HandleUpdateArtistTags(c echo.Context) error {
-	newTag, err := model.UpdateArtistTagsById(c, hc.e.App, c.PathParam("id"))
+func (hc HandlerContext) HandleAddArtistTags(c echo.Context) error {
+	artistId := c.PathParam("id")
+	tagId := c.QueryParam("index")
+
+	artist, err := model.GetArtistByArtistId(hc.e.App.Dao(), artistId)
 	if err != nil {
 		return err
 	}
-	return Render(c, http.StatusOK, components.DropdownMultiSelectTag(newTag))
+
+	tag, err := model.GetTagById(hc.e.App.Dao(), tagId)
+	if err != nil {
+		return err
+	}
+
+	_, err = model.CreateTagRelation(hc.e.App, artist, tag)
+	if err != nil {
+		return err
+	}
+
+	return Render(c, http.StatusOK, components.DropdownMultiSelectTag(tag.Name))
 }
 
 func (hc HandlerContext) HandleArtistProfileGallery(c echo.Context) error {

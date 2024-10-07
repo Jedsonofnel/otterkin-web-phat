@@ -1,19 +1,21 @@
 package components
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 // we need a dropdown add things like tags
-// this will work by sending a PUT request to add/remove tags on
-// menu button or cross button press
+// this will make POST and DELETE requests
+// to a junction table
 
 type DropdownMultiSelectProps struct {
 	Name     string
-	Options  []string
-	Path     string
+	Options  map[string]string
+	AddURL   string
 	Selected []string
 }
 
-// TODO create a helper function to
 templ DropdownMultiSelect(ddmsp DropdownMultiSelectProps) {
 	<div class="ddms">
 		<div class="ddms-header">
@@ -35,12 +37,11 @@ templ DropdownMultiSelect(ddmsp DropdownMultiSelectProps) {
 					aria-activedescendant={ fmt.Sprintf("dd-mi-%s-1", ddmsp.Name) }
 				>
 					for index, option := range ddmsp.Options {
-						<li id={ fmt.Sprintf("dd-mi-%s-%v", ddmsp.Name, index+1) } role="menuitem">
+						<li id={ fmt.Sprintf("dd-mi-%s-%s", ddmsp.Name, index) } role="menuitem">
 							<button
-								hx-put={ ddmsp.Path }
+								hx-post={ strings.Join([]string{ddmsp.AddURL, fmt.Sprintf("?index=%s", index)}, "") }
 								hx-target={ fmt.Sprintf("#ddms-tags-%s", ddmsp.Name) }
 								hx-swap="beforeend"
-								hx-vals={ fmt.Sprintf(`{"%s": "%s" }`, ddmsp.Name, option) }
 							>{ option }</button>
 						</li>
 					}

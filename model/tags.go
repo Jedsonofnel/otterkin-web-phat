@@ -15,8 +15,14 @@ type Tag struct {
 	Type string `db:"type"`
 }
 
+type TagRelation struct {
+	Id       string `db:"id"`
+	ArtistId string `db:"artist_id"`
+	TagId    string `db:"tag_id"`
+}
+
 func CreateTag(app core.App, c echo.Context) (Tag, error) {
-	tag, err := app.Dao().FindCollectionByNameOrId("tags")
+	tags, err := app.Dao().FindCollectionByNameOrId("tags")
 	if err != nil {
 		return Tag{}, err
 	}
@@ -26,7 +32,7 @@ func CreateTag(app core.App, c echo.Context) (Tag, error) {
 		Type: c.FormValue("type"),
 	}
 
-	newTag := models.NewRecord(tag)
+	newTag := models.NewRecord(tags)
 	tagForm := forms.NewRecordUpsert(app, newTag)
 	tagForm.LoadData(map[string]any{
 		"name": tagFromForm.Name,
@@ -67,6 +73,28 @@ func GetTagById(dao *daos.Dao, id string) (Tag, error) {
 	return tag, nil
 }
 
+// key value is the tag id, value is the name of the tag
+// for drop down multi select
+func GetTagOptionsByType(dao *daos.Dao, tagType string) (map[string]string, error) {
+	tagOptions := make(map[string]string)
+	tags := []Tag{}
+	err := dao.DB().
+		Select("*").
+		From("tags").
+		Where(dbx.NewExp("type = {:type}", dbx.Params{"type": tagType})).
+		All(&tags)
+
+	if err != nil {
+		return tagOptions, nil
+	}
+
+	for _, tag := range tags {
+		tagOptions[tag.Id] = tag.Name
+	}
+
+	return tagOptions, nil
+}
+
 func UpdateTagById(app core.App, c echo.Context, id string) (Tag, error) {
 	tag, err := app.Dao().FindRecordById("tags", id)
 	if err != nil {
@@ -98,4 +126,40 @@ func DeleteTagById(dao *daos.Dao, id string) error {
 	}
 
 	return dao.DeleteRecord(tag)
+}
+
+// now for the junction table stuff
+func CreateTagRelation(app core.App, artist Artist, tag Tag) (TagRelation, error) {
+	tagRelation := TagRelation{
+		ArtistId: artist.Id,
+		TagId:    tag.Id,
+	}
+
+	artistTags, err := app.Dao().FindCollectionByNameOrId("artist_tags")
+	if err != nil {
+		return TagRelation{}, err
+	}
+
+	// TODO check that an artist does not already have that
+	// tag
+	newTagRelation := models.NewRecord(artistTags)
+	tagForm := forms.NewRecordUpsert(app, newTagRelation)
+	tagForm.LoadData(map[string]any{
+		"artist_id": tagRelation.ArtistId,
+		"tag_id":    tagRelation.TagId,
+	})
+
+	if err := tagForm.Submit(); err != nil {
+		return TagRelation{}, err
+	}
+
+	return tagRelation, nil
+}
+
+func IndexTagsByArtistId(dao *daos.Dao, id string) ([]Tag, error) {
+	return []Tag{}, nil
+}
+
+func RemoveTagRelation(dao *daos.Dao, artistId string, tagId string) error {
+	return nil
 }

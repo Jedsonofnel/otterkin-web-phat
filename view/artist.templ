@@ -29,11 +29,13 @@ templ ArtistPage(ld layout.LayoutData, apd ArtistPageData) {
 // profile edit page
 type ArtistProfilePageData struct {
 	artist model.Artist
+  tagOptions map[string]string
 }
 
-func NewArtistProfilePageData(artist model.Artist) ArtistProfilePageData {
+func NewArtistProfilePageData(artist model.Artist, tagOptions map[string]string) ArtistProfilePageData {
 	return ArtistProfilePageData{
 		artist: artist,
+    tagOptions: tagOptions,
 	}
 }
 
@@ -49,26 +51,24 @@ templ ArtistProfilePage(ld layout.LayoutData, apd ArtistProfilePageData) {
 			}
 			<a href={ templ.URL(fmt.Sprintf("/artist/%s", apd.artist.Id)) }>See your profile</a>
 		</section>
-		<section class="dashboard-form-section">
-			<h2 class="profile-form-subtitle">Artist details</h2>
+		<section class="dashboard-section">
+			<h2 class="dashboard-subtitle">Artist details</h2>
 			@artistUpdateForm(apd.artist)
 		</section>
-		@artistTagInputs(apd.artist)
+		<section>
+			<h2 class="dashboard-subtitle">Artist tags</h2>
+			@artistTagInputs(apd.artist, apd.tagOptions)
+		</section>
 		@artistServicesTable()
 	}
 }
 
-templ artistTagInputs(artist model.Artist) {
-	<section class="dashboard-form-section">
-		<h2 class="profile-form-subtitle">
-			Tags
-		</h2>
-		@components.DropdownMultiSelect(components.DropdownMultiSelectProps{
-			Name: "mediums",
-			Options: model.PossibleArtistMediums,
-      Path: fmt.Sprintf("/artist/profile/%s/tags", artist.Id),
-		})
-	</section>
+templ artistTagInputs(artist model.Artist, tagOptions map[string]string) {
+	@components.DropdownMultiSelect(components.DropdownMultiSelectProps{
+		Name:    "mediums",
+		Options: tagOptions,
+    AddURL: fmt.Sprintf("/artist/profile/%s/tags", artist.Id),
+	})
 }
 
 templ artistUpdateForm(artist model.Artist) {
@@ -95,7 +95,7 @@ templ artistUpdateForm(artist model.Artist) {
 
 templ ArtistUpdateResponse(artist model.Artist) {
 	@artistUpdateForm(artist)
-	<h1 id="artist-greeting" hx-swap-oob="outerHTML">Hello { artist.User.FirstName }</h1>
+	<h1 class="dashboard-title" id="artist-greeting" hx-swap-oob="outerHTML">Hello { artist.User.FirstName }</h1>
 	@layout.FlashInfo("Updated your details!")
 }
 

@@ -40,6 +40,7 @@ func OnlyTheCorrespondingArtist(app core.App) echo.MiddlewareFunc {
 		return func(c echo.Context) error {
 			user, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
 			artist, err := model.GetArtistByArtistId(app.Dao(), c.PathParam("id"))
+
 			if !ok || err != nil || user.Id != artist.User.Id {
 				SetFlash(c, "error", "Don't be silly - you don't have approval to go in there!")
 				return c.Redirect(http.StatusTemporaryRedirect, "/")
