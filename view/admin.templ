@@ -81,9 +81,14 @@ templ AdminTagsPage(ld layout.LayoutData) {
 			<h1 class="dashboard-title">Manage tags</h1>
 			<p>Here you can manage what tags are available for artists to tag themselves (mediums, styles, subjects).</p>
 		</section>
-		<section class="dashboard-section fw">
-			<h2 class="dashboard-subtitle">Add mediums</h2>
-			<div hx-get="/tag/table?type=medium" hx-trigger="load"></div>
+		<section class="dashboard-section">
+			<div hx-get="/tag/table?type=medium" hx-trigger="load" hx-swap="outerHTML"></div>
+		</section>
+		<section class="dashboard-section">
+			<div hx-get="/tag/table?type=subject" hx-trigger="load" hx-swap="outerHTML"></div>
+		</section>
+		<section class="dashboard-section">
+			<div hx-get="/tag/table?type=style" hx-trigger="load" hx-swap="outerHTML"></div>
 		</section>
 	}
 }

@@ -2,18 +2,19 @@
 .dashboard-grid-wrapper {
   display: grid;
   padding: var(--minim);
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-auto-rows: min-content;
+  column-gap: var(--crotchet);
+  row-gap: var(--semibreve);
 }
 
-.dashboard-section {
+.dashboard-section,
+.dashboard-table-wrapper {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--semibreve) 0;
-
-  /* TODO remove thise */
-  border: 1px solid black;
+  gap: var(--quaver);
 
   &.fw {
     grid-column: 1 / -1;
@@ -40,12 +41,11 @@
 }
 
 .dashboard-title {
-  margin-top: var(--minim);
+  margin: var(--crotchet) 0;
 }
 
 .dashboard-subtitle {
   font-family: var(--font-sans);
-  margin-bottom: var(--crotchet);
   align-self: start;
   text-align: left;
 }

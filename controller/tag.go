@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/Jedsonofnel/otterkin-web/auth"
@@ -8,10 +9,31 @@ import (
 	"github.com/Jedsonofnel/otterkin-web/view"
 	"github.com/Jedsonofnel/otterkin-web/view/components"
 	"github.com/labstack/echo/v5"
+	"github.com/pocketbase/dbx"
 )
 
-var tagTableProps components.TableProps = components.TableProps{
-	CreateURL: "/tag/table/create-modal",
+func newTagTableProps(ts model.TableSpec, tagType string) components.TableProps {
+	return components.TableProps{
+		CreateURL: fmt.Sprintf("/tag/table/create-modal?type=%s", tagType),
+		PagNextURL: fmt.Sprintf(
+			"/tag/table?type=%s&sort=%s&order=%s&page=%v&perpage=%v",
+			tagType,
+			ts.Sort,
+			ts.Order,
+			ts.Page+1,
+			ts.PerPage,
+		),
+		PagPrevURL: fmt.Sprintf(
+			"/tag/table?type=%s&sort=%s&order=%s&page=%v&perpage=%v",
+			tagType,
+			ts.Sort,
+			ts.Order,
+			ts.Page-1,
+			ts.PerPage,
+		),
+		PagPage:    ts.Page,
+		PagMaxPage: ts.MaxPage,
+	}
 }
 
 func (hc HandlerContext) HandleTag(g *echo.Group) {
@@ -34,17 +56,25 @@ func (hc HandlerContext) HandleIndexTagTable(c echo.Context) error {
 	// query stuff
 	tagType := c.QueryParam("type")
 
-	ts := model.TableSpec{Collection: "tags"}
-	tags, err := model.IndexTagsTable(hc.e.App.Dao(), ts)
+	ts, err := model.NewTableSpec(hc.e.App.Dao(), c, "tags",
+		dbx.NewExp("type={:type}", dbx.Params{"type": tagType}))
 	if err != nil {
 		return err
 	}
 
-	return Render(c, http.StatusOK, components.TagTable(tagTableProps, tags, tagType))
+	fmt.Printf("ts: %+v\n", ts)
+
+	tags, err := model.IndexTagsTable(hc.e.App.Dao(), ts, tagType)
+	if err != nil {
+		return err
+	}
+
+	return Render(c, http.StatusOK, components.TagTable(newTagTableProps(ts, tagType), tags, tagType))
 }
 
 func (hc HandlerContext) HandleCreateTagModal(c echo.Context) error {
-	return Render(c, http.StatusOK, view.TagCreateModal(model.Tag{Type: "medium"}))
+	tagType := c.QueryParam("type")
+	return Render(c, http.StatusOK, view.TagCreateModal(model.Tag{Type: tagType}))
 }
 
 func (hc HandlerContext) HandleCreateTag(c echo.Context) error {
@@ -54,13 +84,18 @@ func (hc HandlerContext) HandleCreateTag(c echo.Context) error {
 		return Render(c, http.StatusUnprocessableEntity, view.TagCreateForm(tag, errMap))
 	}
 
-	ts := model.TableSpec{Collection: "tags"}
-	tags, err := model.IndexTagsTable(hc.e.App.Dao(), ts)
+	ts, err := model.NewTableSpec(hc.e.App.Dao(), c, "tags",
+		dbx.NewExp("type={:type}", dbx.Params{"type": tag.Type}))
 	if err != nil {
 		return err
 	}
 
-	return Render(c, http.StatusOK, components.TagTable(tagTableProps, tags, tag.Type))
+	tags, err := model.IndexTagsTable(hc.e.App.Dao(), ts, tag.Type)
+	if err != nil {
+		return err
+	}
+
+	return Render(c, http.StatusOK, components.TagTable(newTagTableProps(ts, tag.Type), tags, tag.Type))
 }
 
 func (hc HandlerContext) HandleUpdateTagModal(c echo.Context) error {
@@ -78,13 +113,18 @@ func (hc HandlerContext) HandleUpdateTag(c echo.Context) error {
 		return Render(c, http.StatusUnprocessableEntity, view.TagUpdateForm(tag, errMap))
 	}
 
-	ts := model.TableSpec{Collection: "tags"}
-	tags, err := model.IndexTagsTable(hc.e.App.Dao(), ts)
+	ts, err := model.NewTableSpec(hc.e.App.Dao(), c, "tags",
+		dbx.NewExp("type={:type}", dbx.Params{"type": tag.Type}))
 	if err != nil {
 		return err
 	}
 
-	return Render(c, http.StatusOK, components.TagTable(tagTableProps, tags, tag.Type))
+	tags, err := model.IndexTagsTable(hc.e.App.Dao(), ts, tag.Type)
+	if err != nil {
+		return err
+	}
+
+	return Render(c, http.StatusOK, components.TagTable(newTagTableProps(ts, tag.Type), tags, tag.Type))
 }
 
 func (hc HandlerContext) HandleDeleteTag(c echo.Context) error {
@@ -98,11 +138,16 @@ func (hc HandlerContext) HandleDeleteTag(c echo.Context) error {
 		return err
 	}
 
-	ts := model.TableSpec{Collection: "tags"}
-	tags, err := model.IndexTagsTable(hc.e.App.Dao(), ts)
+	ts, err := model.NewTableSpec(hc.e.App.Dao(), c, "tags",
+		dbx.NewExp("type={:type}", dbx.Params{"type": tag.Type}))
 	if err != nil {
 		return err
 	}
 
-	return Render(c, http.StatusOK, components.TagTable(tagTableProps, tags, tag.Type))
+	tags, err := model.IndexTagsTable(hc.e.App.Dao(), ts, tag.Type)
+	if err != nil {
+		return err
+	}
+
+	return Render(c, http.StatusOK, components.TagTable(newTagTableProps(ts, tag.Type), tags, tag.Type))
 }

@@ -125,6 +125,7 @@ main {
   flex-direction: column;
   justify-content: start;
   background-color: var(--grey-100);
+  overflow: hidden;
 }
 
 .dashboard-sidebar-subtitle {
