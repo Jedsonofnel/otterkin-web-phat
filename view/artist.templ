@@ -71,6 +71,7 @@ templ artistTagInputs(apd ArtistProfilePageData) {
 		Options: apd.tagOptions["medium"].ToMap(),
     Selected: apd.artistTags["medium"].ToMap(),
     AddURL: fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
+    DeleteURL: fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
 	})
 
 	@components.DropdownMultiSelect(components.DropdownMultiSelectProps{
@@ -78,6 +79,7 @@ templ artistTagInputs(apd ArtistProfilePageData) {
 		Options: apd.tagOptions["style"].ToMap(),
     Selected: apd.artistTags["style"].ToMap(),
     AddURL: fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
+    DeleteURL: fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
 	})
 
 	@components.DropdownMultiSelect(components.DropdownMultiSelectProps{
@@ -85,6 +87,7 @@ templ artistTagInputs(apd ArtistProfilePageData) {
 		Options: apd.tagOptions["subject"].ToMap(),
     Selected: apd.artistTags["subject"].ToMap(),
     AddURL: fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
+    DeleteURL: fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
 	})
 }
 

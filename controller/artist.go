@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/Jedsonofnel/otterkin-web/auth"
@@ -22,7 +23,8 @@ func (hc HandlerContext) HandleArtist(g *echo.Group) {
 	// artist profile settings
 	g.GET("/profile/:id", hc.HandleArtistProfile, OnlyArtists, OnlyTheCorrespondingUser)
 	g.PUT("/profile/:id", hc.HandleUpdateArtistProfile, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
-	g.POST("/profile/:id/tags", hc.HandleAddArtistTags, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
+	g.POST("/profile/:id/tags", hc.HandleAddArtistTag, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
+	g.DELETE("/profile/:id/tags", hc.HandleRemoveArtistTag, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
 
 	// gallery stuff
 	g.GET("/profile/:id/gallery", hc.HandleArtistProfileGallery, OnlyArtists, OnlyTheCorrespondingUser, LoadFlash)
@@ -77,7 +79,7 @@ func (hc HandlerContext) HandleUpdateArtistProfile(c echo.Context) error {
 	return Render(c, http.StatusOK, view.ArtistUpdateResponse(artist))
 }
 
-func (hc HandlerContext) HandleAddArtistTags(c echo.Context) error {
+func (hc HandlerContext) HandleAddArtistTag(c echo.Context) error {
 	artistId := c.PathParam("id")
 	tagId := c.QueryParam("index")
 
@@ -96,7 +98,20 @@ func (hc HandlerContext) HandleAddArtistTags(c echo.Context) error {
 		return err
 	}
 
-	return Render(c, http.StatusOK, components.DropdownMultiSelectTag(tag.Name))
+	deleteURL := fmt.Sprintf("/artist/profile/%s/tags?index=%s", artist.Id, tag.Id)
+	return Render(c, http.StatusOK, components.DropdownMultiSelectTag(tag.Name, deleteURL))
+}
+
+func (hc HandlerContext) HandleRemoveArtistTag(c echo.Context) error {
+	artistId := c.PathParam("id")
+	tagId := c.QueryParam("index")
+
+	err := model.RemoveTagRelation(hc.e.App.Dao(), artistId, tagId)
+	if err != nil {
+		return err
+	}
+
+	return c.NoContent(http.StatusOK)
 }
 
 func (hc HandlerContext) HandleArtistProfileGallery(c echo.Context) error {

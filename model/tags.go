@@ -203,6 +203,22 @@ func CreateTagRelation(app core.App, artist Artist, tag Tag) (TagRelation, error
 	return tagRelation, nil
 }
 
+func GetTagRelationByIds(dao *daos.Dao, tagId string, artistId string) (TagRelation, error) {
+	tagRelation := TagRelation{}
+	err := dao.DB().
+		Select("*").
+		From("artist_tags").
+		Where(dbx.NewExp("tag_id = {:tag_id}", dbx.Params{"tag_id": tagId})).
+		AndWhere(dbx.NewExp("artist_id = {:artist_id}", dbx.Params{"artist_id": artistId})).
+		One(&tagRelation)
+
+	if err != nil {
+		return TagRelation{}, err
+	}
+
+	return tagRelation, nil
+}
+
 func IndexTagsByArtistId(dao *daos.Dao, id string) (Tags, error) {
 	tags := []Tag{}
 	err := dao.DB().
@@ -239,5 +255,15 @@ func IndexTagsByArtistIdAndType(dao *daos.Dao, id string, tagType string) (Tags,
 }
 
 func RemoveTagRelation(dao *daos.Dao, artistId string, tagId string) error {
-	return nil
+	tagRelation, err := GetTagRelationByIds(dao, tagId, artistId)
+	if err != nil {
+		return err
+	}
+
+	tagRelationRecord, err := dao.FindRecordById("artist_tags", tagRelation.Id)
+	if err != nil {
+		return err
+	}
+
+	return dao.DeleteRecord(tagRelationRecord)
 }
