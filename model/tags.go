@@ -1,6 +1,8 @@
 package model
 
 import (
+	"fmt"
+
 	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"
@@ -176,8 +178,17 @@ func CreateTagRelation(app core.App, artist Artist, tag Tag) (TagRelation, error
 		return TagRelation{}, err
 	}
 
-	// TODO check that an artist does not already have that
-	// tag
+	// check that an artist does not already have that tag
+	existingTags, err := IndexTagsByArtistId(app.Dao(), artist.Id)
+	if err != nil {
+		return TagRelation{}, err
+	}
+	for _, existingTag := range existingTags {
+		if existingTag.Id == tag.Id {
+			return TagRelation{}, fmt.Errorf("Cannot add a tag already applied to this artist")
+		}
+	}
+
 	newTagRelation := models.NewRecord(artistTags)
 	tagForm := forms.NewRecordUpsert(app, newTagRelation)
 	tagForm.LoadData(map[string]any{
