@@ -21,6 +21,18 @@ type TagRelation struct {
 	TagId    string `db:"tag_id"`
 }
 
+// to write a method to turn into a map
+type Tags []Tag
+
+func (tags Tags) ToMap() map[string]string {
+	tagMap := make(map[string]string)
+	for _, tag := range tags {
+		tagMap[tag.Id] = tag.Name
+	}
+
+	return tagMap
+}
+
 func CreateTag(app core.App, c echo.Context) (Tag, error) {
 	tags, err := app.Dao().FindCollectionByNameOrId("tags")
 	if err != nil {
@@ -46,7 +58,7 @@ func CreateTag(app core.App, c echo.Context) (Tag, error) {
 	return GetTagById(app.Dao(), newTag.Id)
 }
 
-func IndexTagsTable(dao *daos.Dao, ts TableSpec, tagType string) ([]Tag, error) {
+func IndexTagsTable(dao *daos.Dao, ts TableSpec, tagType string) (Tags, error) {
 	tags := []Tag{}
 	query := ts.Query(dao)
 	if err := query.
@@ -75,9 +87,8 @@ func GetTagById(dao *daos.Dao, id string) (Tag, error) {
 
 // key value is the tag id, value is the name of the tag
 // for drop down multi select
-func GetTagOptionsByType(dao *daos.Dao, tagType string) (map[string]string, error) {
-	tagOptions := make(map[string]string)
-	tags := []Tag{}
+func GetTagsByType(dao *daos.Dao, tagType string) (Tags, error) {
+	tags := Tags{}
 	err := dao.DB().
 		Select("*").
 		From("tags").
@@ -85,14 +96,38 @@ func GetTagOptionsByType(dao *daos.Dao, tagType string) (map[string]string, erro
 		All(&tags)
 
 	if err != nil {
-		return tagOptions, nil
+		return tags, err
 	}
 
-	for _, tag := range tags {
-		tagOptions[tag.Id] = tag.Name
+	return tags, nil
+}
+
+func GetAllTagsIntoType(dao *daos.Dao) (map[string]Tags, error) {
+	allTags := make(map[string]Tags)
+
+	for _, tagType := range []string{"medium", "style", "subject"} {
+		tags, err := GetTagsByType(dao, tagType)
+		if err != nil {
+			return allTags, err
+		}
+		allTags[tagType] = tags
 	}
 
-	return tagOptions, nil
+	return allTags, nil
+}
+
+func GetAllArtistTagsIntoTypeByArtistId(dao *daos.Dao, artistId string) (map[string]Tags, error) {
+	allTags := make(map[string]Tags)
+
+	for _, tagType := range []string{"medium", "style", "subject"} {
+		tags, err := IndexTagsByArtistIdAndType(dao, artistId, tagType)
+		if err != nil {
+			return allTags, err
+		}
+		allTags[tagType] = tags
+	}
+
+	return allTags, nil
 }
 
 func UpdateTagById(app core.App, c echo.Context, id string) (Tag, error) {
@@ -120,6 +155,7 @@ func UpdateTagById(app core.App, c echo.Context, id string) (Tag, error) {
 }
 
 func DeleteTagById(dao *daos.Dao, id string) error {
+	// TODO this also needs to delete any relevant tag relations
 	tag, err := dao.FindRecordById("tags", id)
 	if err != nil {
 		return err
@@ -156,8 +192,39 @@ func CreateTagRelation(app core.App, artist Artist, tag Tag) (TagRelation, error
 	return tagRelation, nil
 }
 
-func IndexTagsByArtistId(dao *daos.Dao, id string) ([]Tag, error) {
-	return []Tag{}, nil
+func IndexTagsByArtistId(dao *daos.Dao, id string) (Tags, error) {
+	tags := []Tag{}
+	err := dao.DB().
+		Select("artist_tags.tag_id", "artist_tags.artist_id", "tags.*").
+		From("artist_tags").
+		InnerJoin("tags", dbx.NewExp("artist_tags.tag_id=tags.id")).
+		Where(dbx.NewExp("artist_id={:id}", dbx.Params{"id": id})).
+		OrderBy("name DESC").
+		All(&tags)
+
+	if err != nil {
+		return tags, err
+	}
+
+	return tags, nil
+}
+
+func IndexTagsByArtistIdAndType(dao *daos.Dao, id string, tagType string) (Tags, error) {
+	tags := []Tag{}
+	err := dao.DB().
+		Select("artist_tags.tag_id", "artist_tags.artist_id", "tags.*").
+		From("artist_tags").
+		InnerJoin("tags", dbx.NewExp("artist_tags.tag_id=tags.id")).
+		Where(dbx.NewExp("artist_id={:id}", dbx.Params{"id": id})).
+		AndWhere(dbx.NewExp("type={:type}", dbx.Params{"type": tagType})).
+		OrderBy("name DESC").
+		All(&tags)
+
+	if err != nil {
+		return tags, err
+	}
+
+	return tags, nil
 }
 
 func RemoveTagRelation(dao *daos.Dao, artistId string, tagId string) error {

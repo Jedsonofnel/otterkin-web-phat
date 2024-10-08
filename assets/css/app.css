@@ -13,8 +13,8 @@
 @import "./dashboard.css";
 @import "./homepage.css";
 
-/* required by libraries */
-@import "./croppie.css";
+/* vendored */
+@import "./vendored/croppie.css";
 
 /* important for the box model */
 * {

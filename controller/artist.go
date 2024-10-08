@@ -53,12 +53,17 @@ func (hc HandlerContext) HandleArtistProfile(c echo.Context) error {
 		return err
 	}
 
-	tagOptions, err := model.GetTagOptionsByType(hc.e.App.Dao(), "medium")
+	tags, err := model.GetAllTagsIntoType(hc.e.App.Dao())
 	if err != nil {
 		return err
 	}
 
-	apd := view.NewArtistProfilePageData(artist, tagOptions)
+	artistTags, err := model.GetAllArtistTagsIntoTypeByArtistId(hc.e.App.Dao(), artist.Id)
+	if err != nil {
+		return err
+	}
+
+	apd := view.NewArtistProfilePageData(artist, tags, artistTags)
 	ld := layout.NewLayoutData(c, "Artist Profile - Otterkin")
 	return Render(c, http.StatusOK, view.ArtistProfilePage(ld, apd))
 }

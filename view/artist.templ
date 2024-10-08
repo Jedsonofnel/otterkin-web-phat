@@ -29,13 +29,15 @@ templ ArtistPage(ld layout.LayoutData, apd ArtistPageData) {
 // profile edit page
 type ArtistProfilePageData struct {
 	artist model.Artist
-  tagOptions map[string]string
+  tagOptions map[string]model.Tags
+  artistTags map[string]model.Tags
 }
 
-func NewArtistProfilePageData(artist model.Artist, tagOptions map[string]string) ArtistProfilePageData {
+func NewArtistProfilePageData(artist model.Artist, tagOptions map[string]model.Tags, artistTags map[string]model.Tags) ArtistProfilePageData {
 	return ArtistProfilePageData{
 		artist: artist,
     tagOptions: tagOptions,
+    artistTags: artistTags,
 	}
 }
 
@@ -57,17 +59,32 @@ templ ArtistProfilePage(ld layout.LayoutData, apd ArtistProfilePageData) {
 		</section>
 		<section>
 			<h2 class="dashboard-subtitle">Artist tags</h2>
-			@artistTagInputs(apd.artist, apd.tagOptions)
+			@artistTagInputs(apd)
 		</section>
 		@artistServicesTable()
 	}
 }
 
-templ artistTagInputs(artist model.Artist, tagOptions map[string]string) {
+templ artistTagInputs(apd ArtistProfilePageData) {
 	@components.DropdownMultiSelect(components.DropdownMultiSelectProps{
 		Name:    "mediums",
-		Options: tagOptions,
-    AddURL: fmt.Sprintf("/artist/profile/%s/tags", artist.Id),
+		Options: apd.tagOptions["medium"].ToMap(),
+    Selected: apd.artistTags["medium"].ToMap(),
+    AddURL: fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
+	})
+
+	@components.DropdownMultiSelect(components.DropdownMultiSelectProps{
+		Name:    "styles",
+		Options: apd.tagOptions["style"].ToMap(),
+    Selected: apd.artistTags["style"].ToMap(),
+    AddURL: fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
+	})
+
+	@components.DropdownMultiSelect(components.DropdownMultiSelectProps{
+		Name:    "subjects",
+		Options: apd.tagOptions["subject"].ToMap(),
+    Selected: apd.artistTags["subject"].ToMap(),
+    AddURL: fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
 	})
 }
 

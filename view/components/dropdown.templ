@@ -10,23 +10,25 @@ import (
 // to a junction table
 
 type DropdownMultiSelectProps struct {
-	Name     string
-	Options  map[string]string
-	AddURL   string
-	Selected []string
+	Name      string
+	Options   map[string]string
+	Selected  map[string]string
+	AddURL    string
+	DeleteURL string
 }
 
 templ DropdownMultiSelect(ddmsp DropdownMultiSelectProps) {
 	<div class="ddms">
 		<div class="ddms-header">
-			<p>Select things</p>
-			<div data-menu-wrapper>
+			<h4 class="ddms-header-title">Select { ddmsp.Name }</h4>
+			<div data-menu-wrapper class="ddms-select-container">
 				<button
 					type="button"
 					id={ fmt.Sprintf("dd-menubutton-%s", ddmsp.Name) }
 					aria-haspopup="menu"
 					aria-expanded="false"
 					aria-controls={ fmt.Sprintf("dd-menu-%s", ddmsp.Name) }
+					class="button dropdown dark"
 				>Add</button>
 				<ul
 					id={ fmt.Sprintf("dd-menu-%s", ddmsp.Name) }
@@ -35,6 +37,7 @@ templ DropdownMultiSelect(ddmsp DropdownMultiSelectProps) {
 					tabindex="-1"
 					aria-labelledby={ fmt.Sprintf("dd-menubutton-%s", ddmsp.Name) }
 					aria-activedescendant={ fmt.Sprintf("dd-mi-%s-1", ddmsp.Name) }
+					class="ddms-select-list"
 				>
 					for index, option := range ddmsp.Options {
 						<li id={ fmt.Sprintf("dd-mi-%s-%s", ddmsp.Name, index) } role="menuitem">
@@ -42,7 +45,10 @@ templ DropdownMultiSelect(ddmsp DropdownMultiSelectProps) {
 								hx-post={ strings.Join([]string{ddmsp.AddURL, fmt.Sprintf("?index=%s", index)}, "") }
 								hx-target={ fmt.Sprintf("#ddms-tags-%s", ddmsp.Name) }
 								hx-swap="beforeend"
-							>{ option }</button>
+								class="ddms-select-button"
+							>
+								{ option }
+							</button>
 						</li>
 					}
 				</ul>
@@ -50,12 +56,15 @@ templ DropdownMultiSelect(ddmsp DropdownMultiSelectProps) {
 		</div>
 		<div class="ddms-tag-container" id={ fmt.Sprintf("ddms-tags-%s", ddmsp.Name) }>
 			for _, option := range ddmsp.Selected {
-				<div>{ option } </div>
+				@DropdownMultiSelectTag(option)
 			}
 		</div>
 	</div>
 }
 
 templ DropdownMultiSelectTag(text string) {
-	<div>{ text }</div>
+	<div class="ddms-tag">
+		<p>{ text }</p>
+		<button class="ddms-tag-delete-button"></button>
+	</div>
 }
