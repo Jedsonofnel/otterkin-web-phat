@@ -120,6 +120,11 @@
   position: relative;
 }
 
+.ddms-select-list[hidden] {
+  display: none;
+  opacity: 0;
+}
+
 .ddms-select-list {
   position: absolute;
   top: 100%;
@@ -130,6 +135,8 @@
   max-height: 200px;
   overflow-y: auto;
   width: min(auto, 100px);
+
+  animation: fadeIn 150ms ease-in-out;
 }
 
 .ddms-select-button {

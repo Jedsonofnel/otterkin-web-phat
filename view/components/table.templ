@@ -108,9 +108,9 @@ templ TagTableRow(tag model.Tag) {
 						<button
 							class="table-contextmenu-button"
 							style="color:red;"
-							hx-delete={ fmt.Sprintf("/tag/%s", tag.Id) }
-							hx-target={ fmt.Sprintf("#table-tag-%s", tag.Type) }
-							hx-swap="outerHTML"
+							hx-get={ fmt.Sprintf("/tag/table/delete-modal/%s", tag.Id) }
+              hx-target="body"
+							hx-swap="beforeend"
 						>Delete</button>
 					</li>
 				</ul>

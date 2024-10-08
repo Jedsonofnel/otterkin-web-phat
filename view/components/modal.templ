@@ -8,3 +8,27 @@ templ Modal() {
 		</div>
 	</div>
 }
+
+type ConfirmDeleteModalProps struct {
+	Message    string
+	DeleteURL  string
+	SwapTarget string
+	SwapScheme string
+}
+
+templ ConfirmDeleteModal(cmdp ConfirmDeleteModalProps) {
+	@Modal() {
+		<p>
+			{ cmdp.Message }
+		</p>
+		<div class="modal-bottom">
+			<button class="button text" type="button" data-modal-close-btn >Cancel</button>
+			<button
+				class="button soft"
+				hx-delete={ cmdp.DeleteURL }
+				hx-target={ cmdp.SwapTarget }
+				hx-swap={ cmdp.SwapScheme }
+			>Delete</button>
+		</div>
+	}
+}

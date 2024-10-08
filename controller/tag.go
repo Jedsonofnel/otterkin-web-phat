@@ -49,6 +49,7 @@ func (hc HandlerContext) HandleTag(g *echo.Group) {
 	g.PUT("/:id", hc.HandleUpdateTag)
 
 	// deletion
+	g.GET("/table/delete-modal/:id", hc.HandleDeleteTagModal)
 	g.DELETE("/:id", hc.HandleDeleteTag)
 }
 
@@ -125,6 +126,21 @@ func (hc HandlerContext) HandleUpdateTag(c echo.Context) error {
 	}
 
 	return Render(c, http.StatusOK, components.TagTable(newTagTableProps(ts, tag.Type), tags, tag.Type))
+}
+
+func (hc HandlerContext) HandleDeleteTagModal(c echo.Context) error {
+	tag, err := model.GetTagById(hc.e.App.Dao(), c.PathParam("id"))
+	if err != nil {
+		return err
+	}
+
+	cmdp := components.ConfirmDeleteModalProps{
+		DeleteURL:  fmt.Sprintf("/tag/%s", tag.Id),
+		SwapTarget: fmt.Sprintf("#table-tag-%s", tag.Type),
+		Message:    fmt.Sprintf("Are you sure you want to delete this %s tag: \"%s\" ?  This tag will be removed from any artist currently using it!", tag.Type, tag.Name),
+	}
+
+	return Render(c, http.StatusOK, components.ConfirmDeleteModal(cmdp))
 }
 
 func (hc HandlerContext) HandleDeleteTag(c echo.Context) error {

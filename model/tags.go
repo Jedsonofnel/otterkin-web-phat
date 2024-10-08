@@ -157,8 +157,17 @@ func UpdateTagById(app core.App, c echo.Context, id string) (Tag, error) {
 }
 
 func DeleteTagById(dao *daos.Dao, id string) error {
-	// TODO this also needs to delete any relevant tag relations
 	tag, err := dao.FindRecordById("tags", id)
+	if err != nil {
+		return err
+	}
+
+	// delete any relevant tag relations
+	_, err = dao.DB().
+		NewQuery("DELETE FROM artist_tags WHERE tag_id = {:id}").
+		Bind(dbx.Params{"id": id}).
+		Execute()
+
 	if err != nil {
 		return err
 	}
