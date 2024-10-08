@@ -11,9 +11,6 @@ export default function menu(tree = document) {
 
     const isOpen = () => !menu.hidden
 
-    // make it all non-tabbable so we can manage focus ourselves
-    items.forEach((item) => item.setAttribute("tabindex", "-1"))
-
     function toggleMenu(open = !isOpen()) {
       if (open) {
         menu.hidden = false
@@ -24,6 +21,12 @@ export default function menu(tree = document) {
         button.setAttribute("aria-expanded", "false")
       }
     }
+
+    // make it all non-tabbable so we can manage focus ourselves
+    items.forEach((item) => {
+      item.addEventListener("click", () => toggleMenu(false))
+      item.setAttribute("tabindex", "-1")
+    })
 
     toggleMenu(isOpen())
     button.addEventListener("click", () => toggleMenu())
