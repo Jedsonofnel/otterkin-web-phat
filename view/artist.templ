@@ -54,12 +54,13 @@ templ ArtistProfilePage(ld layout.LayoutData, apd ArtistProfilePageData) {
 			<a href={ templ.URL(fmt.Sprintf("/artist/%s", apd.artist.Id)) }>See your profile</a>
 		</section>
 		<section class="dashboard-section">
-			<h2 class="dashboard-subtitle">Artist details</h2>
 			@artistUpdateForm(apd.artist)
 		</section>
-		<section>
-			<h2 class="dashboard-subtitle">Artist tags</h2>
-			@artistTagInputs(apd)
+		<section class="dashboard-section">
+      <div class="column-form">
+			  <h2 class="dashboard-subtitle">Artist tags</h2>
+			  @artistTagInputs(apd)
+      </div>
 		</section>
 		@artistServicesTable()
 	}
@@ -92,7 +93,8 @@ templ artistTagInputs(apd ArtistProfilePageData) {
 }
 
 templ artistUpdateForm(artist model.Artist) {
-	<form hx-put={ fmt.Sprintf("/artist/profile/%s", artist.Id) } class="profile-form">
+	<form hx-put={ fmt.Sprintf("/artist/profile/%s", artist.Id) } class="column-form">
+		<h2 class="dashboard-subtitle">Artist details</h2>
 		<div class="form-field">
 			<label for="instagram_handle">Instagram Handle</label>
 			<input

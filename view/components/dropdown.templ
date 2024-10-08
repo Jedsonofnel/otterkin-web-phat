@@ -55,12 +55,16 @@ templ DropdownMultiSelect(ddmsp DropdownMultiSelectProps) {
 			</div>
 		</div>
 		<div class="ddms-tag-container" id={ fmt.Sprintf("ddms-tags-%s", ddmsp.Name) }>
-			for index, option := range ddmsp.Selected {
-				@DropdownMultiSelectTag(
-					option,
-					strings.Join([]string{ddmsp.DeleteURL, fmt.Sprintf("?index=%s", index)}, ""),
-				)
-			}
+      if len(ddmsp.Selected) > 0 {
+			  for index, option := range ddmsp.Selected {
+			  	@DropdownMultiSelectTag(
+			  		option,
+			  		strings.Join([]string{ddmsp.DeleteURL, fmt.Sprintf("?index=%s", index)}, ""),
+			  	)
+			  }
+      } else {
+        <p>Go ahead, pick some {ddmsp.Name} that describe you!</p>
+      }
 		</div>
 	</div>
 }
