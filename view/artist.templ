@@ -28,16 +28,16 @@ templ ArtistPage(ld layout.LayoutData, apd ArtistPageData) {
 
 // profile edit page
 type ArtistProfilePageData struct {
-	artist model.Artist
-  tagOptions map[string]model.Tags
-  artistTags map[string]model.Tags
+	artist     model.Artist
+	tagOptions map[string]model.Tags
+	artistTags map[string]model.Tags
 }
 
 func NewArtistProfilePageData(artist model.Artist, tagOptions map[string]model.Tags, artistTags map[string]model.Tags) ArtistProfilePageData {
 	return ArtistProfilePageData{
-		artist: artist,
-    tagOptions: tagOptions,
-    artistTags: artistTags,
+		artist:     artist,
+		tagOptions: tagOptions,
+		artistTags: artistTags,
 	}
 }
 
@@ -57,10 +57,10 @@ templ ArtistProfilePage(ld layout.LayoutData, apd ArtistProfilePageData) {
 			@artistUpdateForm(apd.artist)
 		</section>
 		<section class="dashboard-section">
-      <div class="column-form">
-			  <h2 class="dashboard-subtitle">Artist tags</h2>
-			  @artistTagInputs(apd)
-      </div>
+			<div class="column-form">
+				<h2 class="dashboard-subtitle">Artist tags</h2>
+				@artistTagInputs(apd)
+			</div>
 		</section>
 		@artistServicesTable()
 	}
@@ -68,27 +68,25 @@ templ ArtistProfilePage(ld layout.LayoutData, apd ArtistProfilePageData) {
 
 templ artistTagInputs(apd ArtistProfilePageData) {
 	@components.DropdownMultiSelect(components.DropdownMultiSelectProps{
-		Name:    "mediums",
-		Options: apd.tagOptions["medium"].ToMap(),
-    Selected: apd.artistTags["medium"].ToMap(),
-    AddURL: fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
-    DeleteURL: fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
+		Name:      "mediums",
+		Options:   apd.tagOptions["medium"].ToMap(),
+		Selected:  apd.artistTags["medium"].ToMap(),
+		AddURL:    fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
+		DeleteURL: fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
 	})
-
 	@components.DropdownMultiSelect(components.DropdownMultiSelectProps{
-		Name:    "styles",
-		Options: apd.tagOptions["style"].ToMap(),
-    Selected: apd.artistTags["style"].ToMap(),
-    AddURL: fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
-    DeleteURL: fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
+		Name:      "styles",
+		Options:   apd.tagOptions["style"].ToMap(),
+		Selected:  apd.artistTags["style"].ToMap(),
+		AddURL:    fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
+		DeleteURL: fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
 	})
-
 	@components.DropdownMultiSelect(components.DropdownMultiSelectProps{
-		Name:    "subjects",
-		Options: apd.tagOptions["subject"].ToMap(),
-    Selected: apd.artistTags["subject"].ToMap(),
-    AddURL: fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
-    DeleteURL: fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
+		Name:      "subjects",
+		Options:   apd.tagOptions["subject"].ToMap(),
+		Selected:  apd.artistTags["subject"].ToMap(),
+		AddURL:    fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
+		DeleteURL: fmt.Sprintf("/artist/profile/%s/tags", apd.artist.Id),
 	})
 }
 
@@ -144,7 +142,10 @@ func NewArtistGalleryPageData(artist model.Artist, artworks []model.Artwork) Art
 
 templ ArtistProfileGalleryPage(ld layout.LayoutData, agd ArtistGalleryPageData) {
 	@layout.Dashboard(ld, "artist-gallery") {
-		<h1 class="dashboard-title">Your gallery</h1>
+		<section class="dashboard-section fw">
+			<h1 class="dashboard-title">Your gallery</h1>
+			<p>Upload your artwork for patrons to get a little taste of what you're capable of.</p>
+		</section>
 		<section class="dashboard-section">
 			<form
 				hx-post={ fmt.Sprintf("/artist/profile/%s/gallery", agd.artist.Id) }

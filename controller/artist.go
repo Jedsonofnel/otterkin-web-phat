@@ -16,8 +16,7 @@ import (
 // Artist profile main page (where you can change artist-specific info)
 // Artist profile gallery page (where an artist can upload images)
 // Artist public page (for people to look/read about/commission an artist)
-func (hc HandlerContext) HandleArtist(g *echo.Group) {
-	// public artist page
+func (hc HandlerContext) HandleArtist(g *echo.Group) { // public artist page
 	g.GET("/:id", hc.HandleArtistPage)
 
 	// artist profile settings

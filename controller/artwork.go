@@ -14,7 +14,7 @@ import (
 
 func artworkUrl(artwork model.Artwork) string {
 	return fmt.Sprintf(
-		"/api/files/artwork/%s/%s",
+		"/api/files/artworks/%s/%s",
 		artwork.Id,
 		artwork.Image,
 	)

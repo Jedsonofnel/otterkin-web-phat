@@ -96,6 +96,8 @@ func (hc HandlerContext) HandleCreateTag(c echo.Context) error {
 		return err
 	}
 
+	// required to close a modal
+	c.Response().Header().Set("data-modal-close", "true")
 	return Render(c, http.StatusOK, components.TagTable(newTagTableProps(ts, tag.Type), tags, tag.Type))
 }
 
@@ -125,6 +127,7 @@ func (hc HandlerContext) HandleUpdateTag(c echo.Context) error {
 		return err
 	}
 
+	c.Response().Header().Set("data-modal-close", "true")
 	return Render(c, http.StatusOK, components.TagTable(newTagTableProps(ts, tag.Type), tags, tag.Type))
 }
 
@@ -165,5 +168,6 @@ func (hc HandlerContext) HandleDeleteTag(c echo.Context) error {
 		return err
 	}
 
+	c.Response().Header().Set("data-modal-close", "true")
 	return Render(c, http.StatusOK, components.TagTable(newTagTableProps(ts, tag.Type), tags, tag.Type))
 }

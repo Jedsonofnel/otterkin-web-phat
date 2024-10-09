@@ -10,7 +10,7 @@ import (
 )
 
 type Artwork struct {
-	Id          string `db:"image_id"`
+	Id          string `db:"artwork_id"`
 	Title       string `db:"title" json:"title"`
 	Description string `db:"description" json:"description"`
 	Image       string `db:"image"`

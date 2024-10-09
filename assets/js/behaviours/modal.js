@@ -21,9 +21,8 @@ export default function modal(tree = document) {
       })
 
       document.addEventListener("htmx:beforeSwap", (evt) => {
-        // crude but if there is a modal and there is a 200 htmx swap
-        // then close the modal
-        if (evt.detail.xhr.status === 200) {
+        // if the response includes this header close the modal
+        if (evt.detail.xhr.getResponseHeader("data-modal-close")) {
           if (modal) {
             closeModal()
           }
