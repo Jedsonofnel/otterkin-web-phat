@@ -5,29 +5,26 @@ import (
 	"github.com/Jedsonofnel/otterkin-web/view/layout"
 )
 
-// TODO use aria-ispage for selection
-// TODO also replace with anchor tags
 templ RegisterPatron(ld layout.LayoutData) {
 	@layout.Default(ld) {
 		<div class="registration-wrapper">
 			<h1 class="registration-header">I AM A...</h1>
-			<div class="registration-selection">
-				<button hx-get="/auth/register/artist" hx-target="body">Artist</button>
-				<button hx-get="/auth/register/patron" hx-target="body" class="selected" disabled>Patron</button>
+			<div class="registration-selection" hx-boost="true">
+				<a href="/auth/register/artist" class="registration-selection-btn" aria-current="false">Artist</a>
+				<a href="/auth/register/patron" class="registration-selection-btn" aria-current="page" disabled>Patron</a>
 			</div>
 			@PatronForm()
 		</div>
 	}
 }
 
-// TODO replace with anchor tags
 templ RegisterArtist(ld layout.LayoutData) {
 	@layout.Default(ld) {
 		<div class="registration-wrapper">
 			<h1 class="registration-header">I AM AN...</h1>
-			<div class="registration-selection">
-				<button hx-get="/auth/register/artist" hx-target="body" class="selected" disabled>Artist</button>
-				<button hx-get="/auth/register/patron" hx-target="body">Patron</button>
+			<div class="registration-selection" hx-boost="true">
+				<a href="/auth/register/artist" class="registration-selection-btn" aria-current="page" disabled>Artist</a>
+				<a href="/auth/register/patron" class="registration-selection-btn" aria-current="false">Patron</a>
 			</div>
 			@ArtistForm()
 		</div>
