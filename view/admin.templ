@@ -20,19 +20,25 @@ templ AdminArtistPageResponse(ld layout.LayoutData, apd AdminPageData) {
 	@layout.Dashboard(ld, "admin-artists") {
 		<section class="dashboard-section fw" hx-boost="true">
 			<h1>Artist management</h1>
-			<p>See the artist that have just registered and approve their application here</p>
+			<p>See the artist that have just registered and approve their application here.</p>
 		</section>
-		<table>
-			<tr>
-				<th>Name</th>
-				<th>Insta handle</th>
-				<th>Email</th>
-				<th>Approved</th>
-			</tr>
-			for _, artist := range apd.artists {
-				@ArtistRow(artist)
-			}
-		</table>
+		<section class="dashboard-section fw">
+			<table>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Insta handle</th>
+						<th>Email</th>
+						<th>Approved</th>
+					</tr>
+				</thead>
+				<tbody>
+					for _, artist := range apd.artists {
+						@ArtistRow(artist)
+					}
+				</tbody>
+			</table>
+		</section>
 	}
 }
 
