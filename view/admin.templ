@@ -18,7 +18,10 @@ func NewAdminPageData(artists []model.Artist, user model.User) AdminPageData {
 
 templ AdminArtistPageResponse(ld layout.LayoutData, apd AdminPageData) {
 	@layout.Dashboard(ld, "admin-artists") {
-		<h1>Artists:</h1>
+		<section class="dashboard-section fw" hx-boost="true">
+			<h1>Artist management</h1>
+			<p>See the artist that have just registered and approve their application here</p>
+		</section>
 		<table>
 			<tr>
 				<th>Name</th>

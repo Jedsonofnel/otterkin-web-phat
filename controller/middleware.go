@@ -16,7 +16,7 @@ func OnlyUnauthorisedUsers(next echo.HandlerFunc) echo.HandlerFunc {
 		// ie if there is a valid auth record, redirect
 		if ok {
 			SetFlash(c, "error", "Don't be silly - you're already logged in!")
-			return c.Redirect(http.StatusTemporaryRedirect, "/")
+			return hxRedirect(c, http.StatusForbidden, "/")
 		}
 
 		return next(c)
@@ -28,7 +28,7 @@ func OnlyTheCorrespondingUser(next echo.HandlerFunc) echo.HandlerFunc {
 		authRecord, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
 		if !ok || authRecord.Id != c.PathParam("id") {
 			SetFlash(c, "error", "Don't be silly - you don't have approval to go in there!")
-			return c.Redirect(http.StatusTemporaryRedirect, "/")
+			return hxRedirect(c, http.StatusForbidden, "/")
 		}
 
 		return next(c)
@@ -43,7 +43,7 @@ func OnlyTheCorrespondingArtist(app core.App) echo.MiddlewareFunc {
 
 			if !ok || err != nil || user.Id != artist.User.Id {
 				SetFlash(c, "error", "Don't be silly - you don't have approval to go in there!")
-				return c.Redirect(http.StatusTemporaryRedirect, "/")
+				return hxRedirect(c, http.StatusForbidden, "/")
 			}
 
 			return next(c)
@@ -58,7 +58,7 @@ func OnlyTheOwnerArtist(app core.App) echo.MiddlewareFunc {
 			artwork, err := model.GetArtworkById(app.Dao(), c.PathParam("id"))
 			if !ok || err != nil || authRecord.Id != artwork.UserId {
 				SetFlash(c, "error", "Don't be silly - you don't have approval to go in there!")
-				return c.Redirect(http.StatusTemporaryRedirect, "/")
+				return hxRedirect(c, http.StatusForbidden, "/")
 			}
 
 			return next(c)
@@ -71,7 +71,7 @@ func OnlyAdmins(next echo.HandlerFunc) echo.HandlerFunc {
 		user, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
 		if !ok || user.Role != "admin" {
 			SetFlash(c, "error", "Don't be silly - you don't have approval to go in there!")
-			hxRedirect(c, http.StatusForbidden)
+			return hxRedirect(c, http.StatusForbidden, "/")
 		}
 
 		return next(c)
@@ -83,7 +83,7 @@ func OnlyArtists(next echo.HandlerFunc) echo.HandlerFunc {
 		user, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
 		if !ok || user.Role != "artist" {
 			SetFlash(c, "error", "Don't be silly - you don't have approval to go in there!")
-			return c.Redirect(http.StatusTemporaryRedirect, "/")
+			return hxRedirect(c, http.StatusForbidden, "/")
 		}
 		return next(c)
 	}

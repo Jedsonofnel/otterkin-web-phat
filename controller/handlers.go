@@ -30,13 +30,11 @@ func (hc HandlerContext) HandleHomePage(c echo.Context) error {
 	return Render(c, http.StatusOK, view.HomePage(ld, hd))
 }
 
-// TODO fix this by using hxRedirect
 func (hc HandlerContext) HandleProfilePage(c echo.Context) error {
-	authRecord, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
-	if !ok || authRecord.Id == "" {
-		c.Response().Header().Set("Hx-Location", "/auth")
-		return Render(c, http.StatusUnauthorized, layout.RedirectPage())
+	user, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
+	if !ok || user.Id == "" {
+		return hxRedirect(c, http.StatusUnauthorized, "/auth")
 	}
-	c.Response().Header().Set("Hx-Location", fmt.Sprintf("/user/profile/%s", authRecord.Id))
-	return Render(c, http.StatusOK, layout.RedirectPage())
+
+	return hxRedirect(c, http.StatusOK, fmt.Sprintf("/user/profile/%s", user.Id))
 }

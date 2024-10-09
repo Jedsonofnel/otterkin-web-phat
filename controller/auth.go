@@ -46,7 +46,6 @@ func (h HandlerContext) HandleLoginPost(c echo.Context) error {
 	return nil
 }
 
-// TODO use hxRedirect to redirect
 func (h HandlerContext) HandleRegisterPage(c echo.Context) error {
 	ld := layout.NewLayoutData(c, "Register - Otterkin")
 	return Render(c, http.StatusOK, view.RegisterArtist(ld))
@@ -69,9 +68,7 @@ func (h HandlerContext) HandleCreatePatron(c echo.Context) error {
 	}
 
 	SetFlash(c, "info", "Registered - welcome!")
-	c.Response().Header().Set("Hx-Redirect", "/")
-	c.Response().WriteHeader(http.StatusOK)
-	return nil
+	return hxRedirect(c, http.StatusOK, "/")
 }
 
 func (h HandlerContext) HandleCreateArtist(c echo.Context) error {
@@ -81,16 +78,12 @@ func (h HandlerContext) HandleCreateArtist(c echo.Context) error {
 	}
 
 	SetFlash(c, "info", "Registered - welcome!")
-	c.Response().Header().Set("Hx-Redirect", "/")
-	c.Response().WriteHeader(http.StatusOK)
-	return nil
+	return hxRedirect(c, http.StatusOK, "/")
 }
 
 func (hc HandlerContext) HandleLogout(c echo.Context) error {
 	auth.Logout(c)
 
 	SetFlash(c, "info", "Logged out!")
-	c.Response().Header().Set("Hx-Redirect", "/")
-	c.Response().WriteHeader(http.StatusOK)
-	return nil
+	return hxRedirect(c, http.StatusOK, "/")
 }
