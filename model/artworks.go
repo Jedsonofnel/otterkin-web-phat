@@ -33,7 +33,7 @@ func CreateArtwork(app core.App, c echo.Context) (Artwork, error) {
 		return Artwork{}, err
 	}
 
-	return GetArtworkById(app.Dao(), artworks.Id)
+	return GetArtworkById(app.Dao(), newArtwork.Id)
 }
 
 func GetArtworkById(dao *daos.Dao, id string) (Artwork, error) {

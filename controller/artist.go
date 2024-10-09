@@ -27,7 +27,9 @@ func (hc HandlerContext) HandleArtist(g *echo.Group) { // public artist page
 
 	// gallery stuff
 	g.GET("/profile/:id/gallery", hc.HandleArtistProfileGallery, OnlyArtists, OnlyTheCorrespondingUser, LoadFlash)
-	g.POST("/profile/:id/gallery", hc.HandleCreateArtistImage, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
+	g.GET("/profile/:id/gallery/add-modal", hc.HandleCreateArtworkModal, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
+	g.POST("/profile/:id/gallery", hc.HandleCreateArtwork, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
+
 }
 
 func (hc HandlerContext) HandleArtistPage(c echo.Context) error {
@@ -129,13 +131,23 @@ func (hc HandlerContext) HandleArtistProfileGallery(c echo.Context) error {
 	return Render(c, http.StatusOK, view.ArtistProfileGalleryPage(ld, apd))
 }
 
-func (hc HandlerContext) HandleCreateArtistImage(c echo.Context) error {
+func (hc HandlerContext) HandleCreateArtworkModal(c echo.Context) error {
+	artist, err := model.GetArtistByArtistId(hc.e.App.Dao(), c.PathParam("id"))
+	if err != nil {
+		return err
+	}
+	return Render(c, http.StatusOK, view.ArtistGalleryAddModal(artist))
+}
+
+func (hc HandlerContext) HandleCreateArtwork(c echo.Context) error {
 	artwork, err := model.CreateArtwork(hc.e.App, c)
 	if err != nil {
+		fmt.Printf("err: %v\n", err)
 		errMap := auth.GetMapOfErrs(err)
-		return Render(c, http.StatusUnprocessableEntity, view.GalleryFormError(errMap))
+		return Render(c, http.StatusUnprocessableEntity, view.ArtistGalleryFormError(errMap))
 	}
 
 	// if not we want to append the artist card to the thing
-	return Render(c, http.StatusOK, view.GalleryFormSuccess(artwork))
+	c.Response().Header().Add("data-modal-close", "true")
+	return Render(c, http.StatusOK, view.EditableImage(artwork))
 }

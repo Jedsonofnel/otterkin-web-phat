@@ -6,6 +6,18 @@
   gap: var(--crotchet);
 }
 
+.split-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--crotchet);
+
+  & > * {
+    flex: auto 1 1;
+    margin: 0 auto;
+  }
+}
+
 /* dropdown multiselct */
 .ddms-header {
   display: flex;
