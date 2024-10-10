@@ -22,6 +22,13 @@
   }
 }
 
+.image-modal-container {
+  position: absolute;
+  top: 10vh;
+  height: 80vh;
+  width: min(800px 100%);
+}
+
 .image-wrapper-fullsize {
   height: 100%;
   width: 100%;
@@ -30,6 +37,7 @@
     width: 100%;
     display: block;
     object-fit: contain;
+    object-position: 50% 50%;
   }
 }
 
@@ -40,10 +48,83 @@
 }
 
 /* artist gallery */
-.editable-image-button {
-  background: none;
-  border: none;
-  padding: none;
+.editable-artwork-container {
+  position: relative;
 
+  &:hover > .editable-artwork-edit-btn,
+  &:hover > .editable-artwork-expand-btn {
+    opacity: 1;
+  }
+}
+
+.editable-artwork-edit-btn {
+  --size: 25px;
+  position: absolute;
+  top: var(--quaver);
+  right: var(--quaver);
+  opacity: 0;
+
+  display: block;
+  height: var(--size);
+  width: var(--size);
+  border-radius: 50%;
+  border: none;
+  background-color: rgb(from var(--bg) r g b / 1);
   cursor: pointer;
+
+  &:hover {
+    background-color: var(--grey-100);
+  }
+}
+
+.artwork-contextbtn-icon {
+  display: block;
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+  background-color: var(--fg);
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  transform: translateY(-2.5px);
+
+  &::before,
+  &::after {
+    display: block;
+    content: "";
+    height: 5px;
+    width: 5px;
+    border-radius: 50%;
+    background-color: var(--fg);
+  }
+
+  &::before {
+    transform: translateY(-7.5px);
+  }
+  &::after {
+    transform: translateY(2.5px);
+  }
+}
+
+.editable-artwork-expand-btn {
+  --size: 25px;
+  position: absolute;
+  top: var(--quaver);
+  left: var(--quaver);
+  opacity: 0;
+
+  display: block;
+  height: var(--size);
+  width: var(--size);
+  border-radius: 50%;
+  border: none;
+  background-color: rgb(from var(--bg) r g b / 1);
+  cursor: pointer;
+  color: var(--fg);
+  font-size: 1rem;
+
+  &:hover {
+    background-color: var(--grey-100);
+  }
 }

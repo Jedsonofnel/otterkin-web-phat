@@ -10,6 +10,13 @@ templ Modal() {
 	</div>
 }
 
+templ ModalBase() {
+	<div id="modal" data-modal>
+		<div data-modal-underlay class="modal-underlay"></div>
+		{ children... }
+	</div>
+}
+
 type ConfirmDeleteModalProps struct {
 	Message    string
 	DeleteURL  string
@@ -23,7 +30,7 @@ templ ConfirmDeleteModal(cmdp ConfirmDeleteModalProps) {
 			{ cmdp.Message }
 		</p>
 		<div class="modal-bottom">
-			<button class="button text" type="button" data-modal-close-btn >Cancel</button>
+			<button class="button text" type="button" data-modal-close-btn>Cancel</button>
 			<button
 				class="button soft"
 				hx-delete={ cmdp.DeleteURL }

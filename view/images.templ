@@ -3,20 +3,31 @@ package view
 import (
 	"fmt"
 	"github.com/Jedsonofnel/otterkin-web/model"
+	"github.com/Jedsonofnel/otterkin-web/view/components"
 	"github.com/Jedsonofnel/otterkin-web/view/layout"
 )
 
 templ EditableArtwork(artwork model.Artwork) {
-	<button
-		id={ fmt.Sprintf("editable-artwork-%s", artwork.Id) }
-		class="editable-image-button"
-		hx-get={ fmt.Sprintf("/artwork/%s/update-modal", artwork.Id) }
-		hx-target="body"
-		hx-swap="beforeend"
-		hx-trigger="click"
-	>
+	<div class="editable-artwork-container">
+		<button
+			id={ fmt.Sprintf("editable-artwork-%s", artwork.Id) }
+			class="editable-artwork-edit-btn"
+			hx-get={ fmt.Sprintf("/artwork/%s/update-modal", artwork.Id) }
+			hx-target="body"
+			hx-swap="beforeend"
+		>
+			<span class="artwork-contextbtn-icon"></span>
+		</button>
+		<button
+			class="editable-artwork-expand-btn"
+			hx-get={ fmt.Sprintf("/artwork/%s?modal=true", artwork.Id) }
+			hx-target="body"
+			hx-swap="beforeend"
+		>
+			<i class="at-move-down-up-arrows-bold"></i>
+		</button>
 		@LoadImageSquare(fmt.Sprintf("/artwork/%s", artwork.Id))
-	</button>
+	</div>
 }
 
 templ replaceEditableImage(artwork model.Artwork) {
@@ -26,8 +37,8 @@ templ replaceEditableImage(artwork model.Artwork) {
 }
 
 templ ArtworkUpdateSuccess(artwork model.Artwork) {
-  @replaceEditableImage(artwork)
-  @layout.FlashInfo("Image updated!")
+	@replaceEditableImage(artwork)
+	@layout.FlashInfo("Image updated!")
 }
 
 templ artistGallery() {
@@ -46,6 +57,14 @@ templ LoadImageSquare(url string) {
 	<div hx-get={ url } hx-trigger="revealed" class="image-wrapper-square" hx-swap="innerHTML" hx-target="this">
 		<img alt="Image loading..." class="htmx-indicator image-placeholder"/>
 	</div>
+}
+
+templ ImageModal(url string) {
+	@components.ModalBase() {
+		<div class="image-modal-container" data-modal-close-btn>
+			@LoadImage(url)
+		</div>
+	}
 }
 
 templ Image(url string, alt string) {

@@ -33,8 +33,14 @@ func (hc HandlerContext) HandleGetArtwork(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	url := artworkUrl(artwork)
-	return Render(c, http.StatusOK, view.Image(url, artwork.Description))
+
+	// if modal then return modal
+	if c.QueryParam("modal") == "true" {
+		return Render(c, http.StatusOK, view.ImageModal(fmt.Sprintf("/artwork/%s", artwork.Id)))
+	}
+
+	imgUrl := artworkUrl(artwork)
+	return Render(c, http.StatusOK, view.Image(imgUrl, artwork.Description))
 }
 
 func (hc HandlerContext) HandleArtworkUpdateModal(c echo.Context) error {
