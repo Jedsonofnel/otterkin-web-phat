@@ -1,7 +1,10 @@
 package components
 
+import "fmt"
+
 type ToggleButtonProps struct {
 	Value     bool
+	Name      string
 	TrueText  string
 	FalseText string
 }
@@ -15,17 +18,29 @@ func boolToStr(value bool) string {
 }
 
 templ ToggleButton(tbp ToggleButtonProps) {
-	<label data-toggle-btn class="toggle-button-wrapper" for="visible-checkbox">
+	<label data-toggle-btn class="toggle-button-wrapper">
 		if tbp.Value {
-			<input role="switch" type="checkbox" name="visible" id="visible-checkbox" class="toggle-checkbox" checked/>
+			<input
+				role="switch"
+				type="checkbox"
+				name={ fmt.Sprintf("toggle-%s", tbp.Name) }
+				class="toggle-checkbox"
+				checked
+			/>
 			<span data-toggle-btn-switch class="toggle-button"></span>
 			<span data-toggle-btn-true>{ tbp.TrueText }</span>
 			<span data-toggle-btn-false hidden>{ tbp.FalseText }</span>
 		} else {
-			<input role="switch" type="checkbox" name="visible" id="visible-checkbox" class="toggle-button"/>
+			<input
+				role="switch"
+				type="checkbox"
+				name={ fmt.Sprintf("toggle-%s", tbp.Name) }
+				class="toggle-checkbox"
+			/>
 			<span data-toggle-btn-switch data-toggle-btn-off class="toggle-button"></span>
 			<span data-toggle-btn-true hidden>{ tbp.TrueText }</span>
 			<span data-toggle-btn-false>{ tbp.FalseText }</span>
 		}
+		<input type="hidden" name={ tbp.Name } value={ boolToStr(tbp.Value) }/>
 	</label>
 }

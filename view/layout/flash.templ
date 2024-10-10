@@ -17,19 +17,19 @@ templ FlashMessages(flashError string, flashInfo string) {
 }
 
 templ FlashError(message string) {
-	<div id="flash-container" hx-swap-oob="beforeend" class="info flash">
+	<template hx-swap-oob="beforeend:#flash-container">
 		<div class="error flash" data-flash-msg>
 			{ message }
 			<button class="flash-close"></button>
 		</div>
-	</div>
+	</template>
 }
 
 templ FlashInfo(message string) {
-	<div id="flash-container" hx-swap-oob="beforeend">
+	<template hx-swap-oob="beforeend:#flash-container">
 		<div class="info flash" data-flash-msg>
 			{ message }
 			<button class="flash-close"></button>
 		</div>
-	</div>
+	</template>
 }

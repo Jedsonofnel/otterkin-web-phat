@@ -149,5 +149,5 @@ func (hc HandlerContext) HandleCreateArtwork(c echo.Context) error {
 
 	// if not we want to append the artist card to the thing
 	c.Response().Header().Add("data-modal-close", "true")
-	return Render(c, http.StatusOK, view.EditableImage(artwork))
+	return Render(c, http.StatusOK, view.EditableArtwork(artwork))
 }

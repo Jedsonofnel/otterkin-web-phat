@@ -22,8 +22,9 @@ func artworkUrl(artwork model.Artwork) string {
 
 func (hc HandlerContext) HandleArtwork(g *echo.Group) {
 	g.GET("/:id", hc.HandleGetArtwork)
-	g.GET("/edit/:id", hc.HandleGetArtworkUpdateModal, OnlyTheOwnerArtist(hc.e.App))
-	g.PUT("/edit/:id", hc.HandleUpdateArtwork, OnlyTheOwnerArtist(hc.e.App))
+
+	g.GET("/:id/update-modal", hc.HandleArtworkUpdateModal, OnlyTheOwnerArtist(hc.e.App))
+	g.PUT("/:id", hc.HandleUpdateArtwork, OnlyTheOwnerArtist(hc.e.App))
 	g.DELETE("/:id", hc.HandleDeleteArtwork, OnlyTheOwnerArtist(hc.e.App))
 }
 
@@ -36,38 +37,34 @@ func (hc HandlerContext) HandleGetArtwork(c echo.Context) error {
 	return Render(c, http.StatusOK, view.Image(url, artwork.Description))
 }
 
-func (hc HandlerContext) HandleGetArtworkUpdateModal(c echo.Context) error {
+func (hc HandlerContext) HandleArtworkUpdateModal(c echo.Context) error {
+	// get current artist
+	user, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
+	if !ok {
+		return fmt.Errorf("Error getting auth record")
+	}
+	artist, err := model.GetArtistByUserId(hc.e.App.Dao(), user.Id)
+	if err != nil {
+		return err
+	}
+
 	artwork, err := model.GetArtworkById(hc.e.App.Dao(), c.PathParam("id"))
 	if err != nil {
 		return err
 	}
 
-	return Render(c, http.StatusOK, view.ImageModal(artwork))
+	return Render(c, http.StatusOK, view.ArtistGalleryUpdateModal(artist, artwork))
 }
 
 func (hc HandlerContext) HandleUpdateArtwork(c echo.Context) error {
-	_, err := model.UpdateArtworkById(hc.e.App, c, c.PathParam("id"))
+	artwork, err := model.UpdateArtworkById(hc.e.App, c, c.PathParam("id"))
 	if err != nil {
 		errMap := auth.GetMapOfErrs(err)
-		return Render(c, http.StatusUnprocessableEntity, view.ImageUpdateError(errMap))
+		return Render(c, http.StatusUnprocessableEntity, view.ArtistGalleryFormError(errMap))
 	}
 
-	// this is safe as we have middleware
-	user := c.Get(apis.ContextAuthRecordKey).(model.User)
-	artist, err := model.GetArtistByUserId(hc.e.App.Dao(), user.Id)
-	if err != nil {
-		return err
-	}
-	artworks, err := model.GetArtworksByArtistId(hc.e.App.Dao(), artist.Id)
-	if err != nil {
-		return err
-	}
-
-	SetFlash(c, "info", "Updated image!")
-	agd := view.NewArtistGalleryPageData(artist, artworks)
-	ld := layout.NewLayoutData(c, "Artist Gallery - Otterkin")
-	c.Response().Header().Set("Hx-Location", fmt.Sprintf("/artist/profile/%s/gallery", user.Id))
-	return Render(c, http.StatusOK, view.ArtistProfileGalleryPage(ld, agd))
+	c.Response().Header().Add("data-modal-close", "true")
+	return Render(c, http.StatusOK, view.ArtworkUpdateSuccess(artwork))
 }
 
 func (hc HandlerContext) HandleDeleteArtwork(c echo.Context) error {

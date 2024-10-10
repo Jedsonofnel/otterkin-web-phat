@@ -149,20 +149,17 @@ templ ArtistProfileGalleryPage(ld layout.LayoutData, agd ArtistGalleryPageData) 
 		<section class="dashboard-section fw">
 			<h1 class="dashboard-title">Your gallery</h1>
 			<p>Upload your artwork for patrons to get a little taste of what you're capable of.</p>
+			<button
+				class="button soft"
+				hx-get={ fmt.Sprintf("/artist/profile/%s/gallery/add-modal", agd.artist.Id) }
+				hx-target="body"
+				hx-swap="beforeend"
+			>Add</button>
 		</section>
 		<section class="dashboard-section fw">
-			<div class="dashboard-subtitle-container">
-				<h2 class="dashboard-subtitle">Your artwork</h2>
-				<button
-					class="button soft"
-					hx-get={ fmt.Sprintf("/artist/profile/%s/gallery/add-modal", agd.artist.Id) }
-					hx-target="body"
-					hx-swap="beforeend"
-				>Add</button>
-			</div>
 			@artistGallery() {
 				for _, image := range agd.artworks {
-					@EditableImage(image)
+					@EditableArtwork(image)
 				}
 			}
 		</section>
@@ -171,41 +168,89 @@ templ ArtistProfileGalleryPage(ld layout.LayoutData, agd ArtistGalleryPageData) 
 
 templ ArtistGalleryAddModal(artist model.Artist) {
 	@components.Modal() {
-		<form
-			hx-post={ fmt.Sprintf("/artist/profile/%s/gallery", artist.Id) }
-			enctype="multipart/form-data"
-			hx-target="#artist-gallery"
-			hx-swap="beforeend"
-			data-image-preview-form
-		>
-			<div class="split-form">
-				<div class="column-form">
-					<h2 class="dashboard-subtitle">Add your artwork</h2>
-					<div class="form-field">
-						<label for="title">Title</label>
-						<input class="text-input" id="title" name="title" type="text"/>
-					</div>
-					<div class="form-field">
-						<label for="description">Description (optional)</label>
-						<textarea class="textarea-input" id="description" name="description" rows="3" maxlength="128"></textarea>
-					</div>
-					<input type="hidden" name="visible" value="true"/>
-					<input type="hidden" name="artist_id" value={ artist.Id }/>
-					<div class="form-field">
-						<label for="image" hidden="true">Image</label>
-						<input id="image" class="file-input" name="image" type="file" accept="image/*" data-image-preview-input/>
-					</div>
-				</div>
-				<div class="gallery-preview-container">
-					<img data-image-preview-img class="image-preview"/>
-				</div>
-			</div>
-			<div class="modal-bottom">
-				<button type="button" class="button text" data-modal-close-btn>Close</button>
-				<input class="button soft" type="submit" value="Add image"/>
-			</div>
-		</form>
+		@artistGalleryForm(artist, model.Artwork{}, false)
 	}
+}
+
+templ ArtistGalleryUpdateModal(artist model.Artist, artwork model.Artwork) {
+	@components.Modal() {
+		@artistGalleryForm(artist, artwork, true)
+	}
+}
+
+templ artistGalleryForm(
+	artist model.Artist,
+	artwork model.Artwork,
+	updateForm bool,
+) {
+	<form
+		if updateForm {
+			hx-put={ fmt.Sprintf("/artwork/%s", artwork.Id) }
+		} else {
+			hx-post={ fmt.Sprintf("/artist/profile/%s/gallery", artist.Id) }
+		}
+		enctype="multipart/form-data"
+		hx-target="#artist-gallery"
+		hx-swap="beforeend"
+		data-image-preview-form
+	>
+		<div class="split-form">
+			<div class="column-form">
+				<h2 class="dashboard-subtitle">
+					if updateForm {
+						Update your artwork
+					} else {
+						Add your artwork
+					}
+				</h2>
+				<div class="form-field">
+					<label for="title">Title</label>
+					<input class="text-input" id="title" name="title" type="text" value={ artwork.Title }/>
+				</div>
+				<div class="form-field">
+					<label for="description">Description (optional)</label>
+					<textarea class="textarea-input" id="description" name="description" rows="3" maxlength="128">
+						{ artwork.Description }
+					</textarea>
+				</div>
+				if updateForm {
+					<div class="form-field">
+						@components.ToggleButton(components.ToggleButtonProps{
+							Value:     artwork.Visible,
+							Name:      "visible",
+							TrueText:  "Visible",
+							FalseText: "Hidden",
+						})
+					</div>
+				} else {
+					<input type="hidden" name="visible" value="true"/>
+				}
+				<input type="hidden" name="artist_id" value={ artist.Id }/>
+				<div class="form-field">
+					<label for="image" hidden="true">Image</label>
+					<input id="image" class="file-input" name="image" type="file" accept="image/*" data-image-preview-input/>
+				</div>
+			</div>
+			<div class="gallery-preview-container">
+				<img
+					data-image-preview-img
+					if artwork.Id !="" {
+						src={ fmt.Sprintf("/api/files/artworks/%s/%s", artwork.Id,
+        artwork.Image) }
+					}
+					class="image-preview"
+				/>
+			</div>
+		</div>
+		<div class="modal-bottom">
+			<button type="button" class="button text" data-modal-close-btn>Close</button>
+			if updateForm {
+				<input class="button primary" type="submit" value="Update image"/>
+			} else {
+				<input class="button primary" type="submit" value="Add image"/>
+			}
+		</div>
+	</form>
 }
 
 templ ArtistGalleryFormError(errMap map[string]string) {

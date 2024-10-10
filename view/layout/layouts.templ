@@ -65,5 +65,6 @@ templ Dashboard(ld LayoutData, page string) {
 				{ children... }
 			</main>
 		</div>
+		@FlashMessages(ld.flashError, ld.flashInfo)
 	}
 }

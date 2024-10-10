@@ -1,6 +1,8 @@
 package model
 
 import (
+	"fmt"
+
 	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"
@@ -11,8 +13,8 @@ import (
 
 type Artwork struct {
 	Id          string `db:"artwork_id"`
-	Title       string `db:"title" json:"title"`
-	Description string `db:"description" json:"description"`
+	Title       string `db:"title"`
+	Description string `db:"description"`
 	Image       string `db:"image"`
 	Visible     bool   `db:"visible"`
 	ArtistId    string `db:"artist_id"`
@@ -90,19 +92,10 @@ func UpdateArtworkById(app core.App, c echo.Context, id string) (Artwork, error)
 		return Artwork{}, err
 	}
 
-	var visible bool
-	if c.FormValue("visible") == "on" {
-		visible = true
-	} else {
-		visible = false
-	}
+	fmt.Printf("c.FormValue(\"visible\"): %v\n", c.FormValue("visible"))
 
 	form := forms.NewRecordUpsert(app, artwork)
-	form.LoadData(map[string]any{
-		"title":       c.FormValue("title"),
-		"description": c.FormValue("description"),
-		"visible":     visible,
-	})
+	form.LoadRequest(c.Request(), "")
 
 	if err := form.Submit(); err != nil {
 		return Artwork{}, err
