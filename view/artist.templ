@@ -22,7 +22,12 @@ func NewArtistPageData(artist model.Artist, artworks []model.Artwork) ArtistPage
 
 templ ArtistPage(ld layout.LayoutData, apd ArtistPageData) {
 	@layout.Default(ld) {
-		<h1>Artist page for { apd.artist.User.FirstName }</h1>
+		<section class="artistpage-section">
+			@artistPageGallery(apd.artworks)
+		</section>
+		<section class="artistpage-section">
+			<h1>{ apd.artist.User.FirstName } {apd.artist.User.LastName}</h1>
+		</section>
 	}
 }
 

@@ -41,6 +41,18 @@ templ ArtworkUpdateSuccess(artwork model.Artwork) {
 	@layout.FlashInfo("Image updated!")
 }
 
+templ artistPageGallery(artworks []model.Artwork) {
+	<div class="artistpage-gallery">
+		for i := range [5]int64{} {
+			if len(artworks) > i {
+				@LoadImageCovered(fmt.Sprintf("/artwork/%s", artworks[i].Id))
+			} else {
+				<div>Hello</div>
+			}
+		}
+	</div>
+}
+
 templ artistGallery() {
 	<div id="artist-gallery" class="image-gallery">
 		{ children... }
@@ -48,13 +60,19 @@ templ artistGallery() {
 }
 
 templ LoadImage(url string) {
-	<div hx-get={ url } hx-trigger="revealed" class="image-wrapper-fullsize" hx-swap="innerHTML" hx-target="this">
+	<div hx-get={ url } hx-trigger="revealed" class="artwork-container-fullsize" hx-swap="innerHTML" hx-target="this">
+		<img alt="Image loading..." class="htmx-indicator image-placeholder"/>
+	</div>
+}
+
+templ LoadImageCovered(url string) {
+	<div hx-get={ url } hx-trigger="revealed" class="artwork-container-covered" hx-swap="innerHTML" hx-target="this">
 		<img alt="Image loading..." class="htmx-indicator image-placeholder"/>
 	</div>
 }
 
 templ LoadImageSquare(url string) {
-	<div hx-get={ url } hx-trigger="revealed" class="image-wrapper-square" hx-swap="innerHTML" hx-target="this">
+	<div hx-get={ url } hx-trigger="revealed" class="artwork-container-square" hx-swap="innerHTML" hx-target="this">
 		<img alt="Image loading..." class="htmx-indicator image-placeholder"/>
 	</div>
 }

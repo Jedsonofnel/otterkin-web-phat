@@ -8,7 +8,7 @@
 }
 
 /* image loading */
-.image-wrapper-square {
+.artwork-container-square {
   aspect-ratio: 1 / 1;
   width: 100%;
   overflow: hidden;
@@ -29,7 +29,7 @@
   width: min(800px 100%);
 }
 
-.image-wrapper-fullsize {
+.artwork-container-fullsize {
   height: 100%;
   width: 100%;
   & > img {
@@ -37,6 +37,18 @@
     width: 100%;
     display: block;
     object-fit: contain;
+    object-position: 50% 50%;
+  }
+}
+
+.artwork-container-covered {
+  height: 100%;
+  width: 100%;
+  & > img {
+    height: 100%;
+    width: 100%;
+    display: block;
+    object-fit: cover;
     object-position: 50% 50%;
   }
 }
@@ -126,5 +138,52 @@
 
   &:hover {
     background-color: var(--grey-100);
+  }
+}
+
+/* Artist page gallery */
+/* Spec: 5 image grid on desktop */
+.artistpage-gallery {
+  width: 100%;
+  height: min(600px, 70vh);
+  border-radius: var(--minim);
+  overflow: hidden;
+  margin: var(--semibreve) 0;
+
+  display: grid;
+  gap: var(--crotchet);
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  grid-template-areas: "big big small_1 small_2" "big big small_3 small_4";
+
+  & > :first-child {
+    grid-area: big;
+  }
+}
+
+@media (600px < width < 1000px) {
+  .artistpage-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    grid-template-areas: none;
+    & > :last-child {
+      display: none;
+    }
+    & > :first-child {
+      grid-area: unset;
+    }
+  }
+}
+
+@media (width <= 600px) {
+  .artistpage-gallery {
+    overflow: auto;
+    overscroll-behavior: none;
+    grid-template-columns: repeat(5, 100%);
+    grid-template-rows: repeat(1, minmax(0, 1fr));
+    grid-template-areas: none;
+    & > :first-child {
+      grid-area: unset;
+    }
   }
 }

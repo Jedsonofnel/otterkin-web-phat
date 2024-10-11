@@ -1,0 +1,6 @@
+/* Styling for the artist page */
+
+.artistpage-section {
+  width: min(1200px, 90%);
+  margin: 0 auto;
+}

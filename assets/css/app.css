@@ -12,6 +12,7 @@
 @import "./registration.css";
 @import "./dashboard.css";
 @import "./homepage.css";
+@import "./artistpage.css";
 
 /* vendored */
 @import "./vendored/croppie.css";
