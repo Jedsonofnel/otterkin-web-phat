@@ -7,6 +7,7 @@ import modal from "./behaviours/modal"
 import imagePreview from "./behaviours/image-preview"
 import avatarModal from "./behaviours/avatar-modal"
 import menu from "./behaviours/menu"
+import carousel from "./behaviours/carousel"
 
 // add behaviours on page and htmx load
 addEventListener("htmx:load", (e) => {
@@ -17,6 +18,7 @@ addEventListener("htmx:load", (e) => {
   imagePreview(e.target)
   avatarModal(e.target)
   menu(e.target)
+  carousel(e.target)
 })
 
 // htmx stuff

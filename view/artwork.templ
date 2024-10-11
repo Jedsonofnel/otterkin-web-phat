@@ -42,7 +42,7 @@ templ ArtworkUpdateSuccess(artwork model.Artwork) {
 }
 
 templ artistPageGallery(artworks []model.Artwork) {
-	<div class="artistpage-gallery">
+	<div class="artistpage-gallery" data-carousel="600">
 		for i := range [5]int64{} {
 			if len(artworks) > i {
 				@LoadImageCovered(fmt.Sprintf("/artwork/%s", artworks[i].Id))
