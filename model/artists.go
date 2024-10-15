@@ -30,6 +30,7 @@ type ArtistDBMarshalling struct {
 	LastName        string `db:"last_name"`
 	Email           string `db:"email"`
 	Role            string `db:"role"`
+	Avatar          string `db:"avatar"`
 }
 type ArtistsDBMarshalling []ArtistDBMarshalling
 
@@ -45,6 +46,7 @@ func (adbm ArtistDBMarshalling) Marshal() Artist {
 			LastName:  adbm.LastName,
 			Email:     adbm.Email,
 			Role:      adbm.Role,
+			Avatar:    adbm.Avatar,
 		},
 	}
 }
@@ -64,6 +66,7 @@ func (adbm ArtistsDBMarshalling) Marshal() []Artist {
 					LastName:  adb.LastName,
 					Email:     adb.Email,
 					Role:      adb.Role,
+					Avatar:    adb.Avatar,
 				},
 			},
 		)
@@ -117,6 +120,7 @@ func GetArtistByArtistId(dao *daos.Dao, id string) (Artist, error) {
 			"users.last_name",
 			"users.email",
 			"users.role",
+			"users.avatar",
 		).
 		From("artists").
 		InnerJoin("users", dbx.NewExp("artists.user_id=users.id")).
@@ -140,6 +144,7 @@ func GetArtistByUserId(dao *daos.Dao, id string) (Artist, error) {
 			"users.last_name",
 			"users.email",
 			"users.role",
+			"users.avatar",
 		).
 		From("artists").
 		InnerJoin("users", dbx.NewExp("artists.user_id=users.id")).

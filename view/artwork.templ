@@ -42,14 +42,19 @@ templ ArtworkUpdateSuccess(artwork model.Artwork) {
 }
 
 templ artistPageGallery(artworks []model.Artwork) {
-	<div class="artistpage-gallery" data-carousel="600">
-		for i := range [5]int64{} {
-			if len(artworks) > i {
-				@LoadImageCovered(fmt.Sprintf("/artwork/%s", artworks[i].Id))
-			} else {
-				<div>Hello</div>
+	<div class="artistpage-gallery-container">
+		<div class="artistpage-gallery" data-carousel="600">
+			for i := range [5]int64{} {
+				if len(artworks) > i {
+					@LoadImageCovered(fmt.Sprintf("/artwork/%s", artworks[i].Id))
+				} else {
+					<div>Hello</div>
+				}
 			}
-		}
+		</div>
+		<a href={ templ.URL(fmt.Sprintf("/artist/%s/gallery", artworks[0].ArtistId)) } class="button bg gallery-link">
+			See full gallery
+		</a>
 	</div>
 }
 

@@ -143,6 +143,9 @@
 
 /* Artist page gallery */
 /* Spec: 5 image grid on desktop */
+.artistpage-gallery-container {
+  position: relative;
+}
 .artistpage-gallery {
   width: 100%;
   height: min(600px, 70vh);
@@ -159,6 +162,12 @@
   & > :first-child {
     grid-area: big;
   }
+}
+
+.gallery-link {
+  position: absolute;
+  bottom: var(--crotchet);
+  right: var(--crotchet);
 }
 
 @media (600px < width < 1000px) {
@@ -186,4 +195,13 @@
       grid-area: unset;
     }
   }
+}
+
+/* Avatars */
+.avatar {
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center center;
 }

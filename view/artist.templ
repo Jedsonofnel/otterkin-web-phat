@@ -23,11 +23,78 @@ func NewArtistPageData(artist model.Artist, artworks []model.Artwork) ArtistPage
 templ ArtistPage(ld layout.LayoutData, apd ArtistPageData) {
 	@layout.Default(ld) {
 		<section class="artistpage-section">
-			@artistPageGallery(apd.artworks)
+			if len(apd.artworks) > 0 {
+				@artistPageGallery(apd.artworks)
+			}
 		</section>
-		<section class="artistpage-section">
-			<h1>{ apd.artist.User.FirstName } {apd.artist.User.LastName}</h1>
+		<section class="artistpage-section artistpage-info">
+			<div class="artistpage-header">
+				<h1>{ apd.artist.User.FirstName } { apd.artist.User.LastName }</h1>
+				@components.Avatar(components.AvatarProps{
+					User: apd.artist.User,
+				})
+			</div>
+			<div class="artistpage-tags-container">
+				<div class="artistpage-tags">
+					<div class="artistpage-tag-icon placeholder"></div>
+					<p>Where does the artist call home?</p>
+					<p>NOT YET IMPLEMENTED</p>
+				</div>
+				<div class="artistpage-tags">
+					<div class="artistpage-tag-icon placeholder"></div>
+					<p>
+						What make a piece
+						<span style="font-style:italic">
+							theirs
+						</span>?
+					</p>
+					<p>GET SUBJECTS</p>
+				</div>
+				<div class="artistpage-tags">
+					<div class="artistpage-tag-icon placeholder"></div>
+					<p>
+						With what mediums does the artist typically work?
+					</p>
+					<p>GET MEDIUMS</p>
+				</div>
+				<div class="artistpage-tags">
+					<div class="artistpage-tag-icon placeholder"></div>
+					<p>
+						What styles does the artist love working in?
+					</p>
+					<p>GET STYLES</p>
+				</div>
+				<div class="artistpage-tags">
+					<div class="artistpage-tag-icon placeholder"></div>
+					<p>
+						How long does the artist typically need?
+					</p>
+					<p>NOT YET IMPLMENTED</p>
+				</div>
+			</div>
+			<div class="artistpage-about-container">
+				<p>
+					{ apd.artist.Biography }
+				</p>
+			</div>
+			<div class="artistpage-payment-container">
+				<p>Also need the option to pick from services</p>
+				<p>Payment black box</p>
+			</div>
 		</section>
+	}
+}
+
+// public artist gallery
+templ ArtistGalleryPage(ld layout.LayoutData, agd ArtistGalleryPageData) {
+	@layout.Default(ld) {
+		<div class="artistgallery-header-container">
+			<h1>{ agd.artist.User.FirstName } { agd.artist.User.LastName }</h1>
+			<a href={ templ.URL(fmt.Sprintf("/artist/%s", agd.artist.Id)) }>Go Back</a>
+		</div>
+		<div>
+			stuff
+		</div>
 	}
 }
 

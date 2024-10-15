@@ -1,0 +1,26 @@
+package components
+
+import (
+	"fmt"
+	"github.com/Jedsonofnel/otterkin-web/model"
+)
+
+type AvatarProps struct {
+	User model.User
+	Size int
+}
+
+css defaultSize() {
+	--size: 60px;
+}
+
+css size(size int) {
+	--size: { fmt.Sprintf("%dpx", size) };
+}
+
+templ Avatar(ap AvatarProps) {
+	<img
+		class={ "avatar" , templ.KV(size(ap.Size), ap.Size !=0), templ.KV(defaultSize(), ap.Size==0) }
+		src={ fmt.Sprintf("/api/files/users/%s/%s", ap.User.Id, ap.User.Avatar) }
+	/>
+}

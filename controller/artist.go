@@ -18,6 +18,7 @@ import (
 // Artist public page (for people to look/read about/commission an artist)
 func (hc HandlerContext) HandleArtist(g *echo.Group) { // public artist page
 	g.GET("/:id", hc.HandleArtistPage)
+	g.GET("/:id/gallery", hc.HandleArtistGalleryPage)
 
 	// artist profile settings
 	g.GET("/profile/:id", hc.HandleArtistProfile, OnlyArtists, OnlyTheCorrespondingUser)
@@ -38,6 +39,8 @@ func (hc HandlerContext) HandleArtistPage(c echo.Context) error {
 		return err
 	}
 
+	fmt.Printf("artist.User.Avatar: %v\n", artist.User.Avatar)
+
 	artworks, err := model.GetArtworksByArtistId(hc.e.App.Dao(), c.PathParam("id"))
 	if err != nil {
 		return err
@@ -46,6 +49,22 @@ func (hc HandlerContext) HandleArtistPage(c echo.Context) error {
 	apd := view.NewArtistPageData(artist, artworks)
 	ld := layout.NewLayoutData(c, "Artist Page - Otterkin")
 	return Render(c, http.StatusOK, view.ArtistPage(ld, apd))
+}
+
+func (hc HandlerContext) HandleArtistGalleryPage(c echo.Context) error {
+	artist, err := model.GetArtistByArtistId(hc.e.App.Dao(), c.PathParam("id"))
+	if err != nil {
+		return err
+	}
+
+	artworks, err := model.GetArtworksByArtistId(hc.e.App.Dao(), c.PathParam("id"))
+	if err != nil {
+		return err
+	}
+
+	agd := view.NewArtistGalleryPageData(artist, artworks)
+	ld := layout.NewLayoutData(c, "Gallery Page - Otterkin")
+	return Render(c, http.StatusOK, view.ArtistGalleryPage(ld, agd))
 }
 
 func (hc HandlerContext) HandleArtistProfile(c echo.Context) error {

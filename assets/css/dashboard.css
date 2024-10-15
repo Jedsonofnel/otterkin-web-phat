@@ -245,6 +245,17 @@
   text-decoration: none;
 }
 
+.button.bg {
+  border: none;
+  background-color: var(--bg);
+  &:hover {
+    background-color: var(--grey-100);
+  }
+  &:active {
+    background-color: var(--grey-200);
+  }
+}
+
 .button.soft {
   border: none;
   background-color: var(--pink);
