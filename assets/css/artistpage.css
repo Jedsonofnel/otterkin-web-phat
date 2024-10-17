@@ -1,15 +1,20 @@
 /* Styling for the artist page */
-
 .artistpage-section {
   width: min(1200px, 90%);
   margin: 0 auto;
 }
 
+.artistpage-subheading {
+  font-size: 2rem;
+  font-family: var(--font-serif-sc);
+}
+
+/* Info section */
 .artistpage-section.artistpage-info {
   display: grid;
   grid-template-columns: 1fr 300px;
   grid-auto-flow: dense;
-  column-gap: var(--minim);
+  column-gap: var(--breve);
 
   & > .artistpage-payment-container {
     grid-column: -2 / -1;
@@ -26,6 +31,7 @@
   }
 }
 
+/* header */
 .artistpage-header {
   border-bottom: 1px solid var(--grey-300);
   padding-bottom: var(--minim);
@@ -33,4 +39,108 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--crotchet);
+
+  & > img {
+    flex-shrinK: 0;
+  }
+}
+
+.artistpage-artist-name {
+  font-family: var(--font-serif-sc);
+}
+
+/* tags section */
+.artistpage-tags-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--semibreve);
+  padding: var(--semibreve);
+  border-bottom: 1px solid var(--grey-300);
+}
+
+@media (width < 600px) {
+  .artistpage-tags-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (width < 400px) {
+  .artistpage-tags-container {
+    padding: var(--semibreve) 0;
+  }
+}
+
+.artistpage-tags {
+  width: 100%;
+  display: grid;
+  column-gap: var(--crotchet);
+  row-gap: var(--quaver);
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto;
+  grid-auto-flow: dense;
+}
+
+.artistpage-tags-icon {
+  --size: 80px;
+  height: var(--size);
+  width: var(--size);
+  object-fit: contain;
+  object-position: center center;
+
+  &.placeholder {
+    border: 1px solid var(--gold);
+  }
+}
+
+.artistpage-tags-question {
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.artistpage-tags-list {
+  display: flex;
+  gap: var(--quaver);
+  flex-wrap: wrap;
+  margin-top: var(--quaver);
+}
+
+.artistpage-tag {
+  display: inline-block;
+  padding: var(--quaver) var(--crotchet);
+  background-color: var(--pink);
+  border-radius: var(--crotchet);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+
+  &.placeholder {
+    text-transform: none;
+    background-color: var(--grey-200);
+  }
+}
+
+/* about section */
+.artistpage-about-container {
+  padding: var(--semibreve) 0;
+  border-bottom: 1px solid var(--grey-300);
+}
+
+/* payment container */
+.artistpage-payment-container {
+  border: 1px solid var(--fg);
+  border-radius: var(--minim);
+  padding: var(--crotchet);
+}
+
+.artistpage-price-text {
+  font-family: var(--font-sans);
+  font-style: italic;
+  margin: 0;
+  line-height: 1;
+}
+
+.artistpage-price {
+  font-family: var(--font-serif-sc);
+  font-size: 2rem;
+  font-style: normal;
 }

@@ -11,12 +11,18 @@ import (
 type ArtistPageData struct {
 	artist   model.Artist
 	artworks []model.Artwork
+	tags     map[string]model.Tags
 }
 
-func NewArtistPageData(artist model.Artist, artworks []model.Artwork) ArtistPageData {
+func NewArtistPageData(
+	artist model.Artist,
+	artworks []model.Artwork,
+	tags map[string]model.Tags,
+) ArtistPageData {
 	return ArtistPageData{
 		artist:   artist,
 		artworks: artworks,
+		tags:     tags,
 	}
 }
 
@@ -29,55 +35,102 @@ templ ArtistPage(ld layout.LayoutData, apd ArtistPageData) {
 		</section>
 		<section class="artistpage-section artistpage-info">
 			<div class="artistpage-header">
-				<h1>{ apd.artist.User.FirstName } { apd.artist.User.LastName }</h1>
+				<h1 class="artistpage-artist-name">{ apd.artist.User.FirstName } { apd.artist.User.LastName }</h1>
 				@components.Avatar(components.AvatarProps{
 					User: apd.artist.User,
 				})
 			</div>
 			<div class="artistpage-tags-container">
 				<div class="artistpage-tags">
-					<div class="artistpage-tag-icon placeholder"></div>
-					<p>Where does the artist call home?</p>
-					<p>NOT YET IMPLEMENTED</p>
+					<div class="artistpage-tags-icon placeholder"></div>
+					<div class="artistpage-tags-text">
+						<p class="artistpage-tags-question">Where does the artist call home?</p>
+						<p>NOT YET IMPLEMENTED</p>
+					</div>
 				</div>
 				<div class="artistpage-tags">
-					<div class="artistpage-tag-icon placeholder"></div>
-					<p>
-						What make a piece
-						<span style="font-style:italic">
-							theirs
-						</span>?
-					</p>
-					<p>GET SUBJECTS</p>
+					<div class="artistpage-tags-icon placeholder"></div>
+					<div class="artistpage-tags-text">
+						<p class="artistpage-tags-question">
+							What make a piece
+							<span style="font-style:italic">
+								theirs
+							</span>?
+						</p>
+						<div class="artistpage-tags-list">
+							for _, tag := range apd.tags["subject"] {
+								<span class="artistpage-tag">
+									{ tag.Name }
+								</span>
+							}
+							if len(apd.tags["subject"]) == 0 {
+								<span class="artistpage-tag placeholder">
+									We've not been told
+								</span>
+							}
+						</div>
+					</div>
 				</div>
 				<div class="artistpage-tags">
-					<div class="artistpage-tag-icon placeholder"></div>
-					<p>
-						With what mediums does the artist typically work?
-					</p>
-					<p>GET MEDIUMS</p>
+					<div class="artistpage-tags-icon placeholder"></div>
+					<div class="artistpage-tags-text">
+						<p class="artistpage-tags-question">
+							With what mediums does the artist typically work?
+						</p>
+						<div class="artistpage-tags-list">
+							for _, tag := range apd.tags["medium"] {
+								<span class="artistpage-tag">
+									{ tag.Name }
+								</span>
+							}
+							if len(apd.tags["medium"]) == 0 {
+								<span class="artistpage-tag placeholder">
+									We've not been told
+								</span>
+							}
+						</div>
+					</div>
 				</div>
 				<div class="artistpage-tags">
-					<div class="artistpage-tag-icon placeholder"></div>
-					<p>
-						What styles does the artist love working in?
-					</p>
-					<p>GET STYLES</p>
+					<div class="artistpage-tags-icon placeholder"></div>
+					<div class="artistpage-tags-text">
+						<p class="artistpage-tags-question">
+							What styles does the artist love working in?
+						</p>
+						<div class="artistpage-tags-list">
+							for _, tag := range apd.tags["style"] {
+								<span class="artistpage-tag">
+									{ tag.Name }
+								</span>
+							}
+							if len(apd.tags["style"]) == 0 {
+								<span class="artistpage-tag placeholder">
+									We've not been told
+								</span>
+							}
+						</div>
+					</div>
 				</div>
 				<div class="artistpage-tags">
-					<div class="artistpage-tag-icon placeholder"></div>
-					<p>
-						How long does the artist typically need?
-					</p>
-					<p>NOT YET IMPLMENTED</p>
+					<div class="artistpage-tags-icon placeholder"></div>
+					<div class="artistpage-tags-text">
+						<p class="artistpage-tags-question">
+							How long does the artist typically need?
+						</p>
+						<p>NOT YET IMPLMENTED</p>
+					</div>
 				</div>
 			</div>
 			<div class="artistpage-about-container">
+        <h2 class="artistpage-subheading">About</h2>
 				<p>
 					{ apd.artist.Biography }
 				</p>
 			</div>
 			<div class="artistpage-payment-container">
+				<p class="artistpage-price-text">
+					<span class="artistpage-price">£4000</span> apiece
+				</p>
 				<p>Also need the option to pick from services</p>
 				<p>Payment black box</p>
 			</div>

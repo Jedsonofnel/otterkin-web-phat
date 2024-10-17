@@ -46,7 +46,9 @@ func (hc HandlerContext) HandleArtistPage(c echo.Context) error {
 		return err
 	}
 
-	apd := view.NewArtistPageData(artist, artworks)
+	tags, err := model.GetAllArtistTagsIntoTypeByArtistId(hc.e.App.Dao(), artist.Id)
+
+	apd := view.NewArtistPageData(artist, artworks, tags)
 	ld := layout.NewLayoutData(c, "Artist Page - Otterkin")
 	return Render(c, http.StatusOK, view.ArtistPage(ld, apd))
 }
