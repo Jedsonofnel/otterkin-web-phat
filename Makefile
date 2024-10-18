@@ -23,7 +23,7 @@ dev-build:
 live-build:
 	docker build --target dev-stage -t otterkin-web-dev .
 
-live-run:
+live:
 	docker run -p 8080:8080 --rm -it --name otterkin-web-dev-live \
 	-v $(shell pwd):/app -v otterkin-web-tmp:/app/tmp -v otterkin-web-dev-db:/app/tmp/pb_data \
 	otterkin-web-dev
@@ -50,5 +50,5 @@ live/server:
   --build.stop_on_error "false" \
   --misc.clean_on_exit = false \
 
-live:
+live-run:
 	make -j live/templ live/esbuild live/server
