@@ -51,12 +51,29 @@ func OnlyTheCorrespondingArtist(app core.App) echo.MiddlewareFunc {
 	}
 }
 
+func OnlyQueriedArtist(app core.App) echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			// assumes there's a query ?artist=id
+			user, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
+			artist, err := model.GetArtistByArtistId(app.Dao(), c.QueryParam("artist"))
+
+			if !ok || err != nil || user.Id != artist.User.Id {
+				SetFlash(c, "error", "Don't be silly - you don't have approval to access that!")
+				return hxRedirect(c, http.StatusForbidden, "/")
+			}
+
+			return next(c)
+		}
+	}
+}
+
 func OnlyTheOwnerArtist(app core.App) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			authRecord, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
+			user, ok := c.Get(apis.ContextAuthRecordKey).(model.User)
 			artwork, err := model.GetArtworkById(app.Dao(), c.PathParam("id"))
-			if !ok || err != nil || authRecord.Id != artwork.UserId {
+			if !ok || err != nil || user.Id != artwork.UserId {
 				SetFlash(c, "error", "Don't be silly - you don't have approval to go in there!")
 				return hxRedirect(c, http.StatusForbidden, "/")
 			}

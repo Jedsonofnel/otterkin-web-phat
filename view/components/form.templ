@@ -1,0 +1,11 @@
+package components
+
+import "fmt"
+
+templ FormErrors(errMap map[string]string) {
+  for field, value := range errMap {
+    <div hx-swap-oob={ fmt.Sprintf("afterend:#%s", field) }>
+      <p class="error-message">{ value }</p>
+    </div>
+  }
+}

@@ -92,8 +92,7 @@ func RegisterArtist(app core.App, c echo.Context) error {
 		return err
 	}
 
-	err = fd.Validate()
-	if err != nil {
+	if err = fd.Validate(); err != nil {
 		return err
 	}
 

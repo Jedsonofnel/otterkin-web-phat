@@ -221,7 +221,15 @@ templ ArtistProfilePage(ld layout.LayoutData, apd ArtistProfilePageData) {
 				{ apd.artist.Biography }
 			</textarea>
 		</section>
-		@artistServicesTable()
+		<section class="dashboard-section fw">
+			<div class="dashboard-subtitle-container">
+				<h2 class="dashboard-subtitle">Your Services</h2>
+				<button class="button soft" hx-get="/service/table/create-modal" hx-target="body" hx-swap="beforeend">
+					Add
+				</button>
+			</div>
+			<div hx-get={ fmt.Sprintf("/service/table?artist=%s", apd.artist.Id) } hx-trigger="load" hx-swap="outerHTML"></div>
+		</section>
 	}
 }
 
@@ -282,14 +290,6 @@ templ ArtistUpdateResponse(artist model.Artist) {
 	@artistUpdateForm(artist)
 	<h1 class="dashboard-title" id="artist-greeting" hx-swap-oob="outerHTML">Hello { artist.User.FirstName }</h1>
 	@layout.FlashInfo("Updated your details!")
-}
-
-templ artistServicesTable() {
-	<section class="dashboard-section fw">
-		<h2 class="dashboard-subtitle">
-			Services table
-		</h2>
-	</section>
 }
 
 // gallery page

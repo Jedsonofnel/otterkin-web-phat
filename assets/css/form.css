@@ -43,6 +43,11 @@
   font-size: 0.9rem;
 }
 
+label.text-field {
+  display: flex;
+  flex-direction: column;
+}
+
 
 /* input styling */
 .text-input {

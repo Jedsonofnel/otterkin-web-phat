@@ -14,7 +14,14 @@ import (
 
 func newTagTableProps(ts model.TableSpec, tagType string) components.TableProps {
 	return components.TableProps{
+		TableId:   fmt.Sprintf("table-tag-%s", tagType),
 		CreateURL: fmt.Sprintf("/tag/table/create-modal?type=%s", tagType),
+		UpdateURL: func(id string) string {
+			return "hello"
+		},
+		DeleteURL: func(id string) string {
+			return "hello"
+		},
 		PagNextURL: fmt.Sprintf(
 			"/tag/table?type=%s&sort=%s&order=%s&page=%v&perpage=%v",
 			tagType,
@@ -62,8 +69,6 @@ func (hc HandlerContext) HandleIndexTagTable(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-
-	fmt.Printf("ts: %+v\n", ts)
 
 	tags, err := model.IndexTagsTable(hc.e.App.Dao(), ts, tagType)
 	if err != nil {

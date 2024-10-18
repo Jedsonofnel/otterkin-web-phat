@@ -61,12 +61,12 @@ func CreateTag(app core.App, c echo.Context) (Tag, error) {
 }
 
 func IndexTagsTable(dao *daos.Dao, ts TableSpec, tagType string) (Tags, error) {
-	tags := []Tag{}
+	tags := Tags{}
 	query := ts.Query(dao)
 	if err := query.
 		Where(dbx.NewExp("type = {:type}", dbx.Params{"type": tagType})).
 		All(&tags); err != nil {
-		return []Tag{}, err
+		return Tags{}, err
 	}
 
 	return tags, nil

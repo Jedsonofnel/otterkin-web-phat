@@ -3,10 +3,14 @@ package components
 import (
 	"fmt"
 	"github.com/Jedsonofnel/otterkin-web/model"
+	"strconv"
 )
 
 type TableProps struct {
+	TableId    string
 	CreateURL  string
+	UpdateURL  func(id string) string
+	DeleteURL  func(id string) string
 	PagNextURL string
 	PagPrevURL string
 	PagPage    int64
@@ -14,9 +18,8 @@ type TableProps struct {
 }
 
 // Services Table
-templ ServicesTable(tp TableProps, rows []string) {
-	<div>Table</div>
-	<table>
+templ ServicesTable(tp TableProps, services model.Services, artistId string) {
+	<table id={ tp.TableId }>
 		<thead>
 			<tr>
 				<th>Subject</th>
@@ -24,29 +27,37 @@ templ ServicesTable(tp TableProps, rows []string) {
 				<th>Size</th>
 				<th>Completion Time (days)</th>
 				<th>Price (£)</th>
+        <th></th>
 			</tr>
 		</thead>
+		@PaginatedFooter(tp)
 		<tbody>
-			if len(rows) > 0 {
-				for _, row := range rows {
-					<tr>
-						<td>
-							{ row }
-						</td>
-					</tr>
+			if len(services) > 0 {
+				for _, service := range services {
+          @ServiceRow(tp, service)
 				}
 			} else {
 				<tr>
-					<td>No rows yet</td>
+					<td colspan="100%">No rows yet</td>
 				</tr>
 			}
 		</tbody>
 	</table>
 }
 
+templ ServiceRow(tp TableProps, service model.Service) {
+	@TableRow(tp, service.Id) {
+		<td>{ service.Subject }</td>
+		<td>{ service.Surface }</td>
+		<td>{ service.Size }</td>
+		<td class="td-integer">{ strconv.FormatInt(service.CompletionTime, 10) }</td>
+		<td class="td-integer">{ strconv.FormatInt(service.Price, 10) }</td>
+	}
+}
+
 // Tag Table
-templ TagTable(tp TableProps, rows []model.Tag, tagType string) {
-	<div id={ fmt.Sprintf("table-tag-%s", tagType) } class="column-form">
+templ TagTable(tp TableProps, tags []model.Tag, tagType string) {
+	<div id={ tp.TableId } class="column-form">
 		<h2 class="dashboard-subtitle">Add "{ tagType }" tags</h2>
 		<button
 			hx-get={ tp.CreateURL }
@@ -61,42 +72,11 @@ templ TagTable(tp TableProps, rows []model.Tag, tagType string) {
 					<th>Tag Name</th>
 				</tr>
 			</thead>
-			<tfoot colspan="all">
-				<tr>
-					<td>
-						<div>
-							{ 
-            fmt.Sprintf("%v/%v", tp.PagPage, tp.PagMaxPage) }
-						</div>
-						<div>
-							if tp.PagPage == 1 {
-								<button class="pag-button" disabled><i class="at-arrow-left"></i></button>
-							} else {
-								<button
-									class="pag-button"
-									hx-get={ tp.PagPrevURL }
-									hx-target={ fmt.Sprintf("#table-tag-%s", tagType) }
-									hx-swap="outerHTML"
-								><i class="at-arrow-left"></i></button>
-							}
-							if tp.PagMaxPage == tp.PagPage {
-								<button class="pag-button" disabled><i class="at-arrow-right"></i></button>
-							} else {
-								<button
-									class="pag-button"
-									hx-get={ tp.PagNextURL }
-									hx-target={ fmt.Sprintf("#table-tag-%s", tagType) }
-									hx-swap="outerHTML"
-								><i class="at-arrow-right"></i></button>
-							}
-						</div>
-					</td>
-				</tr>
-			</tfoot>
+			@PaginatedFooter(tp)
 			<tbody>
-				if len(rows) > 0 {
-					for _, row := range rows {
-						@TagTableRow(row)
+				if len(tags) > 0 {
+					for _, tag := range tags {
+						@TagTableRow(tag)
 					}
 				} else {
 					<tr>
@@ -155,4 +135,81 @@ templ TagTableRow(tag model.Tag) {
 			</div>
 		</td>
 	</tr>
+}
+
+templ TableRow(tp TableProps, id string) {
+	<tr>
+		{ children... }
+		<td class="table-contextbtn-td">
+			<div data-menu-wrapper class="table-contextbtn-wrapper">
+				<button
+					class="table-contextbtn"
+					type="button"
+					id={ fmt.Sprintf("table-contextbtn-%s", id) }
+					aria-haspopup="menu"
+					aria-expanded="false"
+					aria-controls={ fmt.Sprintf("table-contextmenu-%s", id) }
+				>
+					<span class="table-contextbtn-icon"></span>
+				</button>
+				<ul
+					class="table-contextmenu"
+					id={ fmt.Sprintf("table-contextmenu-%s", id) }
+					role="menu"
+					hidden
+					tabindex="-1"
+					aria-labelledby={ fmt.Sprintf("table-contextbtn-%s", id) }
+					aria-activedescendant={ fmt.Sprintf("table-mi-%s-1",
+        id) }
+				>
+					<li class="table-contextmenu-item" id={ fmt.Sprintf("table-mi-%s-1", id) } role="menuitem">
+						<button
+							class="table-contextmenu-button"
+							hx-get={ tp.UpdateURL(id) }
+							hx-target="body"
+							hx-swap="beforeend"
+						>Edit</button>
+					</li>
+					<li class="table-contextmenu-item" id={ fmt.Sprintf("table-mi-%s-2", id) } role="menuitem">
+						<button
+							class="table-contextmenu-button"
+							style="color:red;"
+							hx-get={ tp.DeleteURL(id) }
+							hx-target="body"
+							hx-swap="beforeend"
+						>Delete</button>
+					</li>
+				</ul>
+			</div>
+		</td>
+	</tr>
+}
+
+templ PaginatedFooter(tp TableProps) {
+	<tfoot>
+		<tr>
+			<td colspan="100%">
+				<div>
+					{ 
+        fmt.Sprintf("%v/%v", tp.PagPage, tp.PagMaxPage) }
+				</div>
+				<div>
+					if tp.PagPage == 1 {
+						<button class="pag-button" disabled><i class="at-arrow-left"></i></button>
+					} else {
+						<button class="pag-button" hx-get={ tp.PagPrevURL } hx-target={ tp.TableId } hx-swap="outerHTML">
+							<i class="at-arrow-left"></i>
+						</button>
+					}
+					if tp.PagMaxPage == tp.PagPage {
+						<button class="pag-button" disabled><i class="at-arrow-right"></i></button>
+					} else {
+						<button class="pag-button" hx-get={ tp.PagNextURL } hx-target={ tp.TableId } hx-swap="outerHTML">
+							<i class="at-arrow-right"></i>
+						</button>
+					}
+				</div>
+			</td>
+		</tr>
+	</tfoot>
 }

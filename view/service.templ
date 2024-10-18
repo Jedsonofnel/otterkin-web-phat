@@ -1,0 +1,41 @@
+package view
+
+import (
+	"github.com/Jedsonofnel/otterkin-web/model"
+	"github.com/Jedsonofnel/otterkin-web/view/components"
+)
+
+templ ServiceCreateModal(artist model.Artist) {
+	@components.Modal() {
+		<form hx-post="/service" hx-swap="beforeend" hx-target="#table-service">
+			<h2>Add a service</h2>
+			<label for="subject" class="text-field">
+				Subject
+				<input id="subject" name="subject" type="text" class="text-input"/>
+			</label>
+			<label for="surface" class="text-field">
+				Surface
+				<input id="surface" name="surface" type="text" class="text-input"/>
+			</label>
+			<label for="size" class="text-field">
+				Size
+				<input id="size" name="size" type="text" class="text-input"/>
+			</label>
+			<label for="completion_time" class="text-field">
+				Time to complete (days)
+				<input id="completion_time" name="completion_time" type="number" class="text-input"/>
+			</label>
+			<label for="price" class="text-field">
+				Price (pounds)
+				<input id="price" name="price" type="number" class="text-input"/>
+			</label>
+			<input type="hidden" name="artist_id" value={ artist.Id }/>
+			<div class="modal-bottom">
+				<button type="button" class="button text" data-modal-close-btn>
+					Close
+				</button>
+				<input type="submit" value="Add" class="button soft"/>
+			</div>
+		</form>
+	}
+}

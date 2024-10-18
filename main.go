@@ -89,6 +89,13 @@ func main() {
 		)
 		hc.HandleTag(tagGroup)
 
+		// service routes
+		serviceGroup := e.Router.Group("/service",
+			auth.LoadAuthContextFromCookie(e.App),
+			controller.OnlyArtists,
+		)
+		hc.HandleService(serviceGroup)
+
 		return nil
 	})
 

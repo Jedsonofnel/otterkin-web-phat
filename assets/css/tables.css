@@ -31,6 +31,11 @@ td {
   padding: var(--quaver) var(--crotchet);
 }
 
+/* data types */
+td.td-integer {
+  text-align: right;
+}
+
 /* context button */
 .table-contextbtn-td {
   padding: 0;
