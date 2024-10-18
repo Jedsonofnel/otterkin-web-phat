@@ -8,11 +8,15 @@
 @import "./typography.css";
 @import "./form.css";
 
+/* components */
+@import "./components/buttons.css";
+
 /* page specific */
-@import "./registration.css";
+@import "./pages/registration.css";
 @import "./dashboard.css";
-@import "./homepage.css";
-@import "./artistpage.css";
+@import "./pages/homepage.css";
+@import "./pages/artistpage.css";
+@import "./pages/artistgallerypage.css";
 
 /* vendored */
 @import "./vendored/croppie.css";

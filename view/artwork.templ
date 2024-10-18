@@ -46,7 +46,9 @@ templ artistPageGallery(artworks []model.Artwork) {
 		<div class="artistpage-gallery" data-carousel="600">
 			for i := range [5]int64{} {
 				if len(artworks) > i {
-					@LoadImageCovered(fmt.Sprintf("/artwork/%s", artworks[i].Id))
+					@ArtworkExpandWrapper(artworks[i]) {
+						@LoadImageCovered(fmt.Sprintf("/artwork/%s", artworks[i].Id))
+					}
 				} else {
 					<div>Hello</div>
 				}
@@ -80,6 +82,17 @@ templ LoadImageSquare(url string) {
 	<div hx-get={ url } hx-trigger="revealed" class="artwork-container-square" hx-swap="innerHTML" hx-target="this">
 		<img alt="Image loading..." class="htmx-indicator image-placeholder"/>
 	</div>
+}
+
+templ ArtworkExpandWrapper(artwork model.Artwork) {
+	<button
+		class="button invisible"
+		hx-get={ fmt.Sprintf("/artwork/%s?modal=true", artwork.Id) }
+		hx-target="body"
+		hx-swap="beforeend"
+	>
+		{ children... }
+	</button>
 }
 
 templ ImageModal(url string) {

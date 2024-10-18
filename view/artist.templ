@@ -122,7 +122,7 @@ templ ArtistPage(ld layout.LayoutData, apd ArtistPageData) {
 				</div>
 			</div>
 			<div class="artistpage-about-container">
-        <h2 class="artistpage-subheading">About</h2>
+				<h2 class="artistpage-subheading">About</h2>
 				<p>
 					{ apd.artist.Biography }
 				</p>
@@ -141,13 +141,21 @@ templ ArtistPage(ld layout.LayoutData, apd ArtistPageData) {
 // public artist gallery
 templ ArtistGalleryPage(ld layout.LayoutData, agd ArtistGalleryPageData) {
 	@layout.Default(ld) {
-		<div class="artistgallery-header-container">
-			<h1>{ agd.artist.User.FirstName } { agd.artist.User.LastName }</h1>
-			<a href={ templ.URL(fmt.Sprintf("/artist/%s", agd.artist.Id)) }>Go Back</a>
-		</div>
-		<div>
-			stuff
-		</div>
+		<section class="artistpage-section">
+			<div class="artistgallery-header-container">
+				<h1>
+					<span class="artistgallery-artist-name">{ agd.artist.User.FirstName } { agd.artist.User.LastName }</span>
+				</h1>
+				<a class="button soft" href={ templ.URL(fmt.Sprintf("/artist/%s", agd.artist.Id)) }>Go Back</a>
+			</div>
+			<div class="artistgallery-gallery-container">
+				for _, artwork := range agd.artworks {
+					@ArtworkExpandWrapper(artwork) {
+						@LoadImageSquare(fmt.Sprintf("/artwork/%s", artwork.Id))
+					}
+				}
+			</div>
+		</section>
 	}
 }
 

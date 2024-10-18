@@ -58,7 +58,7 @@
 
 /* general */
 .column-form {
-  max-width: min(320px, 100%);
+  width: min(320px, 100%);
   margin: 0 auto;
   display: flex;
   flex-direction: column;

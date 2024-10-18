@@ -1,0 +1,15 @@
+/* styling for artist gallery page */
+.artistgallery-header-container {
+  margin: var(--minim) 0;
+}
+
+.artistgallery-artist-name {
+  font-family: var(--font-serif-sc);
+}
+
+.artistgallery-gallery-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--crotchet);
+
+}
