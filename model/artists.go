@@ -13,6 +13,7 @@ type Artist struct {
 	Id              string `db:"artist_id"`
 	InstagramHandle string `db:"instagram_handle"`
 	Biography       string `db:"biography"`
+	Location        string `db:"location"`
 	Approved        bool   `db:"approved"`
 	User            User
 }
@@ -24,6 +25,7 @@ type ArtistDBMarshalling struct {
 	ArtistId        string `db:"artist_id"`
 	InstagramHandle string `db:"instagram_handle"`
 	Biography       string `db:"biography"`
+	Location        string `db:"location"`
 	Approved        bool   `db:"approved"`
 	UserId          string `db:"user_id"`
 	FirstName       string `db:"first_name"`
@@ -39,6 +41,7 @@ func (adbm ArtistDBMarshalling) Marshal() Artist {
 		Id:              adbm.ArtistId,
 		InstagramHandle: adbm.InstagramHandle,
 		Biography:       adbm.Biography,
+		Location:        adbm.Location,
 		Approved:        adbm.Approved,
 		User: User{
 			Id:        adbm.UserId,
@@ -59,6 +62,7 @@ func (adbm ArtistsDBMarshalling) Marshal() []Artist {
 				Id:              adb.ArtistId,
 				InstagramHandle: adb.InstagramHandle,
 				Biography:       adb.Biography,
+				Location:        adb.Location,
 				Approved:        adb.Approved,
 				User: User{
 					Id:        adb.UserId,
@@ -164,11 +168,22 @@ func UpdateArtistById(app core.App, c echo.Context, id string) (Artist, error) {
 		return Artist{}, err
 	}
 
+	// checks to see what is available and only updates based
+	// on that
+	formData := make(map[string]any)
+	for _, field := range []string{
+		"instagram_handle",
+		"location",
+		"biography",
+	} {
+		if c.FormValue(field) != "" {
+			formData[field] = c.FormValue(field)
+		}
+	}
+
 	form := forms.NewRecordUpsert(app, artist)
-	form.LoadData(map[string]any{
-		"instagram_handle": c.FormValue("instagram_handle"),
-		"biography":        c.FormValue("biography"),
-	})
+	form.LoadData(formData)
+
 	if err := form.Submit(); err != nil {
 		return Artist{}, err
 	}

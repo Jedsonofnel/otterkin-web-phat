@@ -8,6 +8,7 @@ import imagePreview from "./behaviours/image-preview"
 import avatarModal from "./behaviours/avatar-modal"
 import menu from "./behaviours/menu"
 import carousel from "./behaviours/carousel"
+import saveIndicator from "./behaviours/save-indicator"
 
 // add behaviours on page and htmx load
 addEventListener("htmx:load", (e) => {
@@ -19,6 +20,7 @@ addEventListener("htmx:load", (e) => {
   avatarModal(e.target)
   menu(e.target)
   carousel(e.target)
+  saveIndicator(e.target)
 })
 
 // htmx stuff

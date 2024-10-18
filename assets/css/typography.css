@@ -17,6 +17,11 @@ h6,
 p {
   color: var(--fg);
   max-width: var(--text-maxwidth);
+
+  &.fw {
+    max-width: 100%;
+    width: 100%;
+  }
 }
 
 h1 {
@@ -55,3 +60,4 @@ input,
 textarea {
   font-family: var(--font-sans);
 }
+

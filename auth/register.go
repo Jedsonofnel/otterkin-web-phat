@@ -45,7 +45,6 @@ func (a ArtistFormFields) Validate() error {
 	return validation.ValidateStruct(&a,
 		validation.Field(&a.FirstName, validation.Required),
 		validation.Field(&a.LastName, validation.Required),
-		validation.Field(&a.InstagramHandle, validation.Required),
 		validation.Field(&a.Biography, validation.Required),
 		validation.Field(&a.Email, validation.Required, is.Email),
 		validation.Field(&a.Password, validation.Required),

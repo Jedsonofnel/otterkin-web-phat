@@ -23,6 +23,7 @@ func (hc HandlerContext) HandleArtist(g *echo.Group) { // public artist page
 	// artist profile settings
 	g.GET("/profile/:id", hc.HandleArtistProfile, OnlyArtists, OnlyTheCorrespondingUser)
 	g.PUT("/profile/:id", hc.HandleUpdateArtistProfile, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
+	g.PUT("/profile/:id/biography", hc.HandleUpdateArtistBiography, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
 	g.POST("/profile/:id/tags", hc.HandleAddArtistTag, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
 	g.DELETE("/profile/:id/tags", hc.HandleRemoveArtistTag, OnlyArtists, OnlyTheCorrespondingArtist(hc.e.App))
 
@@ -93,12 +94,21 @@ func (hc HandlerContext) HandleArtistProfile(c echo.Context) error {
 }
 
 func (hc HandlerContext) HandleUpdateArtistProfile(c echo.Context) error {
-	artist, err := model.UpdateArtistById(hc.e.App, c, c.PathParam("id"))
+	_, err := model.UpdateArtistById(hc.e.App, c, c.PathParam("id"))
 	if err != nil {
 		return err
 	}
 
-	return Render(c, http.StatusOK, view.ArtistUpdateResponse(artist))
+	return Render(c, http.StatusOK, view.SavedIndicator("#artist-details"))
+}
+
+func (hc HandlerContext) HandleUpdateArtistBiography(c echo.Context) error {
+	_, err := model.UpdateArtistById(hc.e.App, c, c.PathParam("id"))
+	if err != nil {
+		return err
+	}
+
+	return Render(c, http.StatusOK, view.SavedIndicator("#biography"))
 }
 
 func (hc HandlerContext) HandleAddArtistTag(c echo.Context) error {

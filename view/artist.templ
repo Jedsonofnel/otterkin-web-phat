@@ -191,16 +191,42 @@ templ ArtistProfilePage(ld layout.LayoutData, apd ArtistProfilePageData) {
 			<a href={ templ.URL(fmt.Sprintf("/artist/%s", apd.artist.Id)) }>See your profile</a>
 		</section>
 		<section class="dashboard-section">
+			<div class="dashboard-subtitle-container text-baseline">
+				<h2 class="dashboard-subtitle">Artist details</h2>
+				<div data-save-indicator="#artist-details" class="save-indicator snug" hidden>Saving...</div>
+			</div>
 			@artistUpdateForm(apd.artist)
 		</section>
 		<section class="dashboard-section">
-			<div class="column-form">
-				<h2 class="dashboard-subtitle">Artist tags</h2>
-				@artistTagInputs(apd)
+			<h2 class="dashboard-subtitle">Artist tags</h2>
+			@artistTagInputs(apd)
+		</section>
+		<section class="dashboard-section fw">
+			<div class="dashboard-subtitle-container text-baseline">
+				<h2 class="dashboard-subtitle">Biography</h2>
+				<div data-save-indicator="#biography" class="save-indicator snug" hidden>Saving...</div>
 			</div>
+			<p class="fw">
+				This should be in the third person - it will go under an "about" section in your profile
+			</p>
+			<textarea
+				id="biography"
+				class="textarea-input fw"
+				rows="10"
+				name="biography"
+				hx-put={ fmt.Sprintf("/artist/profile/%s/biography", apd.artist.Id) }
+				hx-trigger="keyup changed delay:500ms"
+				hx-swap="none"
+			>
+				{ apd.artist.Biography }
+			</textarea>
 		</section>
 		@artistServicesTable()
 	}
+}
+
+templ SavedIndicator(id string) {
+	<div hx-swap-oob={ fmt.Sprintf(`innerHTML:[data-save-indicator="%s" ]`, id) }>Saved</div>
 }
 
 templ artistTagInputs(apd ArtistProfilePageData) {
@@ -228,8 +254,13 @@ templ artistTagInputs(apd ArtistProfilePageData) {
 }
 
 templ artistUpdateForm(artist model.Artist) {
-	<form hx-put={ fmt.Sprintf("/artist/profile/%s", artist.Id) } class="column-form">
-		<h2 class="dashboard-subtitle">Artist details</h2>
+	<form
+		id="artist-details"
+		hx-put={ fmt.Sprintf("/artist/profile/%s", artist.Id) }
+		hx-trigger="keyup delay:500ms"
+		hx-swap="none"
+		class="stack"
+	>
 		<div class="form-field">
 			<label for="instagram_handle">Instagram Handle</label>
 			<input
@@ -241,12 +272,9 @@ templ artistUpdateForm(artist model.Artist) {
 			/>
 		</div>
 		<div class="form-field">
-			<label for="biography">Short Biography</label>
-			<textarea class="textarea-input" id="biography" name="biography" rows="3" maxlength="128">
-				{ artist.Biography }
-			</textarea>
+			<label for="location">Your Location</label>
+			<input class="text-input" id="location" name="location" type="text" value={ artist.Location }/>
 		</div>
-		<input class="button soft" type="submit" value="Update"/>
 	</form>
 }
 

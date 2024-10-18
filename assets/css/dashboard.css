@@ -1,10 +1,10 @@
 /* User options/settings */
 .dashboard-grid-wrapper {
   display: grid;
-  padding: var(--minim);
+  padding: var(--minim) var(--semibreve);
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-auto-rows: min-content;
-  column-gap: var(--crotchet);
+  column-gap: var(--semibreve);
   row-gap: var(--semibreve);
 }
 
@@ -13,22 +13,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--quaver);
+  gap: var(--crotchet);
 
   &.fw {
     grid-column: 1 / -1;
-  }
-}
-
-.dashboard-form-section {
-  display: flex;
-  padding: var(--minim) 0;
-
-  & > h2.profile-form-subtitle {
-    font-family: var(--font-serif-sc);
-    color: var(--gold);
-    writing-mode: vertical-rl;
-    text-orientation: sideways;
   }
 }
 
@@ -48,30 +36,21 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  &.text-baseline{
+    & > .dashboard-subtitle {
+      line-height: 0.9;
+      padding: 0;
+      margin: 0;
+    }
+    margin: var(--crotchet) 0;
+  }
 }
 
 .dashboard-subtitle {
   font-family: var(--font-sans);
   align-self: start;
   text-align: left;
-}
-
-/* general */
-.column-form {
-  width: min(320px, 100%);
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--crotchet);
-}
-
-.form-field {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  font-size: 0.9rem;
 }
 
 /* gallery uploading */

@@ -13,11 +13,48 @@ type TableProps struct {
 	PagMaxPage int64
 }
 
+// Services Table
+templ ServicesTable(tp TableProps, rows []string) {
+	<div>Table</div>
+	<table>
+		<thead>
+			<tr>
+				<th>Subject</th>
+				<th>Surface</th>
+				<th>Size</th>
+				<th>Completion Time (days)</th>
+				<th>Price (£)</th>
+			</tr>
+		</thead>
+		<tbody>
+			if len(rows) > 0 {
+				for _, row := range rows {
+					<tr>
+						<td>
+							{ row }
+						</td>
+					</tr>
+				}
+			} else {
+				<tr>
+					<td>No rows yet</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
 // Tag Table
 templ TagTable(tp TableProps, rows []model.Tag, tagType string) {
 	<div id={ fmt.Sprintf("table-tag-%s", tagType) } class="column-form">
 		<h2 class="dashboard-subtitle">Add "{ tagType }" tags</h2>
-		<button hx-get={ tp.CreateURL } hx-target="body" hx-swap="beforeend" class="button soft" style="margin-left: auto;">Add Tag</button>
+		<button
+			hx-get={ tp.CreateURL }
+			hx-target="body"
+			hx-swap="beforeend"
+			class="button soft"
+			style="margin-left: auto;"
+		>Add Tag</button>
 		<table>
 			<thead>
 				<tr>
@@ -108,8 +145,9 @@ templ TagTableRow(tag model.Tag) {
 						<button
 							class="table-contextmenu-button"
 							style="color:red;"
-							hx-get={ fmt.Sprintf("/tag/table/delete-modal/%s", tag.Id) }
-              hx-target="body"
+							hx-get={ fmt.Sprintf("/tag/table/delete-modal/%s",
+            tag.Id) }
+							hx-target="body"
 							hx-swap="beforeend"
 						>Delete</button>
 					</li>
