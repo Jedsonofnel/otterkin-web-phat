@@ -38,7 +38,7 @@ live/esbuild:
 	--watch </dev/zero \
 
 live/server:
-	go run github.com/cosmtrek/air@v1.51.0 \
+	air \
 	--tmp_dir "tmp" \
 	--build.bin "tmp/main" \
 	--build.full_bin "APP_ENV=dev tmp/main" \
